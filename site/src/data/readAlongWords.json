@@ -1,0 +1,160 @@
+{
+ "note": "Word timings of /audio/read-along/moon.mp3 (ElevenLabs voice 'Nate' reading the opening of 'We choose to go to the moon', skipping 'decade' on purpose), from ElevenLabs transcription.",
+ "words": [
+  {
+   "text": "We",
+   "start": 0.17,
+   "end": 0.25
+  },
+  {
+   "text": "choose",
+   "start": 0.33,
+   "end": 0.57
+  },
+  {
+   "text": "to",
+   "start": 0.65,
+   "end": 0.73
+  },
+  {
+   "text": "go",
+   "start": 0.81,
+   "end": 0.89
+  },
+  {
+   "text": "to",
+   "start": 0.97,
+   "end": 1.01
+  },
+  {
+   "text": "the",
+   "start": 1.05,
+   "end": 1.13
+  },
+  {
+   "text": "moon.",
+   "start": 1.21,
+   "end": 1.89
+  },
+  {
+   "text": "We",
+   "start": 2.25,
+   "end": 2.41
+  },
+  {
+   "text": "choose",
+   "start": 2.49,
+   "end": 2.73
+  },
+  {
+   "text": "to",
+   "start": 2.81,
+   "end": 2.89
+  },
+  {
+   "text": "go",
+   "start": 2.97,
+   "end": 3.05
+  },
+  {
+   "text": "to",
+   "start": 3.13,
+   "end": 3.21
+  },
+  {
+   "text": "the",
+   "start": 3.25,
+   "end": 3.29
+  },
+  {
+   "text": "moon",
+   "start": 3.37,
+   "end": 3.69
+  },
+  {
+   "text": "in",
+   "start": 3.81,
+   "end": 3.93
+  },
+  {
+   "text": "this",
+   "start": 4.09,
+   "end": 4.25
+  },
+  {
+   "text": "and",
+   "start": 4.33,
+   "end": 4.49
+  },
+  {
+   "text": "do",
+   "start": 4.57,
+   "end": 4.65
+  },
+  {
+   "text": "the",
+   "start": 4.73,
+   "end": 4.81
+  },
+  {
+   "text": "other",
+   "start": 4.89,
+   "end": 5.13
+  },
+  {
+   "text": "things,",
+   "start": 5.45,
+   "end": 5.81
+  },
+  {
+   "text": "not",
+   "start": 5.85,
+   "end": 6.09
+  },
+  {
+   "text": "because",
+   "start": 6.29,
+   "end": 6.49
+  },
+  {
+   "text": "they",
+   "start": 6.57,
+   "end": 6.65
+  },
+  {
+   "text": "are",
+   "start": 6.73,
+   "end": 6.81
+  },
+  {
+   "text": "easy,",
+   "start": 6.89,
+   "end": 7.53
+  },
+  {
+   "text": "but",
+   "start": 7.61,
+   "end": 7.69
+  },
+  {
+   "text": "because",
+   "start": 7.85,
+   "end": 8.09
+  },
+  {
+   "text": "they",
+   "start": 8.17,
+   "end": 8.25
+  },
+  {
+   "text": "are",
+   "start": 8.33,
+   "end": 8.49
+  },
+  {
+   "text": "hard.",
+   "start": 8.69,
+   "end": 9.13
+  }
+ ]
+}

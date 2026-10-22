@@ -77,6 +77,8 @@ test("home page: the Practice menu and the mode showcases", async ({ page }) => 
   await expect(page.getByRole("link", { name: /Talk with someone/ })).toHaveAttribute("href", "#mode-people");
   await expect(page.getByRole("link", { name: /Read aloud/ }).first()).toHaveAttribute("href", "#mode-read");
   await expect(page.getByRole("link", { name: "Try Read aloud free" })).toHaveAttribute("href", "/try?mode=read");
+  // The read-along tile plays its reader
+  await page.getByRole("button", { name: /Hear it read/ }).click();
   // Stress shift: picking a take moves the meaning and plays its recording
   await page.getByRole("button", { name: "▶ “stole”" }).click();
   await expect(page.getByText("means: She borrowed it.")).toBeVisible();
@@ -90,7 +92,7 @@ test("home page: the Practice menu and the mode showcases", async ({ page }) => 
   await expect(page.getByText("Early for a meeting")).toBeVisible();
   const played = await page.evaluate(() => (window as unknown as { played: string[] }).played);
   // Videos on the page may also call play(); only the sound clips matter here
-  expect(played.map((src) => new URL(src, "http://localhost").pathname).filter((path) => path.startsWith("/audio/"))).toEqual(["/audio/stress-shift/s4.mp3", "/audio/people/theo-01.mp3"]);
+  expect(played.map((src) => new URL(src, "http://localhost").pathname).filter((path) => path.startsWith("/audio/"))).toEqual(["/audio/read-along/moon.mp3", "/audio/stress-shift/s4.mp3", "/audio/people/theo-01.mp3"]);
   expect(problems).toEqual([]);
 });
 
