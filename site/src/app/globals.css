@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+/* VoiceLab's colours and fonts, the same as the app and the videos */
+@theme {
+  --color-paper: #fbf6ee;
+  --color-sand: #efe8dc;
+  --color-card: #ffffff;
+  --color-ink: #1e2620;
+  --color-muted: #59645c;
+  --color-line: #d8cdbb;
+  --color-accent: #2e5b3e;
+  --color-accent-dark: #1f4029;
+  --color-tint: #e4ede6;
+  --color-orange: #c26a2c;
+  --color-warm: #f4a86e;
+  --color-peach: #fce3cf;
+  --color-peach-ink: #7a3a10;
+  --color-usual: #b9c4bb;
+  --color-lane: #c9d0ca;
+  --color-grey: #8c978f;
+  --font-sans: var(--font-atkinson), system-ui, sans-serif;
+  --font-serif: var(--font-fraunces), Georgia, serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+/* Keyboard focus that's easy to see */
+:focus-visible {
+  outline: 3px solid var(--color-orange);
+  outline-offset: 3px;
+}
+
+/* People who ask for less motion get none */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
