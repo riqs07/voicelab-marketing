@@ -1,0 +1,105 @@
+{
+  "01-start": {
+    "file": "demo/01-start.png",
+    "boxes": {
+      "show": {
+        "x": 83,
+        "y": 425.25,
+        "w": 224,
+        "h": 224
+      }
+    }
+  },
+  "02-think": {
+    "file": "demo/02-think.png",
+    "boxes": {}
+  },
+  "03-talking": {
+    "file": "demo/03-talking.png",
+    "boxes": {
+      "stop": {
+        "x": 51,
+        "y": 188.875,
+        "w": 288,
+        "h": 288
+      }
+    }
+  },
+  "04-results": {
+    "file": "demo/04-results.png",
+    "boxes": {}
+  },
+  "05-pitch": {
+    "file": "demo/05-pitch.png",
+    "boxes": {
+      "text": {
+        "x": 44,
+        "y": 149.6875,
+        "w": 302,
+        "h": 229.375
+      },
+      "rose": {
+        "x": 237.828125,
+        "y": 305.78125,
+        "w": 14,
+        "h": 14
+      }
+    }
+  },
+  "06-change": {
+    "file": "demo/06-change.png",
+    "boxes": {
+      "change": {
+        "x": 44,
+        "y": 150.375,
+        "w": 302,
+        "h": 27.1875
+      }
+    }
+  },
+  "07-phrases": {
+    "file": "demo/07-phrases.png",
+    "boxes": {
+      "me": {
+        "x": 305.59375,
+        "y": 240.375,
+        "w": 33.703125,
+        "h": 44
+      },
+      "row": {
+        "x": 40,
+        "y": 149.875,
+        "w": 310,
+        "h": 220.375
+      }
+    }
+  },
+  "08-tapped": {
+    "file": "demo/08-tapped.png",
+    "boxes": {
+      "me": {
+        "x": 305.59375,
+        "y": 250.375,
+        "w": 33.703125,
+        "h": 44
+      },
+      "row": {
+        "x": 30,
+        "y": 149.875,
+        "w": 330,
+        "h": 240.375
+      }
+    }
+  },
+  "09-again": {
+    "file": "demo/09-again.png",
+    "boxes": {
+      "card": {
+        "x": 24,
+        "y": 150.125,
+        "w": 342,
+        "h": 502
+      }
+    }
+  }
+}

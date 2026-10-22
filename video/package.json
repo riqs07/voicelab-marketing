@@ -1,0 +1,24 @@
+{
+  "name": "voicelab-video",
+  "private": true,
+  "version": "0.0.1",
+  "scripts": {
+    "studio": "remotion studio",
+    "render": "remotion render src/index.ts VoicelabPitch out/voicelab-pitch.mp4 --codec=h264 --crf=18 --image-format=png --pixel-format=yuv420p --concurrency=2 ${REMOTION_BROWSER:+--browser-executable=$REMOTION_BROWSER}",
+    "render:voiced": "remotion render src/index.ts VoicelabPitchVoiced out/voicelab-pitch-voiced.mp4 --codec=h264 --crf=18 --audio-codec=aac --image-format=png --pixel-format=yuv420p --concurrency=2 ${REMOTION_BROWSER:+--browser-executable=$REMOTION_BROWSER}",
+    "render:all": "./render-all.sh",
+    "voice:durations": "node scripts/durations.mjs"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.538",
+    "@remotion/google-fonts": "4.0.538",
+    "@remotion/paths": "4.0.538",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "remotion": "4.0.538"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "typescript": "^5.9.3"
+  }
+}

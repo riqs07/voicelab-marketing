@@ -1,0 +1,40 @@
+VoiceLab pitch clip: voiceover slots (15 s, 30 fps, 450 frames)
+=====================================================================
+The clip currently has no audio. Tone: calm, plain and warm. No hype, no cheerleading.
+Keep each line shorter than its slot so the visuals can breathe.
+
+Scene 1: hook (0.0-2.5 s, frames 0-75)
+  On screen: "Do you sound unsure... without knowing it?"
+  VO (optional; the text can carry it alone):
+    "Do you ever sound unsure without meaning to?"
+
+Scene 2: the rise (2.5-7.0 s, frames 75-210)
+  On screen: the card. The curve draws from 3.2 s to 5.6 s, "Rose" appears at 5.6 s,
+             and the caption at 6.0 s.
+  Best idea: during the curve draw (about 3.2-5.6 s), play a REAL recording of
+    "Then the gorilla just stared at me?" with a rising ending, timed so "me" lands at about 5.4-5.6 s.
+  Then VO (about 5.8-7.0 s): "Your voice went up at the end. It sounds like a question."
+
+Scene 3: tell it again (7.0-11.5 s, frames 210-345)
+  On screen: "Tell it again." The old curve greys out. The new curve draws from 7.9 s to 10.2 s,
+             "Fell" appears at 10.2 s, and "Now it lands." at 10.6 s.
+  VO (about 7.0-7.8 s): "Tell it again."
+  Recording (about 7.9-10.2 s): the same sentence with a falling, settled ending.
+  VO (about 10.4-11.4 s): "Now it lands."
+
+Scene 4: end card (11.5-15.0 s, frames 345-450)
+  On screen: "VoiceLab. See how you sound." / "Practise speaking. Hear the difference." / [URL placeholder]
+  VO (about 12.0-14.5 s): "VoiceLab. See how you sound."
+
+Audio notes
+  - Use real speech for the two sample takes. A synthetic voice makes the pitch claim less believable.
+  - If the take timings differ, adjust the T constants in src/VoicelabPitch.tsx
+    (drawRoseStart/End, drawFellStart/End) so each curve finishes on the final word.
+  - Add audio with <Audio src={staticFile('vo.mp3')} /> from 'remotion', or use <Sequence> for each slot.
+
+---------------------------------------------------------------------
+UPDATE: the voiced version is built (composition VoicelabPitchVoiced, out/voicelab-pitch-voiced.mp4, 19.87 s).
+It uses the five recorded clips in public/audio/ with 0.4 s gaps, starting at 0.2 s:
+  1-hook 0.20 s | 2-rising 4.15 s | 3-explain 7.40 s | 4-falling 12.48 s | 5-close 15.88 s | end 19.85 s
+Visual cue points come from ffmpeg silencedetect and are listed in the T block of src/VoicelabPitchVoiced.tsx.
+If a clip changes, update its duration in CLIPS and its in-clip offsets in T and CAPTION_LINES.

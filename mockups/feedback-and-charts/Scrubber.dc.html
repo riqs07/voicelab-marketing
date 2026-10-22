@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Scrubber with pitch outline and markers</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;600;700&amp;family=Fraunces:opsz,wght@9..144,600&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#2E5B3E}a:hover{color:#1F4029}
+</style>
+</helmet>
+<div style="width: 390px; min-height: 1060px; box-sizing: border-box; background: #FBF6EE; color: #1E2620; font-family: 'Atkinson Hyperlegible Next', system-ui, sans-serif; padding: 24px 16px 40px; display: flex; flex-direction: column; gap: 16px">
+
+<div style="display: flex; flex-direction: column; gap: 4px">
+<h1 style="margin: 0; font-family: Fraunces, Georgia, serif; font-size: 28px; font-weight: 600; letter-spacing: -0.01em">Listen back</h1>
+<p style="margin: 0; font-size: 15px; color: #59645C; line-height: 1.45">The bar shows your pitch for the whole take. Marks show the clear moments. Tap one to jump there.</p>
+</div>
+
+<span style="font-size: 13px; font-weight: 600; color: #59645C">At rest</span>
+<div style="background: #FFFFFF; border-radius: 18px; padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 1px 2px rgba(30,38,32,0.06)">
+<div style="display: flex; align-items: center; gap: 10px">
+<button type="button" aria-label="Play" style="width: 44px; height: 44px; border-radius: 22px; border: none; background: #2E5B3E; display: flex; align-items: center; justify-content: center; flex: none"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2 L14 8 L4 14 Z" fill="#FFFFFF"></path></svg></button>
+<span style="font-size: 14px; color: #59645C">0:00 / 0:31</span>
+</div>
+<svg width="326" height="70" viewBox="0 0 326 70" role="img" aria-label="Pitch outline of the whole take, with three rises, three falls and three pause words marked">
+<g fill="none" stroke="#2E5B3E" stroke-width="2" stroke-linecap="round">
+<path d="M2 42 C 10 36, 18 24, 26 30 S 32 44, 34 46"></path>
+<path d="M42 40 C 48 36, 54 34, 59 40"></path>
+<path d="M62 42 C 66 40, 72 38, 77 40"></path>
+<path d="M87 40 C 95 36, 100 12, 104 12 C 108 12, 110 34, 111 44"></path>
+<path d="M123 40 C 133 40, 143 42, 150 36 C 154 30, 157 20, 159 16"></path>
+<path d="M165 40 C 180 38, 195 42, 205 36 C 211 30, 215 24, 217 20"></path>
+<path d="M223 42 C 235 40, 245 40, 252 34 C 257 28, 260 22, 263 20"></path>
+<path d="M270 40 C 290 40, 310 42, 324 46"></path>
+</g>
+<line x1="0" y1="56" x2="326" y2="56" stroke="#EDE4D6" stroke-width="4" stroke-linecap="round"></line>
+<rect x="78" y="54" width="8" height="4" rx="2" fill="#E2A57A"></rect>
+<g fill="#C26A2C"><path d="M155 6 L163 6 L159 1 Z" transform="rotate(0)"></path><path d="M213 6 L221 6 L217 1 Z"></path><path d="M259 6 L267 6 L263 1 Z"></path></g>
+<g fill="#2E5B3E"><path d="M30 1 L38 1 L34 6 Z"></path><path d="M107 1 L115 1 L111 6 Z"></path><path d="M320 1 L326 1 L323 6 Z"></path></g>
+<g fill="#8C978F"><circle cx="126" cy="64" r="2.5"></circle><circle cx="140" cy="64" r="2.5"></circle><circle cx="236" cy="64" r="2.5"></circle></g>
+</svg>
+<div style="display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: #59645C">
+<span style="display: flex; align-items: center; gap: 4px"><svg width="10" height="8" aria-hidden="true"><path d="M1 7 L9 7 L5 1 Z" fill="#C26A2C"></path></svg>Rose</span>
+<span style="display: flex; align-items: center; gap: 4px"><svg width="10" height="8" aria-hidden="true"><path d="M1 1 L9 1 L5 7 Z" fill="#2E5B3E"></path></svg>Fell</span>
+<span style="display: flex; align-items: center; gap: 4px"><svg width="8" height="8" aria-hidden="true"><circle cx="4" cy="4" r="3" fill="#8C978F"></circle></svg>Pause word</span>
+<span style="display: flex; align-items: center; gap: 4px"><span style="width: 14px; height: 4px; border-radius: 2px; background: #E2A57A"></span>Pause mid-sentence</span>
+</div>
+</div>
+
+<span style="font-size: 13px; font-weight: 600; color: #59645C">Showing rises, on the second one</span>
+<div style="background: #FFFFFF; border-radius: 18px; padding: 14px 16px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 1px 2px rgba(30,38,32,0.06)">
+
+<div role="group" aria-label="Show marks" style="display: flex; gap: 6px; overflow-x: auto">
+<button type="button" aria-pressed="false" style="flex: none; min-height: 36px; padding: 0 12px; border-radius: 18px; border: 1.5px solid #D8CDBB; background: transparent; color: #1E2620; font-family: inherit; font-size: 13px; font-weight: 600">All</button>
+<button type="button" aria-pressed="true" style="flex: none; min-height: 36px; padding: 0 12px; border-radius: 18px; border: none; background: #2E5B3E; color: #FFFFFF; font-family: inherit; font-size: 13px; font-weight: 600">Rises 3</button>
+<button type="button" aria-pressed="false" style="flex: none; min-height: 36px; padding: 0 12px; border-radius: 18px; border: 1.5px solid #D8CDBB; background: transparent; color: #1E2620; font-family: inherit; font-size: 13px; font-weight: 600">Falls 3</button>
+<button type="button" aria-pressed="false" style="flex: none; min-height: 36px; padding: 0 12px; border-radius: 18px; border: 1.5px solid #D8CDBB; background: transparent; color: #1E2620; font-family: inherit; font-size: 13px; font-weight: 600">Pauses 5</button>
+<button type="button" aria-pressed="false" style="flex: none; min-height: 36px; padding: 0 12px; border-radius: 18px; border: 1.5px solid #D8CDBB; background: transparent; color: #1E2620; font-family: inherit; font-size: 13px; font-weight: 600">Pause words 3</button>
+</div>
+
+<div style="position: relative; height: 112px">
+<div style="position: absolute; left: 150px; top: 0; transform: translateX(-50%); background: #1E2620; color: #FFFFFF; border-radius: 10px; padding: 6px 10px; font-size: 13px; white-space: nowrap">Rose · “me.” · 0:15</div>
+<svg width="326" height="80" viewBox="0 0 326 80" style="position: absolute; left: 0; top: 32px" role="img" aria-label="Pitch outline with the three rises highlighted; the playhead is on the second rise at 0:15">
+<g fill="none" stroke="#B9C4BB" stroke-width="2" stroke-linecap="round">
+<path d="M2 52 C 10 46, 18 34, 26 40 S 32 54, 34 56"></path>
+<path d="M42 50 C 48 46, 54 44, 59 50"></path>
+<path d="M62 52 C 66 50, 72 48, 77 50"></path>
+<path d="M87 50 C 95 46, 100 22, 104 22 C 108 22, 110 44, 111 54"></path>
+<path d="M270 50 C 290 50, 310 52, 324 56"></path>
+</g>
+<g fill="none" stroke="#2E5B3E" stroke-width="2.5" stroke-linecap="round">
+<path d="M123 50 C 133 50, 143 52, 150 46 C 154 40, 157 30, 159 26"></path>
+<path d="M165 50 C 180 48, 195 52, 205 46 C 211 40, 215 34, 217 30"></path>
+<path d="M223 52 C 235 50, 245 50, 252 44 C 257 38, 260 32, 263 30"></path>
+</g>
+<line x1="0" y1="68" x2="326" y2="68" stroke="#EDE4D6" stroke-width="4" stroke-linecap="round"></line>
+<line x1="0" y1="68" x2="159" y2="68" stroke="#2E5B3E" stroke-width="4" stroke-linecap="round"></line>
+<g fill="#C26A2C"><path d="M154 14 L164 14 L159 7 Z"></path><path d="M212 18 L222 18 L217 11 Z"></path><path d="M258 18 L268 18 L263 11 Z"></path></g>
+<line x1="159" y1="4" x2="159" y2="74" stroke="#1E2620" stroke-width="1.5"></line>
+<circle cx="159" cy="68" r="8" fill="#2E5B3E" stroke="#FFFFFF" stroke-width="3"></circle>
+</svg>
+</div>
+
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px">
+<button type="button" aria-label="Previous rise" style="width: 44px; height: 44px; border-radius: 22px; border: 1.5px solid #D8CDBB; background: transparent; display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 L5 8 L10 13" stroke="#1E2620" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
+<div style="text-align: center; font-size: 14px; line-height: 1.35"><b>Rise 2 of 3</b><br><span style="color: #59645C">“…just stared at <b style="color: #7A3A10">me.</b>”</span></div>
+<button type="button" aria-label="Next rise" style="width: 44px; height: 44px; border-radius: 22px; border: 1.5px solid #D8CDBB; background: transparent; display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3 L11 8 L6 13" stroke="#1E2620" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
+</div>
+
+<div style="display: flex; gap: 8px; flex-wrap: wrap">
+<button type="button" aria-pressed="true" style="min-height: 40px; padding: 0 14px; border-radius: 20px; border: none; background: #E3EDE5; color: #2E5B3E; font-family: inherit; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 6px"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 5 A5 5 0 0 1 11 4 M12 1 L12 4.5 L8.5 4.5 M12 9 A5 5 0 0 1 3 10 M2 13 L2 9.5 L5.5 9.5" stroke="#2E5B3E" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>Loop these 3 seconds</button>
+<button type="button" aria-pressed="false" style="min-height: 40px; padding: 0 14px; border-radius: 20px; border: 1.5px solid #D8CDBB; background: transparent; color: #1E2620; font-family: inherit; font-size: 14px; font-weight: 600">0.75× speed</button>
+</div>
+
+<div style="border-top: 1px solid #EDE4D6; padding-top: 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px">
+<span style="font-size: 14px; line-height: 1.35">Did that sound like it went up?</span>
+<div style="display: flex; gap: 6px">
+<button type="button" aria-label="Yes, it went up" style="width: 44px; height: 44px; border-radius: 22px; border: 1.5px solid #D8CDBB; background: transparent; display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5 L6.5 12 L13 4" stroke="#2E5B3E" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
+<button type="button" aria-label="No, it did not" style="width: 44px; height: 44px; border-radius: 22px; border: 1.5px solid #D8CDBB; background: transparent; display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4 L12 12 M12 4 L4 12" stroke="#59645C" stroke-width="2" fill="none" stroke-linecap="round"></path></svg></button>
+</div>
+</div>
+</div>
+
+<span style="font-size: 13px; font-weight: 600; color: #59645C">While dragging</span>
+<div style="background: #FFFFFF; border-radius: 18px; padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 1px 2px rgba(30,38,32,0.06)">
+<div style="align-self: center; background: #F1F6F2; border-radius: 12px; padding: 8px 12px; display: flex; flex-direction: column; align-items: center; gap: 2px">
+<svg width="150" height="30" viewBox="0 0 150 30" aria-hidden="true"><path d="M2 22 C 30 20, 60 24, 90 18 C 110 14, 130 8, 148 4" stroke="#2E5B3E" stroke-width="2.5" fill="none" stroke-linecap="round"></path><line x1="104" y1="0" x2="104" y2="30" stroke="#1E2620" stroke-width="1.5"></line></svg>
+<span style="font-size: 15px">just stared <b>at</b> me.</span>
+<span style="font-size: 12px; color: #59645C">0:14</span>
+</div>
+<svg width="326" height="20" viewBox="0 0 326 20" aria-hidden="true"><line x1="0" y1="10" x2="326" y2="10" stroke="#EDE4D6" stroke-width="4" stroke-linecap="round"></line><line x1="0" y1="10" x2="150" y2="10" stroke="#2E5B3E" stroke-width="4" stroke-linecap="round"></line><circle cx="150" cy="10" r="9" fill="#2E5B3E" stroke="#FFFFFF" stroke-width="3"></circle></svg>
+<p style="margin: 0; font-size: 13px; color: #59645C; line-height: 1.4">A small preview shows the words and pitch under your finger, so you land on the right word.</p>
+</div>
+
+<p style="margin: 0; font-size: 13px; color: #59645C; line-height: 1.45">Only clear moments get a mark. Your ✓ and ✗ answers show which kinds of mark to trust.</p>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1060}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

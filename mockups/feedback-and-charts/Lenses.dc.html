@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Lens: pauses and ums</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;600;700&amp;family=Fraunces:opsz,wght@9..144,600&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#2E5B3E}a:hover{color:#1F4029}
+</style>
+</helmet>
+<div style="width: 390px; min-height: 1000px; box-sizing: border-box; background: #FBF6EE; color: #1E2620; font-family: 'Atkinson Hyperlegible Next', system-ui, sans-serif; padding: 24px 16px 40px; display: flex; flex-direction: column; gap: 16px">
+
+<div style="display: flex; justify-content: space-between; align-items: center">
+<span style="font-family: Fraunces, Georgia, serif; font-size: 20px; font-weight: 600">Story</span>
+<span style="font-size: 14px; color: #59645C">A day at the zoo</span>
+</div>
+
+<h1 style="margin: 0; font-family: Fraunces, Georgia, serif; font-size: 30px; font-weight: 600; letter-spacing: -0.01em">What you said</h1>
+
+<div role="tablist" aria-label="Ways to look at your take" style="display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px">
+<button type="button" role="tab" aria-selected="false" style="flex: none; min-height: 40px; padding: 0 14px; border-radius: 20px; border: 1.5px solid #D8CDBB; background: transparent; color: #1E2620; font-family: inherit; font-size: 14px; font-weight: 600">Pitch</button>
+<button type="button" role="tab" aria-selected="true" style="flex: none; min-height: 40px; padding: 0 14px; border-radius: 20px; border: none; background: #2E5B3E; color: #FFFFFF; font-family: inherit; font-size: 14px; font-weight: 600">Pauses and ums</button>
+<button type="button" role="tab" aria-selected="false" style="flex: none; min-height: 40px; padding: 0 14px; border-radius: 20px; border: 1.5px solid #D8CDBB; background: transparent; color: #1E2620; font-family: inherit; font-size: 14px; font-weight: 600">Pace</button>
+<button type="button" role="tab" aria-selected="false" style="flex: none; min-height: 40px; padding: 0 14px; border-radius: 20px; border: 1.5px solid #D8CDBB; background: transparent; color: #1E2620; font-family: inherit; font-size: 14px; font-weight: 600">Words</button>
+<button type="button" role="tab" aria-selected="false" style="flex: none; min-height: 40px; padding: 0 14px; border-radius: 20px; border: 1.5px solid #D8CDBB; background: transparent; color: #1E2620; font-family: inherit; font-size: 14px; font-weight: 600">Clarity</button>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+<div style="background: #FFFFFF; border-radius: 14px; padding: 10px 12px; box-shadow: 0 1px 2px rgba(30,38,32,0.06)"><div style="font-family: Fraunces, Georgia, serif; font-size: 24px; font-weight: 600">5</div><div style="font-size: 12px; color: #59645C; line-height: 1.3">pauses between thoughts</div></div>
+<div style="background: #FCE3CF; border-radius: 14px; padding: 10px 12px"><div style="font-family: Fraunces, Georgia, serif; font-size: 24px; font-weight: 600; color: #7A3A10">1</div><div style="font-size: 12px; color: #7A3A10; line-height: 1.3">pause mid-sentence</div></div>
+<div style="background: #FFFFFF; border-radius: 14px; padding: 10px 12px; box-shadow: 0 1px 2px rgba(30,38,32,0.06)"><div style="font-family: Fraunces, Georgia, serif; font-size: 24px; font-weight: 600">3</div><div style="font-size: 12px; color: #59645C; line-height: 1.3">ums and likes</div></div>
+</div>
+
+<div style="background: #FFFFFF; border-radius: 18px; padding: 20px 16px; box-shadow: 0 1px 2px rgba(30,38,32,0.06); font-size: 18px; line-height: 2.2">
+So last Saturday I went to the zoo.<span style="display: inline-block; vertical-align: middle; margin: 0 4px; padding: 0 8px; height: 22px; line-height: 22px; border-radius: 11px; background: #E3EDE5; color: #2E5B3E; font-size: 12px; font-weight: 600; min-width: 34px; text-align: center">0.8 s</span>I bought a hot dog,<span style="display: inline-block; vertical-align: middle; margin: 0 4px; padding: 0 6px; height: 22px; line-height: 22px; border-radius: 11px; background: #E3EDE5; color: #2E5B3E; font-size: 12px; font-weight: 600; min-width: 14px; text-align: center">0.3</span>and a seagull<span style="display: inline-block; vertical-align: middle; margin: 0 4px; padding: 0 10px; height: 22px; line-height: 22px; border-radius: 11px; background: #FCE3CF; color: #7A3A10; font-size: 12px; font-weight: 700; min-width: 38px; text-align: center; outline: 1.5px solid #E2A57A">0.9 s</span>stole it right out of my hand.<span style="display: inline-block; vertical-align: middle; margin: 0 4px; padding: 0 12px; height: 22px; line-height: 22px; border-radius: 11px; background: #E3EDE5; color: #2E5B3E; font-size: 12px; font-weight: 600; min-width: 44px; text-align: center">1.1 s</span>Then <button type="button" aria-label="um, play" style="border: none; background: transparent; padding: 0 2px; font-family: inherit; font-size: 18px; color: #8C978F; font-style: italic; text-decoration: underline dotted #B9C4BB 2px; text-underline-offset: 4px">um</button> the gorilla just <button type="button" aria-label="uh, play" style="border: none; background: transparent; padding: 0 2px; font-family: inherit; font-size: 18px; color: #8C978F; font-style: italic; text-decoration: underline dotted #B9C4BB 2px; text-underline-offset: 4px">uh</button> stared at me.<span style="display: inline-block; vertical-align: middle; margin: 0 4px; padding: 0 6px; height: 22px; line-height: 22px; border-radius: 11px; background: #E3EDE5; color: #2E5B3E; font-size: 12px; font-weight: 600; min-width: 26px; text-align: center">0.6 s</span>Since then I <button type="button" aria-label="like, play" style="border: none; background: transparent; padding: 0 2px; font-family: inherit; font-size: 18px; color: #8C978F; font-style: italic; text-decoration: underline dotted #B9C4BB 2px; text-underline-offset: 4px">like</button> always eat before I see the gorilla.
+</div>
+
+<div style="display: flex; gap: 14px; flex-wrap: wrap; font-size: 13px; color: #59645C">
+<span style="display: flex; align-items: center; gap: 6px"><span style="width: 22px; height: 12px; border-radius: 6px; background: #E3EDE5"></span>Pause between thoughts</span>
+<span style="display: flex; align-items: center; gap: 6px"><span style="width: 22px; height: 12px; border-radius: 6px; background: #FCE3CF; outline: 1.5px solid #E2A57A"></span>Pause mid-sentence</span>
+<span style="display: flex; align-items: center; gap: 6px"><span style="font-style: italic; color: #8C978F; text-decoration: underline dotted #B9C4BB 2px">um</span>Tap to hear it</span>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 10px">
+<div style="background: #FFFFFF; border-radius: 14px; padding: 12px 14px; font-size: 14px; line-height: 1.45; box-shadow: 0 1px 2px rgba(30,38,32,0.06)"><b>The pause after “seagull” split the sentence.</b> Move it before “stole” and it builds suspense instead.</div>
+<div style="background: #FFFFFF; border-radius: 14px; padding: 12px 14px; font-size: 14px; line-height: 1.45; box-shadow: 0 1px 2px rgba(30,38,32,0.06)"><b>Your pauses between thoughts were long and calm.</b> That’s the habit that makes speakers sound sure.</div>
+</div>
+
+<p style="margin: 0; font-size: 13px; color: #59645C; line-height: 1.45">The same transcript with different lenses. Pitch is the one being built now.</p>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1000}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

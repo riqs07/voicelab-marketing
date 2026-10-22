@@ -1,0 +1,8 @@
+# Installed tools (reinstall with npm install)
+node_modules/
+# Build output and scratch renders; finished videos go in renders/
+video/out/
+# Keys: never commit
+.env
+.env.local
+.DS_Store
