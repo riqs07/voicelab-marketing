@@ -59,6 +59,38 @@ test("home page: hero, animations, videos and calls to action", async ({ page })
   expect(problems).toEqual([]);
 });
 
+test("home page: the Practice menu and the mode showcases", async ({ page }) => {
+  const problems = watchConsole(page);
+  // Count clips started instead of playing sound
+  await page.addInitScript(() => {
+    (window as unknown as { played: string[] }).played = [];
+    HTMLMediaElement.prototype.play = function () {
+      (window as unknown as { played: string[] }).played.push(this.src);
+      return Promise.resolve();
+    };
+  });
+  await page.goto("/");
+  await page.getByRole("heading", { name: "Inside the app" }).scrollIntoViewIfNeeded();
+  // The menu shows the app's groups, and its rows link to their showcase
+  await expect(page.getByText("Everyday conversation", { exact: true }).first()).toBeVisible();
+  await expect(page.getByRole("link", { name: /Talk with someone/ })).toHaveAttribute("href", "#mode-people");
+  // Stress shift: picking a take moves the meaning and plays its recording
+  await page.getByRole("button", { name: "▶ “stole”" }).click();
+  await expect(page.getByText("means: She borrowed it.")).toBeVisible();
+  // The guided story's nudges arrive after its facts
+  await page.getByRole("heading", { name: "You get the facts. You make it a story." }).scrollIntoViewIfNeeded();
+  await expect(page.getByText("+ How did it get in the fridge?")).toBeVisible({ timeout: 5_000 });
+  // Each person plays their own opening line
+  await page.getByRole("button", { name: "Theo: play their opening line" }).click();
+  await expect(page.getByText("“Oh, hi. Are you here for the ten o’clock too?”")).toBeVisible();
+  await page.getByRole("button", { name: "Shuffle" }).click();
+  await expect(page.getByText("Early for a meeting")).toBeVisible();
+  const played = await page.evaluate(() => (window as unknown as { played: string[] }).played);
+  // Videos on the page may also call play(); only the sound clips matter here
+  expect(played.map((src) => new URL(src, "http://localhost").pathname).filter((path) => path.startsWith("/audio/"))).toEqual(["/audio/stress-shift/s4.mp3", "/audio/people/theo-01.mp3"]);
+  expect(problems).toEqual([]);
+});
+
 test("waitlist: join with goals and see the success state", async ({ page }) => {
   const problems = watchConsole(page);
   let sent: unknown = null;

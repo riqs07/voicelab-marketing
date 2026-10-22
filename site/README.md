@@ -5,7 +5,7 @@ Next.js 16, Tailwind 4 and Motion (for the springy animations). Colours and font
 
 | Page | What it does |
 |---|---|
-| `/` | Hero with the real pitch line drawing itself ("Hear it" plays the recordings), how it works, the 30-second demo, the um jar and talk lanes (play as you scroll), three Reels, features, sign-up. |
+| `/` | Hero with the real pitch line drawing itself ("Hear it" plays the recordings), how it works, the 30-second demo, the um jar and talk lanes (play as you scroll), three Reels, "Inside the app" (the app's Practice menu in a phone, plus three showcases: stress shift with the real recordings, a guided story building into its story shape, and the four conversation people with their real opening lines), sign-up. |
 | `/waitlist` | Email, optional goals and phone. Sends to `/api/waitlist`, which adds the person to Buttondown. Hidden field for bots. |
 | `/try` | A free Rapid Fire, measured in the browser with the app's own code (`src/core`, copied by `scripts/sync-core.mjs`): pitch in your words with rise/fall endings and peaks, pauses, pace, pause words, fading endings, tap any word to hear it, listen back, "try again" compared with the last try, and one tip. The recording stays in page memory and is never uploaded. A note explains the full version's more accurate server analysis. |
 | `/privacy` | Short privacy notes. Replace `[Your contact email]` before launch. |
@@ -14,8 +14,17 @@ Everything respects "reduce motion": people who ask for less motion see the fini
 
 ## Run it locally
 
+The easy way, every time (from the repository's top folder or from `site`):
+
+```sh
+pnpm fresh          # pulls the latest commit, installs packages, clears the cache, starts http://localhost:3000
+```
+
+It stops with a message if a step fails (for example, if you have local changes that conflict with the new commit). Press Ctrl+C to stop the site. By hand, the same thing is:
+
 ```sh
 cd site
+git pull
 pnpm install
 pnpm dev            # http://localhost:3000
 ```

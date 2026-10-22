@@ -1,6 +1,10 @@
 import { BounceWords, BouncyLink, Reveal } from "@/components/Bouncy";
+import { GuidedStory } from "@/components/GuidedStory";
+import { PeoplePicker } from "@/components/PeoplePicker";
 import { PitchHero } from "@/components/PitchHero";
+import { PracticeMenu } from "@/components/PracticeMenu";
 import { Reels } from "@/components/Reels";
+import { StressShift } from "@/components/StressShift";
 import { TalkLanes } from "@/components/TalkLanes";
 import { UmJar } from "@/components/UmJar";
 
@@ -10,11 +14,11 @@ const STEPS = [
   { n: "3", title: "Say it again", line: "One thing to change, then the same words again, with the change drawn over the first try." },
 ];
 
-const FEATURES = [
-  { title: "Tell better stories", line: "Guided stories, story shapes, and “tell it again, shorter each time”.", tint: "bg-peach" },
-  { title: "Practise real conversations", line: "Talk out loud with people who answer in their own voices. See your share of the talking and your questions.", tint: "bg-tint" },
-  { title: "Train your voice", line: "Drills for stress, rising and falling, pauses and volume, each with its own picture.", tint: "bg-sand" },
-  { title: "Hear your progress", line: "A six-minute weekly check-in. Play week one next to today.", tint: "bg-peach" },
+// The showcases beside the Practice menu; each id is linked from its row in the menu
+const SHOWCASES = [
+  { id: "mode-voice", group: "Your voice", Graphic: StressShift },
+  { id: "mode-stories", group: "Tell stories", Graphic: GuidedStory },
+  { id: "mode-people", group: "Everyday conversation", Graphic: PeoplePicker },
 ];
 
 export default function Home() {
@@ -99,19 +103,34 @@ export default function Home() {
       </section>
 
       {/* Inside the app */}
-      <section className="mx-auto max-w-6xl px-4 py-20 sm:px-8">
+      <section id="modes" className="mx-auto max-w-6xl scroll-mt-8 px-4 py-20 sm:px-8">
         <Reveal>
           <h2 className="m-0 font-serif text-4xl font-semibold leading-tight sm:text-5xl">Inside the app</h2>
         </Reveal>
-        <div className="mt-10 grid gap-5 sm:grid-cols-2">
-          {FEATURES.map((feature, i) => (
-            <Reveal key={feature.title} delay={(i % 2) * 0.1}>
-              <div className={`h-full rounded-[1.75rem] ${feature.tint} p-7 transition-transform duration-300 hover:-translate-y-1.5 hover:rotate-[0.6deg]`}>
-                <h3 className="m-0 font-serif text-2xl font-semibold">{feature.title}</h3>
-                <p className="mb-0 mt-2 text-lg leading-relaxed">{feature.line}</p>
+        <Reveal>
+          <p className="mt-4 max-w-2xl text-lg text-muted">Twenty-odd ways to practise, in four groups. Pick anything, in any order, or let Today choose. Here are three up close.</p>
+        </Reveal>
+        <div className="mt-12 grid gap-10 lg:grid-cols-[22rem_1fr] lg:items-start">
+          <Reveal className="lg:sticky lg:top-8">
+            <PracticeMenu />
+          </Reveal>
+          <div className="flex min-w-0 flex-col gap-8">
+            {SHOWCASES.map(({ id, group, Graphic }) => (
+              <Reveal key={id} className="min-w-0">
+                <div id={id} className="scroll-mt-8">
+                  <p className="m-0 mb-3 text-sm font-bold uppercase tracking-wider text-accent">{group}</p>
+                  <Graphic />
+                </div>
+              </Reveal>
+            ))}
+            <Reveal className="min-w-0">
+              <p className="m-0 mb-3 text-sm font-bold uppercase tracking-wider text-accent">Speak on the spot</p>
+              <div className="flex flex-wrap items-center justify-between gap-4 rounded-[2rem] bg-peach p-6">
+                <p className="m-0 max-w-md font-serif text-2xl font-semibold">Rapid Fire works right here in your browser.</p>
+                <BouncyLink href="/try">Try it free</BouncyLink>
               </div>
             </Reveal>
-          ))}
+          </div>
         </div>
         <Reveal className="mt-8">
           <div className="rounded-[1.75rem] border-2 border-line p-7">

@@ -1,0 +1,7 @@
+{
+  "name": "voicelab-marketing",
+  "private": true,
+  "scripts": {
+    "fresh": "node site/scripts/fresh.mjs"
+  }
+}
