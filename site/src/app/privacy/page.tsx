@@ -13,7 +13,7 @@ export default function PrivacyPage() {
       </p>
       <h2 className="mb-0 mt-4 font-serif text-2xl font-semibold">The free Rapid Fire</h2>
       <p className="m-0">
-        VoiceLab doesn’t record or store anything you say on this site. Your browser’s own speech recognition turns your words into text; depending on your browser, that’s done by Apple or Google under their terms. The results stay on your screen and are gone when you leave the page.
+        Your voice is measured inside the page, on your device: pitch, loudness and pauses. The recording is kept only in the page’s memory so you can play it back, and is never uploaded to us. Your browser’s own speech recognition turns your words into text; depending on your browser, that’s done by Apple or Google under their terms. Everything is gone when you leave the page.
       </p>
       <h2 className="mb-0 mt-4 font-serif text-2xl font-semibold">Everything else</h2>
       <p className="m-0">No ads, no tracking cookies, and we don’t sell anything to anyone.</p>

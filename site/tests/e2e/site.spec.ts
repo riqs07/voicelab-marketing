@@ -89,7 +89,7 @@ test("waitlist: the real route checks the email and needs a key", async ({ page,
   await expect(page.locator("#waitlist-error")).toHaveText("The waitlist isn't open yet. Please try again soon.");
 });
 
-test("free Rapid Fire: question, talk, stop, results", async ({ page }) => {
+test("free Rapid Fire: question, talk, stop, results measured in the browser", async ({ page }) => {
   const problems = watchConsole(page);
   await standInSpeech(page, "um I am a morning person because uh the light is calm and the coffee tastes better");
   await page.goto("/try");
@@ -98,11 +98,21 @@ test("free Rapid Fire: question, talk, stop, results", async ({ page }) => {
   await page.getByRole("button", { name: "Start now" }).click();
   await expect(page.getByText("Listening")).toBeVisible();
   await expect(page.getByText("coffee")).toBeVisible({ timeout: 5_000 });
+  await page.waitForTimeout(1500);
   await page.getByRole("button", { name: "Stop" }).click();
-  await expect(page.getByText("One thing to try:")).toBeVisible();
-  await expect(page.getByText("pause words", { exact: true })).toBeVisible();
+  await expect(page.getByText("One thing to try:")).toBeVisible({ timeout: 10_000 });
   await expect(page.getByText("A little short of a minute.")).toBeVisible();
-  await expect(page.getByRole("link", { name: "Join the waitlist" }).last()).toBeVisible();
+  await expect(page.getByText(/pause words? heard/)).toBeVisible();
+  // The recording is there to play back, from memory
+  await expect(page.locator("audio[src^='blob:']")).toHaveCount(1);
+  // The note about the full version's deeper analysis
+  await expect(page.getByText(/In the full version, portions of your voice are sent to our server for deeper analysis/)).toBeVisible();
+  // More detail behind "See more"
+  await page.getByRole("button", { name: "See more" }).click();
+  await expect(page.getByText(/words at \d+ a minute/)).toBeVisible();
+  // Try again keeps the question and compares with the last try
+  await page.getByRole("button", { name: "Try it again" }).click();
+  await expect(page.getByText("seconds to think")).toBeVisible();
   expect(problems).toEqual([]);
 });
 

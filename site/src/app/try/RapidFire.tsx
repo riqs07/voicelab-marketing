@@ -1,11 +1,15 @@
 "use client";
 // The free Rapid Fire: a surprise question, ten seconds to think, then talk for one to two minutes.
-// Words come from the browser's own speech recognition (Apple or Google, depending on the browser).
-// Nothing is recorded or saved by VoiceLab.
+// While you talk, the page records in memory and reads loudness and pitch ten times a second with the app's own
+// code; words come from the browser's speech recognition (Apple or Google). Nothing is uploaded or kept.
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { BouncyLink, SPRING } from "@/components/Bouncy";
-import { QUESTIONS, THINK_SECONDS, WINDOW, clock, takeStats, type TakeStats } from "@/lib/rapidFire";
+import { stampSpoken } from "@/core/liveReading";
+import { openCapture, type Capture } from "@/lib/capture";
+import { analyseTake, TICK_MS, type FreeTake } from "@/lib/freeTake";
+import { QUESTIONS, THINK_SECONDS, WINDOW, clock } from "@/lib/rapidFire";
+import { Results } from "./Results";
 
 // The small part of the Web Speech API we use (it isn't in TypeScript's built-in types everywhere)
 type Alternative = { transcript: string };
@@ -29,7 +33,7 @@ function recognitionClass(): RecognitionClass | null {
   return w.SpeechRecognition ?? w.webkitSpeechRecognition ?? null;
 }
 
-type Stage = "intro" | "think" | "talk" | "done" | "unsupported" | "blocked";
+type Stage = "intro" | "think" | "talk" | "working" | "done" | "unsupported" | "blocked";
 
 const AUTO_STOP = 150;
 
@@ -48,19 +52,21 @@ function Ring({ fraction, colour, size = 72, children }: { fraction: number; col
     <div className="relative inline-flex items-center justify-center" style={{ width: size, height: size }}>
       <svg width={size} height={size} aria-hidden="true" className="absolute inset-0">
         <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="#E4EDE6" strokeWidth="8" />
-        <circle
-          cx={size / 2}
-          cy={size / 2}
-          r={r}
-          fill="none"
-          stroke={colour}
-          strokeWidth="8"
-          strokeLinecap="round"
-          strokeDasharray={`${Math.max(0, Math.min(1, fraction)) * around} ${around}`}
-          transform={`rotate(-90 ${size / 2} ${size / 2})`}
-        />
+        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={colour} strokeWidth="8" strokeLinecap="round" strokeDasharray={`${Math.max(0, Math.min(1, fraction)) * around} ${around}`} transform={`rotate(-90 ${size / 2} ${size / 2})`} />
       </svg>
       <span className="relative font-bold tabular-nums">{children}</span>
+    </div>
+  );
+}
+
+// A small live loudness meter, so people can see the page hearing them
+function Meter({ level }: { level: number }) {
+  const bars = [0.25, 0.5, 0.75, 1, 0.75, 0.5, 0.25];
+  return (
+    <div className="flex h-8 items-center gap-1" aria-hidden="true">
+      {bars.map((shape, i) => (
+        <span key={i} className="w-1.5 rounded-full bg-accent transition-[height] duration-100" style={{ height: `${Math.max(12, Math.min(100, level * 600 * shape))}%` }} />
+      ))}
     </div>
   );
 }
@@ -71,62 +77,90 @@ export function RapidFire() {
   const [question, setQuestion] = useState<string>(QUESTIONS[0]);
   const [left, setLeft] = useState(THINK_SECONDS);
   const [seconds, setSeconds] = useState(0);
+  const [level, setLevel] = useState(0);
   const [finalText, setFinalText] = useState("");
   const [interim, setInterim] = useState("");
-  const [stats, setStats] = useState<TakeStats | null>(null);
+  const [take, setTake] = useState<FreeTake | null>(null);
+  const [lastTake, setLastTake] = useState<FreeTake | null>(null);
+  const [audioUrl, setAudioUrl] = useState<string | null>(null);
+
+  // Everything the take collects while it runs
   const recognition = useRef<Recognition | null>(null);
+  const capture = useRef<Capture | null>(null);
   const talking = useRef(false);
   const startedAt = useRef(0);
   const finalRef = useRef("");
-  // Words heard but not yet confirmed by the browser; kept if Stop is pressed mid-phrase
   const interimRef = useRef("");
+  const spokenTimes = useRef<number[]>([]);
+  const levels = useRef<number[]>([]);
+  const pitches = useRef<(number | null)[]>([]);
 
   // Thinking countdown, then talk
   useEffect(() => {
     if (stage !== "think") return;
     if (left <= 0) {
-      startTalking();
+      void startTalking();
       return;
     }
     const id = window.setTimeout(() => setLeft((s) => s - 1), 1000);
     return () => window.clearTimeout(id);
   }, [stage, left]);
 
-  // The talking clock, with an automatic stop
+  // While talking: read loudness and pitch ten times a second (as the app does), run the clock, stop at the limit
   useEffect(() => {
     if (stage !== "talk") return;
     const id = window.setInterval(() => {
       const now = (performance.now() - startedAt.current) / 1000;
       setSeconds(now);
-      if (now >= AUTO_STOP) stopTalking();
-    }, 250);
+      const mic = capture.current;
+      if (mic) {
+        const reading = mic.level();
+        levels.current.push(reading);
+        pitches.current.push(mic.pitch());
+        setLevel(reading);
+      }
+      if (now >= AUTO_STOP) void stopTalking();
+    }, TICK_MS);
     return () => window.clearInterval(id);
   }, [stage]);
 
-  // Stop listening if the page goes away mid-take
-  useEffect(() => () => {
-    talking.current = false;
-    recognition.current?.stop();
-  }, []);
+  // Let go of the microphone if the page goes away mid-take
+  useEffect(
+    () => () => {
+      talking.current = false;
+      recognition.current?.stop();
+      void capture.current?.stop();
+    },
+    [],
+  );
+  // Free the in-memory recording when a new one replaces it or the page goes away
+  useEffect(() => () => (audioUrl ? URL.revokeObjectURL(audioUrl) : undefined), [audioUrl]);
 
   // Start thinking time; a fresh question unless they're trying the same one again
   function think(fresh: boolean) {
-    if (!recognitionClass()) {
+    if (!recognitionClass() || typeof navigator === "undefined" || !navigator.mediaDevices?.getUserMedia) {
       setStage("unsupported");
       return;
     }
     if (fresh) {
       const others = QUESTIONS.filter((q) => q !== question);
       setQuestion(others[Math.floor(Math.random() * others.length)] ?? QUESTIONS[0]);
-    }
+      setLastTake(null);
+    } else if (take) setLastTake(take);
     setLeft(THINK_SECONDS);
     setStage("think");
   }
 
-  function startTalking() {
+  async function startTalking() {
     const Recog = recognitionClass();
     if (!Recog) {
       setStage("unsupported");
+      return;
+    }
+    try {
+      capture.current = await openCapture();
+    } catch {
+      setStage("blocked");
       return;
     }
     const rec = new Recog();
@@ -142,12 +176,17 @@ export function RapidFire() {
         else live += ` ${item[0].transcript}`;
       }
       interimRef.current = live.trim();
+      // Note when each word was first heard, as the app does, to place words against the pitch
+      const heard = `${finalRef.current} ${interimRef.current}`.trim();
+      const now = (performance.now() - startedAt.current) / 1000;
+      spokenTimes.current = stampSpoken(spokenTimes.current, heard.split(/\s+/).filter(Boolean).length, now);
       setFinalText(finalRef.current.trim());
-      setInterim(live.trim());
+      setInterim(interimRef.current);
     };
     rec.onerror = (event) => {
       if (event.error === "not-allowed" || event.error === "service-not-allowed") {
         talking.current = false;
+        void capture.current?.stop();
         setStage("blocked");
       }
     };
@@ -163,6 +202,9 @@ export function RapidFire() {
     };
     finalRef.current = "";
     interimRef.current = "";
+    spokenTimes.current = [];
+    levels.current = [];
+    pitches.current = [];
     setFinalText("");
     setInterim("");
     setSeconds(0);
@@ -177,20 +219,27 @@ export function RapidFire() {
     }
   }
 
-  function stopTalking() {
+  async function stopTalking() {
     if (!talking.current) return;
     talking.current = false;
     recognition.current?.stop();
     const spoken = (performance.now() - startedAt.current) / 1000;
+    setStage("working");
+    const blob = (await capture.current?.stop()) ?? null;
+    capture.current = null;
     // Give the last words a moment to arrive
-    window.setTimeout(() => {
-      setStats(takeStats(`${finalRef.current} ${interimRef.current}`.trim(), spoken));
-      setStage("done");
-    }, 700);
+    await new Promise((resolve) => window.setTimeout(resolve, 600));
+    const transcript = `${finalRef.current} ${interimRef.current}`.trim();
+    const count = transcript.split(/\s+/).filter(Boolean).length;
+    const times = stampSpoken(spokenTimes.current, count, spoken).slice(0, count);
+    setTake(analyseTake({ transcript, spokenTimes: times, levels: levels.current, pitches: pitches.current, seconds: spoken }));
+    setAudioUrl(blob && blob.size > 0 ? URL.createObjectURL(blob) : null);
+    setStage("done");
   }
 
   function another() {
-    setStats(null);
+    setTake(null);
+    setLastTake(null);
     setStage("intro");
   }
 
@@ -218,7 +267,9 @@ export function RapidFire() {
               </svg>
               Show my question
             </motion.button>
-            <p className="m-0 max-w-md text-sm text-muted">Your browser will ask to use the microphone. Its speech recognition (Apple or Google) turns your words into text; VoiceLab doesn’t record or keep anything.</p>
+            <p className="m-0 max-w-md text-sm text-muted">
+              Your browser will ask to use the microphone. Your voice is measured right here in the page; the recording stays on your device for you to play back and is never uploaded. Your browser’s speech recognition (Apple or Google) turns your words into text.
+            </p>
           </motion.div>
         ) : null}
 
@@ -234,7 +285,7 @@ export function RapidFire() {
                   {left}
                 </Ring>
                 <span className="text-lg text-muted">seconds to think</span>
-                <button type="button" onClick={startTalking} className="min-h-11 rounded-full border-2 border-line px-5 font-bold hover:border-accent">
+                <button type="button" onClick={() => void startTalking()} className="min-h-11 rounded-full border-2 border-line px-5 font-bold hover:border-accent">
                   Start now
                 </button>
               </div>
@@ -251,13 +302,8 @@ export function RapidFire() {
                     </span>
                     <span className="text-muted">{now.text}</span>
                   </div>
-                  <motion.button
-                    type="button"
-                    onClick={stopTalking}
-                    whileTap={still ? undefined : { scale: 0.92 }}
-                    transition={SPRING}
-                    className="ml-auto min-h-13 rounded-full bg-ink px-8 text-lg font-bold text-paper"
-                  >
+                  <Meter level={level} />
+                  <motion.button type="button" onClick={() => void stopTalking()} whileTap={still ? undefined : { scale: 0.92 }} transition={SPRING} className="ml-auto min-h-13 rounded-full bg-ink px-8 text-lg font-bold text-paper">
                     Stop
                   </motion.button>
                 </div>
@@ -271,69 +317,16 @@ export function RapidFire() {
           </motion.div>
         ) : null}
 
-        {stage === "done" && stats ? (
-          <motion.div key="done" {...pop} className="flex flex-col gap-6">
-            <div>
-              <span className="text-sm font-semibold text-muted">Your question</span>
-              <h2 className="m-0 mt-1 font-serif text-2xl font-semibold leading-tight sm:text-3xl">{question}</h2>
-            </div>
-            <div className="flex items-center gap-4">
-              <Ring fraction={stats.seconds / WINDOW.long} colour={stats.window === "inside" ? "#2E5B3E" : "#C26A2C"} size={72}>
-                {clock(stats.seconds)}
-              </Ring>
-              <span className="text-lg">
-                {stats.window === "inside" ? "Inside the 1:00 to 2:00 window." : stats.window === "short" ? "A little short of a minute." : "Over two minutes."}
-              </span>
-            </div>
-            <div className="grid grid-cols-3 gap-3">
-              {[
-                { value: stats.perMinute, label: "words a minute" },
-                { value: stats.pauseWords, label: stats.pauseWords === 1 ? "pause word" : "pause words" },
-                { value: stats.words, label: "words" },
-              ].map((tile, i) => (
-                <motion.div
-                  key={tile.label}
-                  className="rounded-2xl bg-paper p-4"
-                  initial={still ? false : { opacity: 0, y: 20, scale: 0.9 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 12, delay: 0.15 + i * 0.1 }}
-                >
-                  <div className="font-serif text-4xl font-semibold tabular-nums">{tile.value}</div>
-                  <div className="text-sm text-muted">{tile.label}</div>
-                </motion.div>
-              ))}
-            </div>
-            <p className="m-0 rounded-2xl bg-peach px-5 py-4 text-lg leading-snug text-peach-ink">
-              <b>One thing to try:</b> {stats.tip}
-            </p>
-            {stats.tokens.length > 0 ? (
-              <div>
-                <span className="text-sm font-semibold text-muted">What we heard (pause words in grey)</span>
-                <p className="m-0 mt-2 text-lg leading-relaxed">
-                  {stats.tokens.map((token, i) => (
-                    <span key={i} className={token.pause ? "italic text-grey underline decoration-usual decoration-dotted decoration-2" : ""}>
-                      {token.text}{" "}
-                    </span>
-                  ))}
-                </p>
-              </div>
-            ) : null}
-            <div className="flex flex-wrap gap-3">
-              <motion.button type="button" onClick={() => think(false)} whileTap={still ? undefined : { scale: 0.94 }} transition={SPRING} className="min-h-12 rounded-full bg-accent px-6 text-lg font-bold text-white shadow-[0_6px_0_#1f4029]">
-                Try it again
-              </motion.button>
-              <button type="button" onClick={another} className="min-h-12 rounded-full border-2 border-line px-6 text-lg font-bold hover:border-accent">
-                Another question
-              </button>
-            </div>
-            <div className="flex flex-col items-start gap-3 rounded-[1.5rem] bg-ink p-6 text-paper">
-              <b className="font-serif text-2xl">The app goes further</b>
-              <span className="text-[#D7DED9]">See where your voice rose and fell on every word, tap any word to hear it, tell stories, practise conversations, and hear your progress week to week.</span>
-              <BouncyLink href="/waitlist" variant="light">
-                Join the waitlist
-              </BouncyLink>
-            </div>
-            <p className="m-0 text-sm text-muted">Nothing was saved. Your browser’s speech recognition turned your words into text.</p>
+        {stage === "working" ? (
+          <motion.div key="working" {...pop} className="flex flex-col items-center gap-4 py-10 text-center">
+            <motion.span className="h-4 w-4 rounded-full bg-accent" animate={still ? undefined : { y: [0, -16, 0] }} transition={{ duration: 0.6, repeat: Infinity }} />
+            <span className="text-lg text-muted">Measuring your voice…</span>
+          </motion.div>
+        ) : null}
+
+        {stage === "done" && take ? (
+          <motion.div key="done" {...pop}>
+            <Results question={question} take={take} last={lastTake} audioUrl={audioUrl} onAgain={() => think(false)} onAnother={another} />
           </motion.div>
         ) : null}
 

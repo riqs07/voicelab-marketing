@@ -12,7 +12,7 @@ export default function TryPage() {
         <h1 className="m-0 font-serif text-4xl font-semibold leading-[1.08] sm:text-5xl">
           <BounceWords text="A surprise question. Ten seconds to think. Then talk." />
         </h1>
-        <p className="m-0 text-lg leading-relaxed text-muted">Aim for one to two minutes. Afterwards you’ll see your time, your pace, your pause words, and one thing to try.</p>
+        <p className="m-0 text-lg leading-relaxed text-muted">Aim for one to two minutes. Afterwards you’ll see where your voice rose, fell and paused, word by word, with one thing to try. Tap any word to hear it back.</p>
       </div>
       <RapidFire />
     </section>

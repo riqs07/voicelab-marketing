@@ -8,7 +8,12 @@ export default defineConfig({
   reporter: "line",
   use: {
     baseURL: `http://localhost:${PORT}`,
-    launchOptions: process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {},
+    // A stand-in microphone (a test tone) that's allowed without asking
+    permissions: ["microphone"],
+    launchOptions: {
+      ...(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {}),
+      args: ["--use-fake-device-for-media-stream", "--use-fake-ui-for-media-stream"],
+    },
   },
   webServer: {
     command: `pnpm exec next start --port ${PORT}`,

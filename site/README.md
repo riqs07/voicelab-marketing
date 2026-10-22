@@ -7,7 +7,7 @@ Next.js 16, Tailwind 4 and Motion (for the springy animations). Colours and font
 |---|---|
 | `/` | Hero with the real pitch line drawing itself ("Hear it" plays the recordings), how it works, the 30-second demo, the um jar and talk lanes (play as you scroll), three Reels, features, sign-up. |
 | `/waitlist` | Email, optional goals and phone. Sends to `/api/waitlist`, which adds the person to Buttondown. Hidden field for bots. |
-| `/try` | A free Rapid Fire: surprise question, 10 seconds to think, talk with timing lights, then time, pace, pause words and one tip. Uses the browser's speech recognition; nothing is recorded or kept. |
+| `/try` | A free Rapid Fire, measured in the browser with the app's own code (`src/core`, copied by `scripts/sync-core.mjs`): pitch in your words with rise/fall endings and peaks, pauses, pace, pause words, fading endings, tap any word to hear it, listen back, "try again" compared with the last try, and one tip. The recording stays in page memory and is never uploaded. A note explains the full version's more accurate server analysis. |
 | `/privacy` | Short privacy notes. Replace `[Your contact email]` before launch. |
 
 Everything respects "reduce motion": people who ask for less motion see the finished state without animation.
@@ -30,6 +30,15 @@ Checks: `pnpm check` (lint, types, unit tests), `pnpm build`, then `pnpm e2e` (b
 4. **Last touches:** put your contact email on the privacy page, point your Instagram bio link at the site, and (optionally) put the web address on the video end cards (`video/src/content/brand.ts`).
 
 Note: Vercel's free Hobby plan is for non-commercial projects; switch to Pro if VoiceLab starts charging.
+
+## Keeping the free Rapid Fire in step with the app
+
+The measuring code in `src/core/` is copied unchanged from the app. After the app's analysis changes:
+
+```sh
+node scripts/sync-core.mjs /path/to/Table-Topics
+pnpm check && pnpm build
+```
 
 ## Where things come from
 
