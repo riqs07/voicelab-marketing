@@ -5,7 +5,7 @@ Everything for marketing VoiceLab (the app lives in `riqs07/table-topics`): soci
 | Folder | What's in it |
 |---|---|
 | `video/` | The Remotion project: 8 reusable video templates plus the website demo. Words, timings and chart data live in `video/src/content/`; voice files in `video/public/audio/`. See `video/README.md`. |
-| `renders/batch-1/` | Finished MP4s, ready to post (9:16 for Reels/TikTok/Shorts, 4:5 for feed, 16:9 for the website). |
+| `renders/batch-1/` | Finished MP4s, ready to post (9:16 for Reels/TikTok/Shorts, 4:5 for feed, 16:9 for the website), plus Reel covers (`covers/`) and captions (`captions.md`). |
 | `mockups/` | Design canvases: the website and waitlist, the feedback and chart ideas, and the hero-animation storyboards. |
 | `video/scripts-v1.md` | The approved scripts for the first five videos. |
 
@@ -26,6 +26,8 @@ Everything for marketing VoiceLab (the app lives in `riqs07/table-topics`): soci
 Every end card says "Join the waitlist". To show a web address instead, change `cta` in `video/src/content/brand.ts` and re-render (`cd video && npm run render:all`).
 
 ## Posting to Instagram
+
+- Captions, hashtags and the matching cover for each Reel are in `renders/batch-1/captions.md`. Covers are made from real frames of each video (`video/src/Covers.tsx`); re-render one with `npx remotion still src/index.ts Cover-UmRain out.png --frame=0`.
 
 - Post the `-story` files as Reels; the `-feed` files work as feed posts and in carousels.
 - Turn on Instagram's "AI info" label: the voices are made with ElevenLabs.

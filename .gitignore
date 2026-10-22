@@ -1,5 +1,5 @@
 # Installed tools (reinstall with npm install)
-node_modules/
+node_modules
 # Build output and scratch renders; finished videos go in renders/
 video/out/
 # Keys: never commit

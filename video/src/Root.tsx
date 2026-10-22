@@ -1,5 +1,6 @@
 import React from 'react';
 import {Composition} from 'remotion';
+import {Cover, COVERS} from './Covers';
 import {VoicelabPitch} from './VoicelabPitch';
 import {DURATION_IN_FRAMES, VoicelabPitchVoiced} from './VoicelabPitchVoiced';
 import {FPS} from './kit/theme';
@@ -60,6 +61,10 @@ export const RemotionRoot: React.FC = () => (
     {Template({id: 'UmRain', component: UmRain, timeline: umRainTimeline})}
     {Template({id: 'Demo', component: Demo, timeline: demoTimeline, sizes: ['wide', 'story']})}
     <Composition id="DemoLoop-wide" component={Demo} durationInFrames={demoLoopFrames()} fps={FPS} {...SIZES.wide} defaultProps={{voiced: false, loop: true}} />
+    {COVERS.map((c, i) => (
+      // Long enough that the frozen video frame isn't clamped; covers are snapshots of frame 0.
+      <Composition key={c.id} id={`Cover-${c.id}`} component={Cover} durationInFrames={1200} fps={FPS} width={1080} height={1920} defaultProps={{index: i}} />
+    ))}
     <Composition id="VoicelabPitch" component={VoicelabPitch} durationInFrames={450} fps={30} width={1080} height={1920} />
     <Composition id="VoicelabPitchVoiced" component={VoicelabPitchVoiced} durationInFrames={DURATION_IN_FRAMES} fps={30} width={1080} height={1920} />
   </>

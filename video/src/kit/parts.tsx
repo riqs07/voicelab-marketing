@@ -53,7 +53,11 @@ const chunks = (tl: Timeline, hide: string[]): Chunk[] =>
       });
     });
 
+// Covers turn captions off (a still frame doesn't need them).
+export const CaptionsOff = React.createContext(false);
+
 export const Captions: React.FC<{tl: Timeline; hide?: string[]}> = ({tl, hide = []}) => {
+  const off = React.useContext(CaptionsOff);
   const f = useCurrentFrame();
   const L = useLayout();
   const t = f / FPS;
@@ -63,7 +67,7 @@ export const Captions: React.FC<{tl: Timeline; hide?: string[]}> = ({tl, hide = 
     return Math.min(lines[i].end + 0.35, next ? next.start - 0.02 : lines[i].end + 0.35);
   };
   const idx = lines.findIndex((b, i) => t >= b.start - 0.05 && t < holdOf(i));
-  if (idx < 0) return null;
+  if (off || idx < 0) return null;
   const line = lines[idx];
   const hold = holdOf(idx);
   const o = Math.min(
