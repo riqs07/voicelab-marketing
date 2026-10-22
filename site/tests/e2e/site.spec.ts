@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
+import passages from "../../src/data/passages.json" with { type: "json" };
 
 // Fail on any console error or uncaught exception
 function watchConsole(page: Page): string[] {
@@ -74,6 +75,8 @@ test("home page: the Practice menu and the mode showcases", async ({ page }) => 
   // The menu shows the app's groups, and its rows link to their showcase
   await expect(page.getByText("Everyday conversation", { exact: true }).first()).toBeVisible();
   await expect(page.getByRole("link", { name: /Talk with someone/ })).toHaveAttribute("href", "#mode-people");
+  await expect(page.getByRole("link", { name: /Read aloud/ }).first()).toHaveAttribute("href", "#mode-read");
+  await expect(page.getByRole("link", { name: "Try Read aloud free" })).toHaveAttribute("href", "/try?mode=read");
   // Stress shift: picking a take moves the meaning and plays its recording
   await page.getByRole("button", { name: "▶ “stole”" }).click();
   await expect(page.getByText("means: She borrowed it.")).toBeVisible();
@@ -148,6 +151,38 @@ test("free Rapid Fire: question, talk, stop, results measured in the browser", a
   expect(problems).toEqual([]);
 });
 
+test("free Read aloud: the toggle, words lighting up, stopping by itself, and the reading checked", async ({ page }) => {
+  const problems = watchConsole(page);
+  // The stand-in reads the JFK passage but skips "decade"
+  const moon = passages[0]!;
+  await standInSpeech(page, moon.body.replace(" decade", ""));
+  await page.goto("/try");
+  // The big toggle switches to Read aloud
+  await page.getByRole("navigation", { name: "Free modes" }).getByRole("link", { name: /Read aloud/ }).click();
+  await expect(page).toHaveURL(/mode=read/);
+  await expect(page.getByRole("button", { name: "We choose to go to the moon" })).toHaveAttribute("aria-pressed", "true");
+  // The other passage can be picked, then back
+  await page.getByRole("button", { name: "The man in the arena" }).click();
+  await expect(page.getByRole("heading", { name: "The man in the arena" })).toBeVisible();
+  await page.getByRole("button", { name: "We choose to go to the moon" }).click();
+  await page.getByRole("button", { name: "Start reading" }).click();
+  await expect(page.getByText("Listening")).toBeVisible();
+  // Words light up as they're heard
+  await expect(page.getByTestId("passage").locator("[data-read='true']").first()).toBeVisible({ timeout: 5_000 });
+  // It stops by itself after the last word
+  await expect(page.getByTestId("reading-headline")).toHaveText("You read 98% of the words.", { timeout: 20_000 });
+  await expect(page.locator("[data-read='false']")).toHaveText(["decade"]);
+  await expect(page.getByText("One thing to try:")).toBeVisible();
+  await expect(page.locator("audio[src^='blob:']")).toHaveCount(1);
+  await expect(page.getByText(/In the full version, portions of your voice are sent to our server for deeper analysis/)).toBeVisible();
+  await page.getByRole("button", { name: "See more" }).click();
+  await expect(page.getByText(/1 word not heard/)).toBeVisible();
+  // The other passage is one tap away
+  await page.getByRole("button", { name: "Read “The man in the arena”" }).click();
+  await expect(page.getByRole("button", { name: "Start reading" })).toBeVisible();
+  expect(problems).toEqual([]);
+});
+
 test("free Rapid Fire: a browser without speech recognition is told so", async ({ page }) => {
   await page.addInitScript(() => {
     Object.assign(window, { SpeechRecognition: undefined, webkitSpeechRecognition: undefined });
@@ -159,7 +194,7 @@ test("free Rapid Fire: a browser without speech recognition is told so", async (
 
 test("privacy page and phone layout have no sideways scroll", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  for (const path of ["/", "/waitlist", "/try", "/privacy"]) {
+  for (const path of ["/", "/waitlist", "/try", "/try?mode=read", "/privacy"]) {
     await page.goto(path);
     // Scroll through so every section has animated in before measuring
     const height = await page.evaluate(() => document.body.scrollHeight);

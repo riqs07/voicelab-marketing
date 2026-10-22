@@ -3,6 +3,7 @@ import { GuidedStory } from "@/components/GuidedStory";
 import { PeoplePicker } from "@/components/PeoplePicker";
 import { PitchHero } from "@/components/PitchHero";
 import { PracticeMenu } from "@/components/PracticeMenu";
+import { ReadAlongDemo } from "@/components/ReadAlongDemo";
 import { Reels } from "@/components/Reels";
 import { StressShift } from "@/components/StressShift";
 import { TalkLanes } from "@/components/TalkLanes";
@@ -16,6 +17,7 @@ const STEPS = [
 
 // The showcases beside the Practice menu; each id is linked from its row in the menu
 const SHOWCASES = [
+  { id: "mode-read", group: "Speak on the spot", Graphic: ReadAlongDemo },
   { id: "mode-voice", group: "Your voice", Graphic: StressShift },
   { id: "mode-stories", group: "Tell stories", Graphic: GuidedStory },
   { id: "mode-people", group: "Everyday conversation", Graphic: PeoplePicker },
@@ -108,7 +110,7 @@ export default function Home() {
           <h2 className="m-0 font-serif text-4xl font-semibold leading-tight sm:text-5xl">Inside the app</h2>
         </Reveal>
         <Reveal>
-          <p className="mt-4 max-w-2xl text-lg text-muted">Twenty-odd ways to practise, in four groups. Pick anything, in any order, or let Today choose. Here are three up close.</p>
+          <p className="mt-4 max-w-2xl text-lg text-muted">Twenty-odd ways to practise, in four groups. Pick anything, in any order, or let Today choose. Here are four up close.</p>
         </Reveal>
         <div className="mt-12 grid gap-10 lg:grid-cols-[22rem_1fr] lg:items-start">
           <Reveal className="lg:sticky lg:top-8">
@@ -124,9 +126,9 @@ export default function Home() {
               </Reveal>
             ))}
             <Reveal className="min-w-0">
-              <p className="m-0 mb-3 text-sm font-bold uppercase tracking-wider text-accent">Speak on the spot</p>
+              <p className="m-0 mb-3 text-sm font-bold uppercase tracking-wider text-accent">Free, no sign-up</p>
               <div className="flex flex-wrap items-center justify-between gap-4 rounded-[2rem] bg-peach p-6">
-                <p className="m-0 max-w-md font-serif text-2xl font-semibold">Rapid Fire works right here in your browser.</p>
+                <p className="m-0 max-w-md font-serif text-2xl font-semibold">Rapid Fire and Read aloud work right here in your browser.</p>
                 <BouncyLink href="/try">Try it free</BouncyLink>
               </div>
             </Reveal>

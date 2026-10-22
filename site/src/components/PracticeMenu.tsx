@@ -14,7 +14,7 @@ export const MENU: { title: string; rows: Row[] }[] = [
     rows: [
       { name: "Rapid Fire", detail: "A surprise question, 1 to 2 minutes", icon: "bolt", see: "/try" },
       { name: "Prepared speech", detail: "Plan for 2 minutes, speak for 2 to 4", icon: "note" },
-      { name: "Read aloud", detail: "Famous speeches and passages", icon: "book" },
+      { name: "Read aloud", detail: "Famous speeches and passages", icon: "book", see: "#mode-read" },
       { name: "Free talk", detail: "Talk about anything, as long as you like", icon: "mic" },
       { name: "Short speech", detail: "Your topic and a few points, then speak", icon: "list" },
       { name: "Your talk", detail: "Rehearse a talk you’re giving", icon: "stage" },
