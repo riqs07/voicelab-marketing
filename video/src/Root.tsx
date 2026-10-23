@@ -10,6 +10,7 @@ import {Rally, rallyTimeline} from './templates/Rally';
 import {TalkBack, talkBackTimeline} from './templates/TalkBack';
 import {Overview, overviewTimeline} from './templates/Overview';
 import {Carousel} from './templates/Carousel';
+import {Logo} from './Logo';
 import {DrawnLive, drawnLiveTimeline} from './templates/DrawnLive';
 import {Demo, demoLoopFrames, demoTimeline} from './templates/Demo';
 import {PausePower, pausePowerTimeline} from './templates/PausePower';
@@ -72,6 +73,11 @@ export const RemotionRoot: React.FC = () => (
     ))}
     {/* Instagram carousel slides from the app's Learn cards: render with --props='{"card":"nerves-um","slide":1}' (see carousel.sh) */}
     <Composition id="Carousel" component={Carousel} durationInFrames={1} fps={FPS} width={1080} height={1350} defaultProps={{card: 'nerves-um', slide: 1}} />
+    {/* The logo as still images (rendered into ../renders/brand/) */}
+    <Composition id="Logo-icon" component={Logo} durationInFrames={1} fps={FPS} width={1024} height={1024} defaultProps={{variant: 'icon' as const}} />
+    <Composition id="Logo-avatar" component={Logo} durationInFrames={1} fps={FPS} width={1080} height={1080} defaultProps={{variant: 'avatar' as const}} />
+    <Composition id="Logo-wordmark" component={Logo} durationInFrames={1} fps={FPS} width={2000} height={600} defaultProps={{variant: 'wordmark' as const}} />
+    <Composition id="Logo-wordmark-paper" component={Logo} durationInFrames={1} fps={FPS} width={2000} height={600} defaultProps={{variant: 'wordmark-paper' as const}} />
     <Composition id="VoicelabPitch" component={VoicelabPitch} durationInFrames={450} fps={30} width={1080} height={1920} />
     <Composition id="VoicelabPitchVoiced" component={VoicelabPitchVoiced} durationInFrames={DURATION_IN_FRAMES} fps={30} width={1080} height={1920} />
   </>
