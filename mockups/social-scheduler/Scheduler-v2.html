@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Post scheduler v2 (mock)</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#FBF6EE;color:#1E2620;font-family:system-ui,-apple-system,sans-serif;font-size:14px}
+.top{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;background:#fff;border-bottom:1px solid #EDE4D6}
+.brand{display:flex;align-items:center;gap:10px;font:600 20px Georgia,serif}.logo{width:28px;height:28px;border-radius:8px;background:#2E5B3E}
+.pill{padding:9px 16px;border-radius:999px;font-weight:700;border:none;font-size:14px}.green{background:#2E5B3E;color:#fff}.soft{background:#F1F6F2;color:#2E5B3E}
+.wrap{display:grid;grid-template-columns:1fr 400px;gap:18px;padding:18px 24px}
+h2{margin:0;font:600 20px Georgia,serif}.muted{color:#59645C}
+.tabs{display:flex;gap:6px}.tab{padding:7px 14px;border-radius:999px;font-weight:700;background:#fff;color:#59645C}.tab.on{background:#1E2620;color:#fff}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:14px}
+.card{background:#fff;border-radius:16px;padding:8px;display:flex;flex-direction:column;gap:6px}
+.card img{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:10px}.card b{font-size:13px}.card span{font-size:12px}
+.card.sel{outline:3px solid #C26A2C}
+.tag{font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;align-self:flex-start}
+.new{background:#F1F6F2;color:#2E5B3E}.sch{background:#EDEBFA;color:#3D3A8C}
+.panel{background:#fff;border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:12px}
+label{font-size:12px;font-weight:700;color:#59645C;display:block;margin-bottom:4px}
+.field{border:1.5px solid #EDE4D6;border-radius:10px;padding:8px 10px;background:#FBF6EE}
+.cap{height:120px;line-height:1.45;overflow:hidden;font-size:13px}
+.covers{display:flex;gap:8px;align-items:flex-end}.covers img{width:62px;aspect-ratio:9/16;object-fit:cover;border-radius:8px}
+.covers .on{outline:3px solid #2E5B3E}
+.next{display:flex;flex-direction:column;gap:8px}.row{display:flex;gap:10px;align-items:center;padding:6px;border-radius:12px;background:#FBF6EE}
+.row img{width:36px;height:46px;object-fit:cover;border-radius:6px}.row b{font-size:13px;display:block}.row span{font-size:12px}
+.callout{position:absolute;background:#1E2620;color:#fff;font-size:12px;padding:6px 10px;border-radius:8px;max-width:230px;line-height:1.35}
+</style></head><body style="position:relative">
+<div class="top">
+ <div class="brand"><span class="logo"></span>Post scheduler <span class="muted" style="font:400 13px system-ui">· New York time · connected</span></div>
+ <div style="display:flex;gap:12px;align-items:center"><button class="pill soft">📅 Calendar</button><span style="color:#7A3A10;font-weight:700">2 changes not sent</span><button class="pill green">Send to server ↑</button></div>
+</div>
+<div class="wrap">
+ <div>
+  <div style="display:flex;justify-content:space-between;align-items:center"><h2>Ready to post</h2>
+   <div class="tabs"><span class="tab on">Ready · 9</span><span class="tab">Scheduled · 4</span><span class="tab">Posted · 2</span></div></div>
+  <p class="muted" style="margin:6px 0 0;font-size:13px">Everything in renders/. Click one to schedule it. Once it's posted it moves to renders/posted/ and to the Posted tab.</p>
+  <div class="grid">
+   <div class="card sel"><img src="../../renders/batch-1/covers/TalkBack-cover.png"><b>They talk back</b><span class="muted">Reel · 66 s</span><span class="tag new">Ready</span></div>
+   <div class="card"><img src="../../renders/batch-1/covers/UmRain-cover.png"><b>Um rain</b><span class="muted">Reel · 29 s</span><span class="tag new">Ready</span></div>
+   <div class="card"><img src="../../renders/batch-1/covers/StressShift-cover.png"><b>Stress shift</b><span class="muted">Reel · 25 s</span><span class="tag new">Ready</span></div>
+   <div class="card"><img src="../../renders/batch-1/covers/PausePower-cover.png"><b>Pause power</b><span class="muted">Reel · 22 s</span><span class="tag new">Ready</span></div>
+   <div class="card"><img src="../../renders/batch-1/covers/Rally-cover.png"><b>Conversation as a rally</b><span class="muted">Reel · 32 s</span><span class="tag new">Ready</span></div>
+   <div class="card"><img src="../../renders/batch-1/covers/SoundCheck-cover.png"><b>Sound check</b><span class="muted">Reel · 24 s</span><span class="tag sch">Scheduled Tue 6:00 pm</span></div>
+   <div class="card"><img src="../../renders/batch-1/covers/TalkShare-cover.png"><b>Talk share</b><span class="muted">Reel · 28 s</span><span class="tag new">Ready</span></div>
+   <div class="card"><img src="../../renders/carousels/nerves-um/1.png"><b>“Um” and “uh”</b><span class="muted">Carousel · 6 slides</span><span class="tag sch">Scheduled Thu 12:30 pm</span></div>
+  </div>
+ </div>
+ <div style="display:flex;flex-direction:column;gap:16px">
+  <div class="panel">
+   <h2>Schedule: They talk back</h2>
+   <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div><label>Date</label><div class="field">Wed, Oct 28</div></div><div><label>Time</label><div class="field">6:00 pm</div></div></div>
+   <div class="muted" style="font-size:12px;margin-top:-4px">Free that day · next open slot suggested</div>
+   <div><label>Cover</label>
+    <div class="covers"><img class="on" src="../../renders/batch-1/covers/TalkBack-cover.png"><img src="../../renders/batch-1/covers/TalkBack-cover.png" style="filter:grayscale(.2) brightness(.95)"><div style="display:flex;flex-direction:column;gap:6px"><button class="pill soft" style="font-size:12px">Pick a frame…</button><button class="pill soft" style="font-size:12px">Pick an image…</button></div></div>
+    <div class="muted" style="font-size:12px;margin-top:4px">Using covers/TalkBack-cover.png</div></div>
+   <div><label>Caption</label><div class="field cap">They react to how you talk. 👀<br><br>Maya warms up when you ask a follow-up. Chris checks out when you only talk about yourself…</div>
+   <div class="muted" style="font-size:12px;margin-top:4px;display:flex;justify-content:space-between"><span>588 / 2,200</span><span>5 / 30 hashtags</span></div></div>
+   <button class="pill green" style="align-self:flex-start">Schedule</button>
+  </div>
+  <div class="panel">
+   <div style="display:flex;justify-content:space-between;align-items:center"><h2 style="font-size:17px">Up next</h2><span style="color:#2E5B3E;font-weight:700;font-size:13px">Open calendar →</span></div>
+   <div class="next">
+    <div class="row"><img src="../../renders/batch-1/covers/Overview-cover.png"><div><b>Who is VoiceLab for?</b><span class="muted">Tue Oct 27 · 9:15 am · On the server</span></div></div>
+    <div class="row"><img src="../../renders/batch-1/covers/SoundCheck-cover.png"><div><b>Sound check</b><span class="muted">Tue Oct 27 · 6:00 pm · <span style="color:#7A3A10">Not sent</span></span></div></div>
+    <div class="row"><img src="../../renders/carousels/nerves-um/1.png"><div><b>“Um” and “uh”</b><span class="muted">Thu Oct 29 · 12:30 pm · On the server</span></div></div>
+    <div class="row"><img src="../../renders/batch-1/covers/DrawnLive-cover.png"><div><b>Drawn live</b><span class="muted">Sat Oct 31 · 10:00 am · On the server</span></div></div>
+   </div>
+  </div>
+ </div>
+</div>
+</body></html>

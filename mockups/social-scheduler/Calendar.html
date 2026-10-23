@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Calendar (mock)</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:rgba(30,38,32,.45);font-family:system-ui,-apple-system,sans-serif;font-size:14px;color:#1E2620;padding:28px}
+.win{background:#FBF6EE;border-radius:22px;padding:20px;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+h2{margin:0;font:600 22px Georgia,serif}.muted{color:#59645C}
+.pill{padding:8px 14px;border-radius:999px;font-weight:700;border:none;font-size:13px}.soft{background:#F1F6F2;color:#2E5B3E}
+.tabs{display:flex;gap:6px}.tab{padding:7px 14px;border-radius:999px;font-weight:700;background:#fff;color:#59645C}.tab.on{background:#1E2620;color:#fff}
+.head{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin:14px 0 6px;font-size:12px;font-weight:700;color:#59645C;padding:0 4px}
+.month{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.d{background:#fff;border-radius:10px;min-height:108px;padding:6px;display:flex;flex-direction:column;gap:4px}
+.d.out{background:transparent;border:1px dashed #E3DACB}.d.today{outline:2px solid #2E5B3E}.d.past{opacity:.6}
+.n{font-size:12px;font-weight:700}
+.p{display:flex;gap:5px;align-items:center;font-size:11px;padding:3px;border-radius:7px}
+.p img{width:22px;height:28px;object-fit:cover;border-radius:4px}
+.on-s{background:#EDEBFA}.un{background:#FCE3CF}.ok{background:#E6EDE7}
+.legend{display:flex;gap:14px;font-size:12px;margin-top:12px}.legend span{display:flex;align-items:center;gap:5px}.sw{width:12px;height:12px;border-radius:3px;display:inline-block}
+</style></head><body>
+<div class="win">
+ <div style="display:flex;justify-content:space-between;align-items:center">
+  <div style="display:flex;gap:14px;align-items:baseline"><h2>Calendar</h2><span class="muted">October 26 – November 22</span></div>
+  <div style="display:flex;gap:10px;align-items:center"><div class="tabs"><span class="tab">This week</span><span class="tab">2 weeks</span><span class="tab on">Month</span></div><button class="pill soft">←</button><button class="pill soft">→</button><button class="pill soft">✕ Close</button></div>
+ </div>
+ <div class="head"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+ <div class="month">
+  <div class="d past"><span class="n">26</span><div class="p ok"><img src="../../renders/batch-1/covers/Rally-cover.png">6:00p Rally ✓</div></div>
+  <div class="d today"><span class="n">27 · today</span><div class="p ok"><img src="../../renders/batch-1/covers/Overview-cover.png">9:15a Overview ✓</div><div class="p un"><img src="../../renders/batch-1/covers/SoundCheck-cover.png">6:00p Sound check</div></div>
+  <div class="d"><span class="n">28</span><div class="p un"><img src="../../renders/batch-1/covers/TalkBack-cover.png">6:00p They talk back</div></div>
+  <div class="d"><span class="n">29</span><div class="p on-s"><img src="../../renders/carousels/nerves-um/1.png">12:30p “Um” and “uh”</div></div>
+  <div class="d"><span class="n">30</span></div>
+  <div class="d"><span class="n">31</span><div class="p on-s"><img src="../../renders/batch-1/covers/DrawnLive-cover.png">10:00a Drawn live</div></div>
+  <div class="d"><span class="n">Nov 1</span></div>
+  <div class="d"><span class="n">2</span><div class="p on-s"><img src="../../renders/batch-1/covers/UmRain-cover.png">9:00a Um rain</div></div>
+  <div class="d"><span class="n">3</span></div><div class="d"><span class="n">4</span><div class="p on-s"><img src="../../renders/batch-1/covers/PausePower-cover.png">12:00p Pause power</div></div>
+  <div class="d"><span class="n">5</span></div><div class="d"><span class="n">6</span><div class="p on-s"><img src="../../renders/batch-1/covers/StressShift-cover.png">6:00p Stress shift</div></div>
+  <div class="d"><span class="n">7</span></div><div class="d"><span class="n">8</span></div>
+  <div class="d"><span class="n">9</span></div><div class="d"><span class="n">10</span></div><div class="d"><span class="n">11</span></div><div class="d"><span class="n">12</span></div><div class="d"><span class="n">13</span></div><div class="d"><span class="n">14</span></div><div class="d"><span class="n">15</span></div>
+  <div class="d"><span class="n">16</span></div><div class="d"><span class="n">17</span></div><div class="d"><span class="n">18</span></div><div class="d"><span class="n">19</span></div><div class="d"><span class="n">20</span></div><div class="d"><span class="n">21</span></div><div class="d"><span class="n">22</span></div>
+ </div>
+ <div class="legend"><span><i class="sw" style="background:#E6EDE7"></i>Posted ✓</span><span><i class="sw" style="background:#EDEBFA"></i>On the server</span><span><i class="sw" style="background:#FCE3CF"></i>Not sent yet</span><span class="muted">Click a post to open it in the scheduler. Drag a post to another day to move it.</span></div>
+</div>
+</body></html>
