@@ -8,11 +8,10 @@ const REELS = [
   { id: "DrawnLive", title: "Your voice, drawn live" },
   { id: "UmRain", title: "How many times do you say um?" },
   { id: "Rally", title: "Who’s hogging the conversation?" },
-  { id: "TalkBack", title: "They react to how you talk" },
 ];
 
 // A slight, alternating tilt for each phone as it rises into place
-const TILT = [-4, 0, 4, -2];
+const TILT = [-4, 0, 4];
 
 function Phone({ id, title, loud, onSound, index }: { id: string; title: string; loud: boolean; onSound: () => void; index: number }) {
   const video = useRef<HTMLVideoElement>(null);
@@ -71,7 +70,7 @@ function Phone({ id, title, loud, onSound, index }: { id: string; title: string;
 export function Reels() {
   const [loud, setLoud] = useState<string | null>(null);
   return (
-    <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
+    <div className="grid grid-cols-1 gap-10 sm:grid-cols-3 sm:gap-6">
       {REELS.map((reel, i) => (
         <Phone key={reel.id} {...reel} index={i} loud={loud === reel.id} onSound={() => setLoud(loud === reel.id ? null : reel.id)} />
       ))}

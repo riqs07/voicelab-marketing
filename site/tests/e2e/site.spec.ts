@@ -55,9 +55,8 @@ test("home page: hero, animations, videos and calls to action", async ({ page })
   await page.getByRole("button", { name: "Second try" }).click();
   await expect(page.getByText("About even, and you asked back.")).toBeVisible();
   await expect(page.getByText("59%")).toBeVisible({ timeout: 5_000 });
-  // Four reels (the newest is They talk back) and the demo
-  await expect(page.locator("video")).toHaveCount(5);
-  await expect(page.locator("video[src='/videos/TalkBack.mp4']")).toHaveAttribute("aria-label", "They react to how you talk");
+  // Three reels and the demo
+  await expect(page.locator("video")).toHaveCount(4);
   expect(problems).toEqual([]);
 });
 

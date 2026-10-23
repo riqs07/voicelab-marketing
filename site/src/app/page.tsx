@@ -95,7 +95,7 @@ export default function Home() {
       <section className="overflow-x-clip bg-tint py-20">
         <div className="mx-auto max-w-6xl px-4 sm:px-8">
           <Reveal>
-            <h2 className="m-0 font-serif text-4xl font-semibold leading-tight sm:text-5xl">Little lessons, about a minute each.</h2>
+            <h2 className="m-0 font-serif text-4xl font-semibold leading-tight sm:text-5xl">Little lessons, 30 seconds each.</h2>
             <p className="mt-4 max-w-2xl text-lg text-muted">Follow along on Instagram while you wait.</p>
           </Reveal>
           <div className="mt-12">
