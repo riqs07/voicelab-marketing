@@ -361,7 +361,7 @@ export const Overview: React.FC<{voiced?: boolean}> = ({voiced = true}) => {
                         ) : null;
                       })}
                       {!second && rosePop > 0.01 ? (
-                        <div style={{position: 'absolute', right: 20, top: 120 + midY - 150, padding: '6px 12px', borderRadius: 999, background: C.peach, color: C.peachInk, fontWeight: 700, fontSize: 19, transform: `scale(${rosePop})`}}>↗ went up: sounds unsure</div>
+                        <div style={{position: 'absolute', right: 20, top: 120 + midY + 70, padding: '6px 12px', borderRadius: 999, background: C.peach, color: C.peachInk, fontWeight: 700, fontSize: 19, transform: `scale(${rosePop})`}}>↗ went up: sounds unsure</div>
                       ) : null}
                       {second && fellPop > 0.01 ? (
                         <div style={{position: 'absolute', right: 20, top: 120 + midY + 60, padding: '6px 12px', borderRadius: 999, background: C.greenTint, color: C.green, fontWeight: 700, fontSize: 19, transform: `scale(${fellPop})`}}>↘ now it lands</div>
