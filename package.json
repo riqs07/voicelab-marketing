@@ -2,6 +2,7 @@
   "name": "voicelab-marketing",
   "private": true,
   "scripts": {
-    "fresh": "node site/scripts/fresh.mjs"
+    "fresh": "node site/scripts/fresh.mjs",
+    "schedule": "pnpm --dir social install && pnpm --dir social dev"
   }
 }
