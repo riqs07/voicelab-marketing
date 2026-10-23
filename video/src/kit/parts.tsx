@@ -23,7 +23,8 @@ export const AudioTrack: React.FC<{tl: Timeline}> = ({tl}) => (
   <>
     {tl.beats.map((b) =>
       b.audio ? (
-        <Sequence key={b.id} from={fr(b.start)} durationInFrames={fr(b.fastForward ? b.fastForward.audioFor : b.end - b.start) + 4} layout="none">
+        // A cut-off line stops on its last frame; others run a few frames past their end
+        <Sequence key={b.id} from={fr(b.start)} durationInFrames={fr(b.fastForward ? b.fastForward.audioFor : b.end - b.start) + (b.cutAt ? 0 : 4)} layout="none">
           {/* A fast-forwarded line fades out over its last few frames instead of cutting */}
           <Audio
             src={staticFile(b.audio)}

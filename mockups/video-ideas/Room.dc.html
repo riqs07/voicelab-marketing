@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>A voice that fills the room</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;600;700&amp;family=Fraunces:opsz,wght@9..144,600&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#2E5B3E}a:hover{color:#1F4029}
+</style>
+</helmet>
+<div style="width: 1100px; height: 740px; box-sizing: border-box; padding: 44px 48px; background: #EFE8DC; color: #1E2620; font-family: 'Atkinson Hyperlegible Next', system-ui, sans-serif; display: flex; gap: 48px; align-items: flex-start">
+
+<svg width="324" height="576" viewBox="0 0 324 576" role="img" aria-label="Sketch: the same line said four times. The room's walls grow with the voice, from a phone booth to a meeting room to a hall full of people, then shrink as the speaker drops their voice and the audience leans in." style="border-radius: 22px; display: block; flex-shrink: 0" font-family="Atkinson Hyperlegible Next, sans-serif">
+<rect width="324" height="576" fill="#FBF6EE"></rect>
+<text x="20" y="40" font-size="15" font-weight="700" fill="#2E5B3E">Three rooms, then a drop</text>
+<text x="20" y="62" font-size="13" fill="#59645C">“Good morning, everyone. Let's get started.”</text>
+
+<rect x="127" y="195" width="70" height="110" rx="10" fill="#E4EDE6" stroke="#2E5B3E" stroke-width="4">
+<animate attributeName="x" values="127;127;77;77;27;27;92;92;127" keyTimes="0;0.2;0.25;0.45;0.5;0.7;0.75;0.95;1" dur="12s" repeatCount="indefinite"></animate>
+<animate attributeName="y" values="195;195;175;175;125;125;190;190;195" keyTimes="0;0.2;0.25;0.45;0.5;0.7;0.75;0.95;1" dur="12s" repeatCount="indefinite"></animate>
+<animate attributeName="width" values="70;70;170;170;270;270;140;140;70" keyTimes="0;0.2;0.25;0.45;0.5;0.7;0.75;0.95;1" dur="12s" repeatCount="indefinite"></animate>
+<animate attributeName="height" values="110;110;150;150;250;250;120;120;110" keyTimes="0;0.2;0.25;0.45;0.5;0.7;0.75;0.95;1" dur="12s" repeatCount="indefinite"></animate>
+</rect>
+
+<g opacity="0" fill="#8C978F">
+<animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.48;0.52;0.95;1" dur="12s" repeatCount="indefinite"></animate>
+<animateTransform attributeName="transform" type="translate" values="0 0;0 0;0 -26;0 -26;0 0" keyTimes="0;0.72;0.77;0.95;1" dur="12s" repeatCount="indefinite"></animateTransform>
+<circle cx="70" cy="160" r="7"></circle><circle cx="100" cy="160" r="7"></circle><circle cx="130" cy="160" r="7"></circle><circle cx="194" cy="160" r="7"></circle><circle cx="224" cy="160" r="7"></circle><circle cx="254" cy="160" r="7"></circle>
+<circle cx="55" cy="190" r="7"></circle><circle cx="85" cy="190" r="7"></circle><circle cx="115" cy="190" r="7"></circle><circle cx="209" cy="190" r="7"></circle><circle cx="239" cy="190" r="7"></circle><circle cx="269" cy="190" r="7"></circle>
+<circle cx="70" cy="220" r="7"></circle><circle cx="100" cy="220" r="7"></circle><circle cx="224" cy="220" r="7"></circle><circle cx="254" cy="220" r="7"></circle>
+</g>
+
+<circle cx="162" cy="262" r="12" fill="#F4A86E" opacity="0.5">
+<animate attributeName="r" values="12;60" dur="1.2s" repeatCount="indefinite"></animate>
+<animate attributeName="opacity" values="0.55;0" dur="1.2s" repeatCount="indefinite"></animate>
+</circle>
+<circle cx="162" cy="262" r="12" fill="#2E5B3E"></circle>
+
+<g font-size="14" font-weight="700" text-anchor="middle">
+<text x="162" y="410" fill="#1E2620" opacity="1">Take 1: a phone booth<animate attributeName="opacity" values="1;1;0;0;1" keyTimes="0;0.22;0.25;0.97;1" dur="12s" repeatCount="indefinite"></animate></text>
+<text x="162" y="410" fill="#1E2620" opacity="0">Take 2: a meeting room<animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.24;0.27;0.47;0.5;1" dur="12s" repeatCount="indefinite"></animate></text>
+<text x="162" y="410" fill="#1E2620" opacity="0">Take 3: the whole hall<animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.49;0.52;0.72;0.75;1" dur="12s" repeatCount="indefinite"></animate></text>
+<text x="162" y="410" fill="#7A3A10" opacity="0">Drop for effect: they lean in<animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.74;0.77;0.95;1" dur="12s" repeatCount="indefinite"></animate></text>
+</g>
+
+<text x="20" y="462" font-size="13" fill="#59645C">Loudness</text>
+<rect x="20" y="474" width="284" height="18" rx="9" fill="#E4EDE6"></rect>
+<rect x="20" y="474" width="70" height="18" rx="9" fill="#2E5B3E">
+<animate attributeName="width" values="70;70;170;170;270;270;110;110;70" keyTimes="0;0.2;0.25;0.45;0.5;0.7;0.75;0.95;1" dur="12s" repeatCount="indefinite"></animate>
+</rect>
+<text x="20" y="530" font-size="13" fill="#59645C">Each step a clear jump:</text>
+<text x="20" y="556" font-size="22" font-weight="600" fill="#1E2620" font-family="Fraunces, Georgia, serif">+6 dB, +5 dB, then −8 dB</text>
+</svg>
+
+<div style="display: flex; flex-direction: column; gap: 22px; max-width: 600px; padding-top: 6px">
+<h1 style="margin: 0; font-family: Fraunces, Georgia, serif; font-size: 40px; font-weight: 600; line-height: 1.1">A voice that fills the room</h1>
+<p style="margin: 0; font-size: 19px; line-height: 1.5">The same line, said three times, and the walls grow with the measured loudness: a phone booth, a meeting room, a hall where the audience turns to listen. Then the “drop for effect” take: the room closes in and everyone leans forward.</p>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<b style="font-size: 15px; color: #2E5B3E">Driven by</b>
+<span style="font-size: 17px; line-height: 1.45">The Volume drills' measurements: the level of each take and the size of each step (Three rooms, then Drop for effect).</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<b style="font-size: 15px; color: #2E5B3E">Cost</b>
+<span style="font-size: 17px; line-height: 1.45">Four short takes in one voice, at three levels and one quiet (a few cents), measured with the app's level reader.</span>
+</div>
+<p style="margin: 0; font-size: 14px; color: #59645C">Sketch only: the decibel steps are stand-ins.</p>
+</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1100,"height":740}}'>
+class Component extends DCLogic {
+componentDidMount() {
+if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) document.querySelectorAll('svg').forEach(function (s) { if (s.pauseAnimations) s.pauseAnimations(); });
+}
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

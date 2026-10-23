@@ -10,4 +10,5 @@ export const voices = {
   narrator: {name: 'Caroline', id: 'yK2Ny0mq8WplixhD1td3'},
   speaker: {name: 'Nate', id: 'Ifu36BnEjjIY932etsqk'},
   maya: {name: 'Brittney (Maya in the app)', id: 'BBGL1mJ66fANrjWTOM5c'},
+  chris: {name: 'Chris in the app', id: 'iP95p4xoKVk53GoZ742B'},
 };

@@ -17,6 +17,7 @@ Everything for marketing VoiceLab (the app lives in `riqs07/table-topics`): soci
 | Your voice, drawn live | `DrawnLive-story`, `DrawnLive-feed` | 20 s |
 | Um rain | `UmRain-story`, `UmRain-feed` | 29 s |
 | Conversation as a rally | `Rally-story`, `Rally-feed` | 32 s |
+| They talk back (Maya and Chris react to how you talk) | `TalkBack-story`, `TalkBack-feed` | 66 s |
 | Sound check (rising vs falling ending) | `SoundCheck-story`, `SoundCheck-feed` | 20 s |
 | Stress shift (one sentence, five meanings) | `StressShift-story`, `StressShift-feed` | 25 s |
 | Talk share (who did the talking) | `TalkShare-story`, `TalkShare-feed` | 32 s |
@@ -36,7 +37,7 @@ Every end card says "Join the waitlist". To show a web address instead, change `
 
 ## Voices and costs so far
 
-Voices: narrator Caroline, speaker Nate, and Maya's app voice (Brittney), all ElevenLabs (`video/src/content/brand.ts`). Each line was generated once and saved, so re-rendering costs nothing.
+Voices: narrator Caroline, speaker Nate, and the app's own recordings of Maya (Brittney) and Chris, all ElevenLabs (`video/src/content/brand.ts`). Each line was generated once and saved, so re-rendering costs nothing.
 
 | Batch | ElevenLabs cost |
 |---|---|
@@ -44,6 +45,8 @@ Voices: narrator Caroline, speaker Nate, and Maya's app voice (Brittney), all El
 | Five templates and the demo (31 lines) | 33.75 cents |
 | Drawn live re-takes | about 2.5 cents |
 | Um rain (5 lines) | about 12 cents |
+| They talk back (5 new lines; Maya's and Chris's are the app's recordings) | about 10 cents |
+| Website Read aloud reader (1 line; word timings by free transcription) | about 3.4 cents |
 
 Rendering is free (Remotion is free for individuals and companies of up to 3 people).
 
@@ -52,5 +55,6 @@ Rendering is free (Remotion is free for individuals and companies of up to 3 peo
 - Website, try-it page and waitlist: https://claude.ai/artifact/ADtxxyLFNp8xswCHQFzzSt
 - Feedback ideas and all current charts: https://claude.ai/artifact/CEQ2bdLqX9sKNXHebT5kqB
 - Hero animation storyboards: https://claude.ai/artifact/913DwTLKmu9NquuofVs8Wz
+- Six more video ideas (roller coaster, traffic, rhythm game, room, heartbeat, voice print), sketches: https://claude.ai/artifact/4oz7Sc9QgLA89HJne6HMDd
 
 The canvas source files are in `mockups/`.

@@ -5,7 +5,7 @@
 import durations from '../content/durations.json';
 import {FPS} from './theme';
 
-export type Voice = 'narrator' | 'speaker' | 'maya';
+export type Voice = 'narrator' | 'speaker' | 'maya' | 'chris';
 
 export type Beat = {
   // Short id; the voice file is public/audio/<video>/<id>.mp3
@@ -23,6 +23,8 @@ export type Beat = {
   gapAfter?: number;
   // Fast-forward: play only the first `audioFor` seconds aloud, then race through the rest at `speed`
   fastForward?: {audioFor: number; speed: number};
+  // Cut off: play only the first `cutAt` seconds, then stop dead (someone interrupts). Use gapAfter: 0 or less.
+  cutAt?: number;
 };
 
 export type TimedBeat = Beat & {start: number; end: number; audio: string | null; full: number};
@@ -50,7 +52,7 @@ export const buildTimeline = (video: string, beats: Beat[], voiced = true): Time
     if (real) anyAudio = true;
     const full = real ?? estimate(b);
     // A fast-forwarded line takes less screen time than its recording.
-    const dur = b.fastForward ? b.fastForward.audioFor + (full - b.fastForward.audioFor) / b.fastForward.speed : full;
+    const dur = b.cutAt ? Math.min(b.cutAt, full) : b.fastForward ? b.fastForward.audioFor + (full - b.fastForward.audioFor) / b.fastForward.speed : full;
     const timed: TimedBeat = {...b, start: t, end: t + dur, audio: real ? file : null, full};
     t += dur + (b.gapAfter ?? 0.3);
     return timed;

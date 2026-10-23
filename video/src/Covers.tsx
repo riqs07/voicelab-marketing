@@ -7,6 +7,7 @@ import {C, sans, serif} from './kit/theme';
 import {DrawnLive} from './templates/DrawnLive';
 import {PausePower} from './templates/PausePower';
 import {Rally} from './templates/Rally';
+import {TalkBack} from './templates/TalkBack';
 import {SoundCheck} from './templates/SoundCheck';
 import {StressShift} from './templates/StressShift';
 import {TalkShare} from './templates/TalkShare';
@@ -21,6 +22,7 @@ export const COVERS = [
   {id: 'StressShift', component: StressShift, frame: 460, title: 'One sentence. Five meanings.'},
   {id: 'TalkShare', component: TalkShare, frame: 380, title: 'Good listener, or waiting to talk?'},
   {id: 'PausePower', component: PausePower, frame: 430, title: 'The most confident sound? Silence.'},
+  {id: 'TalkBack', component: TalkBack, frame: 1372, title: 'They react to how you talk'},
 ] as const;
 
 const SCALE = 0.56;

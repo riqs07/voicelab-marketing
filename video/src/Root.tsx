@@ -7,6 +7,7 @@ import {FPS} from './kit/theme';
 import type {Timeline} from './kit/timeline';
 import {UmRain, umRainTimeline} from './templates/UmRain';
 import {Rally, rallyTimeline} from './templates/Rally';
+import {TalkBack, talkBackTimeline} from './templates/TalkBack';
 import {DrawnLive, drawnLiveTimeline} from './templates/DrawnLive';
 import {Demo, demoLoopFrames, demoTimeline} from './templates/Demo';
 import {PausePower, pausePowerTimeline} from './templates/PausePower';
@@ -58,12 +59,13 @@ export const RemotionRoot: React.FC = () => (
     {Template({id: 'PausePower', component: PausePower, timeline: pausePowerTimeline})}
     {Template({id: 'DrawnLive', component: DrawnLive, timeline: drawnLiveTimeline})}
     {Template({id: 'Rally', component: Rally, timeline: rallyTimeline})}
+    {Template({id: 'TalkBack', component: TalkBack, timeline: talkBackTimeline})}
     {Template({id: 'UmRain', component: UmRain, timeline: umRainTimeline})}
     {Template({id: 'Demo', component: Demo, timeline: demoTimeline, sizes: ['wide', 'story']})}
     <Composition id="DemoLoop-wide" component={Demo} durationInFrames={demoLoopFrames()} fps={FPS} {...SIZES.wide} defaultProps={{voiced: false, loop: true}} />
     {COVERS.map((c, i) => (
       // Long enough that the frozen video frame isn't clamped; covers are snapshots of frame 0.
-      <Composition key={c.id} id={`Cover-${c.id}`} component={Cover} durationInFrames={1200} fps={FPS} width={1080} height={1920} defaultProps={{index: i}} />
+      <Composition key={c.id} id={`Cover-${c.id}`} component={Cover} durationInFrames={2400} fps={FPS} width={1080} height={1920} defaultProps={{index: i}} />
     ))}
     <Composition id="VoicelabPitch" component={VoicelabPitch} durationInFrames={450} fps={30} width={1080} height={1920} />
     <Composition id="VoicelabPitchVoiced" component={VoicelabPitchVoiced} durationInFrames={DURATION_IN_FRAMES} fps={30} width={1080} height={1920} />

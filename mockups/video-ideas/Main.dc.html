@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The pitch roller coaster</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;600;700&amp;family=Fraunces:opsz,wght@9..144,600&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#2E5B3E}a:hover{color:#1F4029}
+</style>
+</helmet>
+<div style="width: 1100px; height: 740px; box-sizing: border-box; padding: 44px 48px; background: #EFE8DC; color: #1E2620; font-family: 'Atkinson Hyperlegible Next', system-ui, sans-serif; display: flex; gap: 48px; align-items: flex-start">
+
+<svg width="324" height="576" viewBox="0 0 324 576" role="img" aria-label="Sketch: a little cart rides two pitch lines. On the flat take it crawls along a level track; on the lively take it climbs and drops, then launches off a ramp at the end." style="border-radius: 22px; display: block; flex-shrink: 0">
+<rect width="324" height="576" fill="#FBF6EE"></rect>
+<text x="20" y="42" font-size="15" font-weight="700" fill="#59645C" font-family="Atkinson Hyperlegible Next, sans-serif">Flat take</text>
+<path id="flat" d="M20 190 C 70 186, 120 196, 170 190 S 260 194, 304 190" stroke="#B9C4BB" stroke-width="6" fill="none" stroke-linecap="round"></path>
+<g>
+<rect x="-14" y="-16" width="28" height="12" rx="4" fill="#59645C"></rect>
+<circle cx="-6" cy="-21" r="5" fill="#C9D0CA"></circle>
+<circle cx="6" cy="-21" r="5" fill="#C9D0CA"></circle>
+<animateMotion dur="7s" repeatCount="indefinite" rotate="auto" path="M20 190 C 70 186, 120 196, 170 190 S 260 194, 304 190"></animateMotion>
+</g>
+<text x="20" y="236" font-size="14" fill="#59645C" font-family="Atkinson Hyperlegible Next, sans-serif">“…and then the gorilla just stared at me.”</text>
+<text x="20" y="258" font-size="13" fill="#8C978F" font-family="Atkinson Hyperlegible Next, sans-serif">The riders yawn. Nothing happens.</text>
+
+<line x1="20" y1="290" x2="304" y2="290" stroke="#D8CDBB" stroke-width="1.5" stroke-dasharray="5 6"></line>
+
+<text x="20" y="324" font-size="15" font-weight="700" fill="#2E5B3E" font-family="Atkinson Hyperlegible Next, sans-serif">Lively take</text>
+<path d="M20 470 C 45 400, 75 395, 95 455 S 140 505, 165 420 S 215 380, 235 455 S 275 420, 300 360" stroke="#2E5B3E" stroke-width="6" fill="none" stroke-linecap="round"></path>
+<g>
+<rect x="-14" y="-16" width="28" height="12" rx="4" fill="#2E5B3E"></rect>
+<circle cx="-6" cy="-21" r="5" fill="#F4A86E"></circle>
+<circle cx="6" cy="-21" r="5" fill="#F4A86E"></circle>
+<line x1="-6" y1="-26" x2="-9" y2="-34" stroke="#F4A86E" stroke-width="2.5" stroke-linecap="round"></line>
+<line x1="6" y1="-26" x2="9" y2="-34" stroke="#F4A86E" stroke-width="2.5" stroke-linecap="round"></line>
+<animateMotion dur="7s" repeatCount="indefinite" rotate="auto" keyPoints="0;1;1" keyTimes="0;0.75;1" calcMode="linear" path="M20 470 C 45 400, 75 395, 95 455 S 140 505, 165 420 S 215 380, 235 455 S 275 420, 300 360"></animateMotion>
+<animateTransform attributeName="transform" type="translate" additive="sum" values="0 0;0 0;10 -60;10 -60" keyTimes="0;0.75;0.88;1" dur="7s" repeatCount="indefinite"></animateTransform>
+</g>
+<g opacity="0">
+<rect x="96" y="250" width="0" height="0" fill="none"></rect>
+<rect x="120" y="268" width="190" height="30" rx="15" fill="#FCE3CF"></rect>
+<text x="134" y="288" font-size="13" font-weight="700" fill="#7A3A10" font-family="Atkinson Hyperlegible Next, sans-serif">That sounded like a question</text>
+<animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.78;0.84;0.97;1" dur="7s" repeatCount="indefinite"></animate>
+</g>
+<text x="20" y="530" font-size="14" fill="#1E2620" font-family="Atkinson Hyperlegible Next, sans-serif">Real climbs and drops; hands go up.</text>
+<text x="20" y="552" font-size="13" fill="#59645C" font-family="Atkinson Hyperlegible Next, sans-serif">A rise on the last word launches the cart.</text>
+</svg>
+
+<div style="display: flex; flex-direction: column; gap: 22px; max-width: 600px; padding-top: 6px">
+<h1 style="margin: 0; font-family: Fraunces, Georgia, serif; font-size: 40px; font-weight: 600; line-height: 1.1">The pitch roller coaster</h1>
+<p style="margin: 0; font-size: 19px; line-height: 1.5">A little cart rides your actual pitch line. A flat take is a dull, level ride; a lively one climbs and drops with the riders' hands in the air. A statement that rises at the end sends the cart off a ramp: “That sounded like a question.”</p>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<b style="font-size: 15px; color: #2E5B3E">Driven by</b>
+<span style="font-size: 17px; line-height: 1.45">The app's pitch line for each take (the track's shape), its phrase endings (the ramp) and its flat-phrase check (the yawning riders).</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<b style="font-size: 15px; color: #2E5B3E">Cost</b>
+<span style="font-size: 17px; line-height: 1.45">None: reuses the two gorilla takes we already measured for the hero.</span>
+</div>
+<p style="margin: 0; font-size: 14px; color: #59645C">Sketch only: stand-in curves, not the measured line.</p>
+</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1100,"height":740}}'>
+class Component extends DCLogic {
+componentDidMount() {
+if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) document.querySelectorAll('svg').forEach(function (s) { if (s.pauseAnimations) s.pauseAnimations(); });
+}
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>
