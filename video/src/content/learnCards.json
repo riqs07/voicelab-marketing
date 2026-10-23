@@ -1,0 +1,31 @@
+{
+  "nerves-um": {
+    "id": "nerves-um",
+    "set": "nerves",
+    "kind": "myth-or-fact",
+    "verdict": "myth",
+    "title": "“Um” and “uh” are mistakes.",
+    "finding": "Linguists found that “uh” and “um” work like words: they tell listeners a short delay is coming. In one set of studies, listeners even recognised the next word faster after “uh”.",
+    "meaning": "A few are normal and even useful. It is a stream of them that distracts.",
+    "doThis": "Don't fight every one. Swap some for a short silent pause, especially before your main point.",
+    "tryIt": {
+      "label": "Pause drill: Before the point",
+      "href": "/session?mode=pause&prompt=d001"
+    },
+    "keyLine": "A few fillers are normal; swap some for a silent pause.",
+    "recall": {
+      "question": "What do “uh” and “um” tell a listener?",
+      "options": [
+        "A short delay is coming",
+        "You are lying",
+        "You have finished"
+      ],
+      "answer": 0
+    },
+    "evidence": "moderate",
+    "source": {
+      "text": "Clark & Fox Tree, 2002",
+      "url": "https://sciencenotes.ucsc.edu/0701/talk"
+    }
+  }
+}

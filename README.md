@@ -36,6 +36,17 @@ Every end card says "Join the waitlist". To show a web address instead, change `
 - Turn on Instagram's "AI info" label: the voices are made with ElevenLabs.
 - The videos keep text clear of Instagram's buttons (bottom and right edge).
 
+## Instagram carousels from the app's Learn cards
+
+`renders/carousels/<card>/` holds 4:5 slides made from the app's Learn cards, word for word (the first is `nerves-um`, "“Um” and “uh” are mistakes.", with a caption in `caption.md`). To make another, from `video/`:
+
+```sh
+node scripts/learn-card.mjs /path/to/Table-Topics <card-id>   # copy the card from the app
+./carousel.sh <card-id>                                          # render its slides
+```
+
+Myth-or-fact cards get six slides (hook, verdict, research, meaning, what to do, call to action); other cards get five. Cards can have their own small drawings (`DRAWINGS` in `video/src/templates/Carousel.tsx`); without one, the slides are text only.
+
 ## Voices and costs so far
 
 Voices: narrator Caroline, speaker Nate, and the app's own recordings of Maya (Brittney) and Chris, all ElevenLabs (`video/src/content/brand.ts`). Each line was generated once and saved, so re-rendering costs nothing.

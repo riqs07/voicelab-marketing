@@ -9,6 +9,7 @@ import {UmRain, umRainTimeline} from './templates/UmRain';
 import {Rally, rallyTimeline} from './templates/Rally';
 import {TalkBack, talkBackTimeline} from './templates/TalkBack';
 import {Overview, overviewTimeline} from './templates/Overview';
+import {Carousel} from './templates/Carousel';
 import {DrawnLive, drawnLiveTimeline} from './templates/DrawnLive';
 import {Demo, demoLoopFrames, demoTimeline} from './templates/Demo';
 import {PausePower, pausePowerTimeline} from './templates/PausePower';
@@ -69,6 +70,8 @@ export const RemotionRoot: React.FC = () => (
       // Long enough that the frozen video frame isn't clamped; covers are snapshots of frame 0.
       <Composition key={c.id} id={`Cover-${c.id}`} component={Cover} durationInFrames={2400} fps={FPS} width={1080} height={1920} defaultProps={{index: i}} />
     ))}
+    {/* Instagram carousel slides from the app's Learn cards: render with --props='{"card":"nerves-um","slide":1}' (see carousel.sh) */}
+    <Composition id="Carousel" component={Carousel} durationInFrames={1} fps={FPS} width={1080} height={1350} defaultProps={{card: 'nerves-um', slide: 1}} />
     <Composition id="VoicelabPitch" component={VoicelabPitch} durationInFrames={450} fps={30} width={1080} height={1920} />
     <Composition id="VoicelabPitchVoiced" component={VoicelabPitchVoiced} durationInFrames={DURATION_IN_FRAMES} fps={30} width={1080} height={1920} />
   </>
