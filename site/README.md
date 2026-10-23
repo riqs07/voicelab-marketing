@@ -40,6 +40,35 @@ Checks: `pnpm check` (lint, types, unit tests), `pnpm build`, then `pnpm e2e` (b
 
 Note: Vercel's free Hobby plan is for non-commercial projects; switch to Pro if VoiceLab starts charging.
 
+## Instagram posts (automatic)
+
+Posts go out by themselves from `src/data/socialQueue.json`. Once a day Vercel Cron calls `/api/social/publish`. That route posts the oldest post whose date has come (your time zone, set in the file), one a day. It skips anything more than two days late.
+
+**Adding posts.** Put the files in place, add an entry to the queue, then open a pull request:
+
+```sh
+node scripts/social-media.mjs nerves-um ../renders/carousels/nerves-um/{1,2,3,4,5,6}.png
+node scripts/social-media.mjs overview ../renders/batch-1/Overview-story.mp4=reel ../renders/batch-1/covers/Overview-cover.png=cover
+```
+
+The script converts PNG to JPEG, because Instagram's API only takes JPEG. Check the branch's preview at `/social`; that page is hidden on the live site. **Merging is the approval.** `pnpm test` checks the queue and that every file exists.
+
+**One-time setup** (in the dashboards, never in git):
+1. A Meta developer app with the Instagram use case. Connect your professional account and generate a token with `instagram_business_content_publish`.
+2. In Vercel → Environment Variables (Production only, Sensitive), add:
+   - `INSTAGRAM_ACCESS_TOKEN`: the token;
+   - `CRON_SECRET`: any long random string.
+3. In Vercel → Storage, create a **private** Blob store and connect it to this project. The publisher keeps its record there (`social/state.json`): what went out, the refreshed token, and the last error. The token lasts 60 days; the publisher renews it weekly.
+
+**Checking on it.**
+- Vercel → Settings → Cron Jobs has a Run button.
+- `/api/social/publish?dry=1` (with the cron secret) shows what would post next without posting.
+- Logs show `Social: posted …` or the error.
+
+**Limits.**
+- On the free plan the timer runs once a day, at a time within the hour set in `vercel.json` (UTC).
+- The API can't add Instagram music, tag people, or set the "AI info" label.
+
 ## Keeping the free modes in step with the app
 
 The measuring code in `src/core/` and the two Read aloud passages (`src/data/passages.json`) are copied unchanged from the app. After the app's analysis or passages change:
