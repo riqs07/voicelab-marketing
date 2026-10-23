@@ -8,7 +8,11 @@ const REELS = [
   { id: "DrawnLive", title: "Your voice, drawn live" },
   { id: "UmRain", title: "How many times do you say um?" },
   { id: "Rally", title: "Who’s hogging the conversation?" },
+  { id: "TalkBack", title: "They react to how you talk" },
 ];
+
+// A slight, alternating tilt for each phone as it rises into place
+const TILT = [-4, 0, 4, -2];
 
 function Phone({ id, title, loud, onSound, index }: { id: string; title: string; loud: boolean; onSound: () => void; index: number }) {
   const video = useRef<HTMLVideoElement>(null);
@@ -34,9 +38,9 @@ function Phone({ id, title, loud, onSound, index }: { id: string; title: string;
   return (
     <motion.figure
       className="m-0 flex flex-col items-center gap-3"
-      initial={still ? false : { opacity: 0, y: 60, rotate: index === 1 ? 0 : index === 0 ? -4 : 4 }}
+      initial={still ? false : { opacity: 0, y: 60, rotate: TILT[index % TILT.length] }}
       whileInView={{ opacity: 1, y: 0 }}
-      whileHover={still ? undefined : { y: -10, rotate: index === 1 ? 0 : index === 0 ? -2 : 2 }}
+      whileHover={still ? undefined : { y: -10, rotate: (TILT[index % TILT.length] ?? 0) / 2 }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{ type: "spring", stiffness: 200, damping: 13, delay: index * 0.12 }}
     >
@@ -67,7 +71,7 @@ function Phone({ id, title, loud, onSound, index }: { id: string; title: string;
 export function Reels() {
   const [loud, setLoud] = useState<string | null>(null);
   return (
-    <div className="grid grid-cols-1 gap-10 sm:grid-cols-3 sm:gap-6">
+    <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
       {REELS.map((reel, i) => (
         <Phone key={reel.id} {...reel} index={i} loud={loud === reel.id} onSound={() => setLoud(loud === reel.id ? null : reel.id)} />
       ))}

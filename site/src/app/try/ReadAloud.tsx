@@ -2,14 +2,25 @@
 // The free Read aloud: pick one of two short passages, read it out, and the words light up as the browser hears them
 // (the app's own read-along code). It stops by itself after the last word. Measured in the page; nothing is uploaded.
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { BouncyLink, SPRING } from "@/components/Bouncy";
 import { Meter, Ring } from "@/components/TakeParts";
 import { followReading, readingTokens, scriptWords } from "@/core/liveReading";
 import { clock } from "@/lib/rapidFire";
 import { FINISH_SECONDS, PASSAGES, READ_LIMIT, analyseReading, type ReadTake } from "@/lib/readAloud";
 import { canListen, useTake } from "@/lib/useTake";
+import examples from "@/data/passageReadings.json";
 import { ReadResults } from "./ReadResults";
+
+type Timed = { text: string; start: number; end: number };
+const READINGS = examples.readings as Record<string, Timed[]>;
+
+// The example's words heard by time t (a word counts once it has been said), as the browser would pass them on
+const heardBy = (words: readonly Timed[], t: number) =>
+  words
+    .filter((w) => w.end <= t)
+    .map((w) => w.text)
+    .join(" ");
 
 type Stage = "ready" | "read" | "working" | "done" | "unsupported" | "blocked";
 
@@ -23,11 +34,17 @@ export function ReadAloud() {
   const recorder = useTake();
   const passage = PASSAGES[pick] ?? PASSAGES[0]!;
   const view: Stage = stage === "read" && recorder.blocked ? "blocked" : stage;
+  // The example reading: where it has got to, while it plays
+  const example = useRef<HTMLAudioElement>(null);
+  const [exampleAt, setExampleAt] = useState<number | null>(null);
 
   // The passage split into words that can light up, and how far the reader has got
   const tokens = useMemo(() => readingTokens(passage.body), [passage.body]);
   const expected = useMemo(() => scriptWords(tokens), [tokens]);
   const follow = followReading(expected, `${recorder.finalText} ${recorder.interim}`);
+  const listening = view === "ready" && exampleAt !== null;
+  const exampleFollow = listening ? followReading(expected, heardBy(READINGS[passage.id] ?? [], exampleAt)) : null;
+  const shown = view === "read" ? follow : exampleFollow;
   const finished = stage === "read" && follow.next >= expected.length;
 
   // Stop by itself a moment after the last word, or at the time limit
@@ -38,10 +55,42 @@ export function ReadAloud() {
     // eslint-disable-next-line react-hooks/exhaustive-deps -- one timer per take, reset once the last word is read
   }, [stage, finished]);
 
+  // Follow the example reading's position while it plays
+  useEffect(() => {
+    if (exampleAt === null) return;
+    let frame = 0;
+    const tick = () => {
+      const el = example.current;
+      if (el) setExampleAt(el.currentTime);
+      frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- runs while the example plays, not on every position
+  }, [exampleAt === null]);
+
+  function hearExample() {
+    const el = example.current;
+    if (!el) return;
+    if (exampleAt !== null) {
+      stopExample();
+      return;
+    }
+    el.currentTime = 0;
+    setExampleAt(0);
+    void el.play().catch(() => setExampleAt(null));
+  }
+
+  function stopExample() {
+    example.current?.pause();
+    setExampleAt(null);
+  }
+
   // Free the in-memory recording when a new one replaces it or the page goes away
   useEffect(() => () => (audioUrl ? URL.revokeObjectURL(audioUrl) : undefined), [audioUrl]);
 
   async function startReading(again: boolean) {
+    stopExample();
     if (!canListen()) {
       setStage("unsupported");
       return;
@@ -61,6 +110,7 @@ export function ReadAloud() {
   }
 
   function choose(index: number) {
+    stopExample();
     setPick(index);
     setTake(null);
     setLastTake(null);
@@ -98,13 +148,13 @@ export function ReadAloud() {
               {tokens.map((token, i) => {
                 if (token.kind === "pause") return <span key={i}> / </span>;
                 if (token.word === null) return <span key={i}>{token.text}</span>;
-                const read = view === "read" && follow.read[token.word];
-                const next = view === "read" && token.word === follow.next;
+                const read = shown !== null && shown.read[token.word];
+                const next = shown !== null && token.word === shown.next && shown.next < expected.length;
                 return (
                   <span
                     key={i}
                     data-read={read ? "true" : undefined}
-                    className={`rounded-md transition-colors duration-200 ${view === "ready" ? "text-ink" : read ? "text-ink" : "text-grey"} ${next ? "bg-peach text-peach-ink" : ""}`}
+                    className={`rounded-md transition-colors duration-200 ${shown === null || read ? "text-ink" : "text-grey"} ${next ? "bg-peach text-peach-ink" : ""}`}
                   >
                     {token.text}
                   </span>
@@ -113,16 +163,28 @@ export function ReadAloud() {
             </p>
             {view === "ready" ? (
               <div className="flex flex-col items-start gap-3">
-                <motion.button
-                  type="button"
-                  onClick={() => void startReading(false)}
-                  whileHover={still ? undefined : { scale: 1.05, rotate: -1 }}
-                  whileTap={still ? undefined : { scale: 0.92 }}
-                  transition={SPRING}
-                  className="min-h-14 rounded-full bg-warm px-8 font-serif text-2xl font-semibold text-ink shadow-[0_6px_0_#c26a2c]"
-                >
-                  Start reading
-                </motion.button>
+                <audio key={passage.id} ref={example} src={`/audio/read-along/${passage.id}.mp3`} preload="none" onEnded={() => setExampleAt(null)} />
+                <div className="flex flex-wrap items-center gap-3">
+                  <motion.button
+                    type="button"
+                    onClick={() => void startReading(false)}
+                    whileHover={still ? undefined : { scale: 1.05, rotate: -1 }}
+                    whileTap={still ? undefined : { scale: 0.92 }}
+                    transition={SPRING}
+                    className="min-h-14 rounded-full bg-warm px-8 font-serif text-2xl font-semibold text-ink shadow-[0_6px_0_#c26a2c]"
+                  >
+                    Start reading
+                  </motion.button>
+                  <button
+                    type="button"
+                    onClick={hearExample}
+                    aria-pressed={listening}
+                    className="flex min-h-12 items-center gap-2 rounded-full border-2 border-line px-5 font-bold hover:border-accent"
+                  >
+                    <span aria-hidden="true">{listening ? "■" : "▶"}</span> {listening ? "Stop the example" : "Hear it read first"}
+                  </button>
+                </div>
+                {listening ? <p className="m-0 text-sm text-muted">Read by an AI voice. The words light up the same way yours will.</p> : null}
                 <p className="m-0 max-w-xl text-sm text-muted">
                   Your browser will ask to use the microphone. Read at your own pace; it stops by itself after the last word. Your voice is measured right here in the page and the recording is never uploaded. Your browser’s speech recognition (Apple or Google) turns your words into text.
                 </p>

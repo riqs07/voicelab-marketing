@@ -55,8 +55,9 @@ test("home page: hero, animations, videos and calls to action", async ({ page })
   await page.getByRole("button", { name: "Second try" }).click();
   await expect(page.getByText("About even, and you asked back.")).toBeVisible();
   await expect(page.getByText("59%")).toBeVisible({ timeout: 5_000 });
-  // Three reels and the demo
-  await expect(page.locator("video")).toHaveCount(4);
+  // Four reels (the newest is They talk back) and the demo
+  await expect(page.locator("video")).toHaveCount(5);
+  await expect(page.locator("video[src='/videos/TalkBack.mp4']")).toHaveAttribute("aria-label", "They react to how you talk");
   expect(problems).toEqual([]);
 });
 
@@ -167,6 +168,11 @@ test("free Read aloud: the toggle, words lighting up, stopping by itself, and th
   await page.getByRole("button", { name: "The man in the arena" }).click();
   await expect(page.getByRole("heading", { name: "The man in the arena" })).toBeVisible();
   await page.getByRole("button", { name: "We choose to go to the moon" }).click();
+  // The example reading lights the words up as it plays, and can be stopped
+  await page.getByRole("button", { name: /Hear it read first/ }).click();
+  await expect(page.getByTestId("passage").locator("[data-read='true']").first()).toBeVisible({ timeout: 8_000 });
+  await page.getByRole("button", { name: /Stop the example/ }).click();
+  await expect(page.getByTestId("passage").locator("[data-read='true']")).toHaveCount(0);
   await page.getByRole("button", { name: "Start reading" }).click();
   await expect(page.getByText("Listening")).toBeVisible();
   // Words light up as they're heard

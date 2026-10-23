@@ -47,6 +47,7 @@ Voices: narrator Caroline, speaker Nate, and the app's own recordings of Maya (B
 | Um rain (5 lines) | about 12 cents |
 | They talk back (5 new lines; Maya's and Chris's are the app's recordings) | about 10 cents |
 | Website Read aloud reader (1 line; word timings by free transcription) | about 3.4 cents |
+| Try it free example readings (JFK and Roosevelt passages in full) | about 21 cents |
 
 Rendering is free (Remotion is free for individuals and companies of up to 3 people).
 
