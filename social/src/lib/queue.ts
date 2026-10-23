@@ -1,5 +1,5 @@
 // The Instagram post queue: what each post is, checking the queue file, and picking the post that is due today.
-// Kept free of Next.js so it can be unit tested. The queue itself is src/data/socialQueue.json.
+// Kept free of Next.js so it can be unit tested. The queue itself is src/data/queue.json.
 
 export type Post =
   // One or more photos (2 or more make a carousel), JPEG only: Instagram's API refuses PNG
@@ -16,8 +16,8 @@ export const CAROUSEL_LIMIT = 10;
 
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
 const ID = /^[a-z0-9-]+$/;
-// Media paths are inside public/, written without a leading slash, e.g. "social/nerves-um/1.jpg"
-const MEDIA = /^social\/[a-z0-9-]+\/[a-z0-9-]+\.(jpg|mp4)$/;
+// Media paths are inside public/, written without a leading slash, e.g. "media/nerves-um/1.jpg"
+const MEDIA = /^media\/[a-z0-9-]+\/[a-z0-9-]+\.(jpg|mp4)$/;
 
 // Everything wrong with the queue, in plain words. Empty means it is fine.
 // fileExists checks a media path (relative to public/); the tests pass a real check against the disk.
@@ -40,7 +40,7 @@ export function queueProblems(queue: Queue, fileExists: (path: string) => boolea
     if (post.kind === "reel" && !post.video.endsWith(".mp4")) problems.push(`${name}: the video must be .mp4`);
     if (post.kind === "reel" && post.cover && !post.cover.endsWith(".jpg")) problems.push(`${name}: the cover must be .jpg`);
     for (const path of media) {
-      if (!MEDIA.test(path)) problems.push(`${name}: "${path}" should look like social/<folder>/<name>.jpg`);
+      if (!MEDIA.test(path)) problems.push(`${name}: "${path}" should look like media/<folder>/<name>.jpg`);
       else if (!fileExists(path)) problems.push(`${name}: "${path}" is not in public/`);
     }
   }
@@ -81,6 +81,6 @@ function addDays(date: string, days: number): string {
 }
 
 // The full web address Instagram downloads a media file from
-export function mediaUrl(siteUrl: string, path: string): string {
-  return `${siteUrl.replace(/\/+$/, "")}/${path}`;
+export function mediaUrl(baseUrl: string, path: string): string {
+  return `${baseUrl.replace(/\/+$/, "")}/${path}`;
 }

@@ -1,16 +1,16 @@
 import { existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import queueFile from "@/data/socialQueue.json";
+import queueFile from "@/data/queue.json";
 import { GRAPH, InstagramError, publish, refreshToken } from "./instagram";
 import { duePost, mediaUrl, queueProblems, todayIn, type Post, type Queue } from "./queue";
 import { claimedByAnotherRun, needsRefresh, parseState } from "./state";
 
-const PUBLIC = fileURLToPath(new URL("../../../public/", import.meta.url));
+const PUBLIC = fileURLToPath(new URL("../../public/", import.meta.url));
 const onDisk = (path: string) => existsSync(PUBLIC + path);
 
-const reel: Post = { id: "a", date: "2026-10-27", kind: "reel", video: "social/a/reel.mp4", cover: "social/a/cover.jpg", caption: "Hi #one" };
-const carousel: Post = { id: "b", date: "2026-10-29", kind: "carousel", images: ["social/b/1.jpg", "social/b/2.jpg"], caption: "Slides" };
+const reel: Post = { id: "a", date: "2026-10-27", kind: "reel", video: "media/a/reel.mp4", cover: "media/a/cover.jpg", caption: "Hi #one" };
+const carousel: Post = { id: "b", date: "2026-10-29", kind: "carousel", images: ["media/b/1.jpg", "media/b/2.jpg"], caption: "Slides" };
 const queue: Queue = { timeZone: "America/New_York", posts: [carousel, reel] };
 
 describe("the real queue file", () => {
@@ -29,8 +29,8 @@ describe("queueProblems", () => {
     const bad: Queue = {
       timeZone: "Mars/Olympus",
       posts: [
-        { ...carousel, images: ["social/b/1.png"], date: "27 Oct" },
-        { ...reel, id: "b", caption: " ", video: "social/a/reel.mov" },
+        { ...carousel, images: ["media/b/1.png"], date: "27 Oct" },
+        { ...reel, id: "b", caption: " ", video: "media/a/reel.mov" },
       ],
     };
     const problems = queueProblems(bad, () => false).join("\n");
@@ -46,7 +46,7 @@ describe("queueProblems", () => {
   it("holds Instagram's caption, hashtag and carousel limits", () => {
     const long: Post = { ...carousel, caption: "x".repeat(2201) };
     const tags: Post = { ...carousel, id: "c", caption: Array.from({ length: 31 }, (_, i) => `#t${i}`).join(" ") };
-    const big: Post = { ...carousel, id: "d", images: Array.from({ length: 11 }, (_, i) => `social/b/${i}.jpg`) };
+    const big: Post = { ...carousel, id: "d", images: Array.from({ length: 11 }, (_, i) => `media/b/${i}.jpg`) };
     const problems = queueProblems({ ...queue, posts: [long, tags, big] }, () => true).join("\n");
     expect(problems).toContain("over 2200 characters");
     expect(problems).toContain("more than 30 hashtags");
@@ -78,8 +78,8 @@ describe("duePost", () => {
 });
 
 describe("mediaUrl", () => {
-  it("joins the site and the path once", () => {
-    expect(mediaUrl("https://example.com/", "social/a/reel.mp4")).toBe("https://example.com/social/a/reel.mp4");
+  it("joins the address and the path once", () => {
+    expect(mediaUrl("https://example.com/", "media/a/reel.mp4")).toBe("https://example.com/media/a/reel.mp4");
   });
 });
 
@@ -93,7 +93,7 @@ function fakeInstagram(answers: Array<[number, Record<string, unknown>]>) {
     const [status, body] = answers.shift() ?? [500, { error: { message: "no answer left" } }];
     return new Response(JSON.stringify(body), { status });
   }) as typeof fetch;
-  return { calls, deps: { token: "tok", siteUrl: "https://example.com", fetch: fetcher, sleep: async () => {} } };
+  return { calls, deps: { token: "tok", baseUrl: "https://example.com", fetch: fetcher, sleep: async () => {} } };
 }
 
 describe("publish", () => {
@@ -109,8 +109,8 @@ describe("publish", () => {
     expect(calls.map((call) => `${call.method} ${call.url.replace(GRAPH, "")}`)).toEqual(["GET /me", "POST /42/media", "GET /c1", "GET /c1", "POST /42/media_publish"]);
     const made = calls[1]?.params;
     expect(made?.get("media_type")).toBe("REELS");
-    expect(made?.get("video_url")).toBe("https://example.com/social/a/reel.mp4");
-    expect(made?.get("cover_url")).toBe("https://example.com/social/a/cover.jpg");
+    expect(made?.get("video_url")).toBe("https://example.com/media/a/reel.mp4");
+    expect(made?.get("cover_url")).toBe("https://example.com/media/a/cover.jpg");
     expect(made?.get("caption")).toBe("Hi #one");
     expect(calls[4]?.params.get("creation_id")).toBe("c1");
   });
@@ -127,9 +127,9 @@ describe("publish", () => {
       [200, { id: "m2" }],
     ]);
     expect(await publish(carousel, deps)).toBe("m2");
-    expect(calls[1]?.params.get("image_url")).toBe("https://example.com/social/b/1.jpg");
+    expect(calls[1]?.params.get("image_url")).toBe("https://example.com/media/b/1.jpg");
     expect(calls[1]?.params.get("is_carousel_item")).toBe("true");
-    expect(calls[3]?.params.get("image_url")).toBe("https://example.com/social/b/2.jpg");
+    expect(calls[3]?.params.get("image_url")).toBe("https://example.com/media/b/2.jpg");
     expect(calls[5]?.params.get("media_type")).toBe("CAROUSEL");
     expect(calls[5]?.params.get("children")).toBe("s1,s2");
     expect(calls[5]?.params.get("caption")).toBe("Slides");

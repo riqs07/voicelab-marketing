@@ -1,12 +1,12 @@
-// GET /api/social/publish: run once a day by Vercel Cron (see vercel.json). Publishes the post from
-// src/data/socialQueue.json that is due today, if any. Add ?dry=1 to see what it would post without posting.
+// GET /api/publish: run once a day by Vercel Cron (see vercel.json). Publishes the post from
+// src/data/queue.json that is due today, if any. Add ?dry=1 to see what it would post without posting.
 // Needs, in the hosting settings (never in git): CRON_SECRET, INSTAGRAM_ACCESS_TOKEN, and a connected Blob store.
-import queueFile from "@/data/socialQueue.json";
-import { InstagramError, publish, refreshToken } from "@/lib/social/instagram";
-import { duePost, mediaUrl, queueProblems, todayIn, type Queue } from "@/lib/social/queue";
-import { claimedByAnotherRun, needsRefresh } from "@/lib/social/state";
-import { loadState, saveState } from "@/lib/social/store";
-import { siteUrl } from "@/lib/siteUrl";
+import queueFile from "@/data/queue.json";
+import { InstagramError, publish, refreshToken } from "@/lib/instagram";
+import { duePost, mediaUrl, queueProblems, todayIn, type Queue } from "@/lib/queue";
+import { claimedByAnotherRun, needsRefresh } from "@/lib/state";
+import { loadState, saveState } from "@/lib/store";
+import { publicUrl } from "@/lib/publicUrl";
 
 // A Reel can take a few minutes for Instagram to process
 export const maxDuration = 300;
@@ -17,8 +17,8 @@ export async function GET(request: Request): Promise<Response> {
   // Vercel Cron sends "Authorization: Bearer <CRON_SECRET>"; anyone else is turned away
   const secret = process.env.CRON_SECRET;
   if (!secret || request.headers.get("authorization") !== `Bearer ${secret}`) return new Response("Unauthorized", { status: 401 });
-  // Only the live site posts, so a preview of a branch can never publish
-  if (process.env.VERCEL_ENV !== "production") return Response.json({ ok: false, message: "Only the production site publishes" }, { status: 403 });
+  // Only the production deployment posts, so a preview of a branch can never publish
+  if (process.env.VERCEL_ENV !== "production") return Response.json({ ok: false, message: "Only the production deployment publishes" }, { status: 403 });
 
   const problems = queueProblems(queue, () => true);
   if (problems.length > 0) return Response.json({ ok: false, problems }, { status: 500 });
@@ -48,10 +48,10 @@ export async function GET(request: Request): Promise<Response> {
   const post = duePost(queue, new Set(Object.keys(state.published)), today);
   if (!post) return Response.json({ ok: true, today, posted: null });
 
-  const site = siteUrl();
+  const base = publicUrl();
   if (new URL(request.url).searchParams.get("dry") === "1") {
     const media = post.kind === "reel" ? [post.video, ...(post.cover ? [post.cover] : [])] : post.images;
-    return Response.json({ ok: true, today, wouldPost: post.id, media: media.map((path) => mediaUrl(site, path)) });
+    return Response.json({ ok: true, today, wouldPost: post.id, media: media.map((path) => mediaUrl(base, path)) });
   }
 
   // Claim the post first: if another run saved in between, it is posting and this one backs off
@@ -60,7 +60,7 @@ export async function GET(request: Request): Promise<Response> {
   if (claimed === null) return Response.json({ ok: false, message: "Another run is posting" }, { status: 409 });
 
   try {
-    const mediaId = await publish(post, { token, siteUrl: site, fetch, sleep: (ms) => new Promise((done) => setTimeout(done, ms)) });
+    const mediaId = await publish(post, { token, baseUrl: base, fetch, sleep: (ms) => new Promise((done) => setTimeout(done, ms)) });
     // Saving without the claim or the last error clears both
     await saveState({ token: state.token, published: { ...state.published, [post.id]: { mediaId, at: new Date().toISOString() } } }, claimed);
     console.log(`Social: posted ${post.id} as ${mediaId}`);

@@ -8,7 +8,8 @@ export const GRAPH = "https://graph.instagram.com/v23.0";
 
 export type Deps = {
   token: string;
-  siteUrl: string;
+  // Where this app is served, so Instagram can download the media
+  baseUrl: string;
   fetch: typeof fetch;
   sleep: (ms: number) => Promise<void>;
   // How long to wait for Instagram to process a container (Reels can take a minute or two)
@@ -62,16 +63,16 @@ export async function publish(post: Post, deps: Deps): Promise<string> {
   const user = await accountId(deps);
   let creation: string;
   if (post.kind === "reel") {
-    const params: Record<string, string> = { media_type: "REELS", video_url: mediaUrl(deps.siteUrl, post.video), caption: post.caption, share_to_feed: "true" };
-    if (post.cover) params.cover_url = mediaUrl(deps.siteUrl, post.cover);
+    const params: Record<string, string> = { media_type: "REELS", video_url: mediaUrl(deps.baseUrl, post.video), caption: post.caption, share_to_feed: "true" };
+    if (post.cover) params.cover_url = mediaUrl(deps.baseUrl, post.cover);
     creation = await container(deps, user, params);
   } else if (post.images.length === 1) {
-    creation = await container(deps, user, { image_url: mediaUrl(deps.siteUrl, post.images[0] ?? ""), caption: post.caption });
+    creation = await container(deps, user, { image_url: mediaUrl(deps.baseUrl, post.images[0] ?? ""), caption: post.caption });
   } else {
     // In order: the carousel shows the images as listed
     const children: string[] = [];
     for (const image of post.images) {
-      const child = await container(deps, user, { image_url: mediaUrl(deps.siteUrl, image), is_carousel_item: "true" });
+      const child = await container(deps, user, { image_url: mediaUrl(deps.baseUrl, image), is_carousel_item: "true" });
       await waitUntilReady(deps, child);
       children.push(child);
     }
