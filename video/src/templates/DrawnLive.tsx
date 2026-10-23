@@ -11,15 +11,15 @@ import {beat, buildTimeline, type TimedBeat} from '../kit/timeline';
 
 export const drawnLiveTimeline = (voiced = true) => buildTimeline(K.video, [...K.beats], voiced);
 
-type Pitch = {tickMs: number; steps: (number | null)[]};
-const pitch = pitchJson as Record<string, Pitch>;
-const LOW = -13;
-const HIGH = 10;
+export type Pitch = {tickMs: number; steps: (number | null)[]};
+export const pitch = pitchJson as Record<string, Pitch>;
+export const LOW = -13;
+export const HIGH = 10;
 
 // The voiced runs of a take up to `upTo` seconds into it, as SVG path data. Gaps under BRIDGE seconds get a
 // thin dashed bridge (no clear pitch there, often a creaky low ending), drawn apart from the real readings.
 const BRIDGE = 0.7;
-const pathUpTo = (p: Pitch, upTo: number, x: (s: number) => number, y: (v: number) => number) => {
+export const pathUpTo = (p: Pitch, upTo: number, x: (s: number) => number, y: (v: number) => number) => {
   let d = '';
   let bridges = '';
   let open = false;
@@ -45,7 +45,7 @@ const pathUpTo = (p: Pitch, upTo: number, x: (s: number) => number, y: (v: numbe
 
 // The voice's height over a word: the median of its voiced readings; with none, the nearest readings
 // before and after it, averaged.
-const heightOf = (p: Pitch, start: number, end: number) => {
+export const heightOf = (p: Pitch, start: number, end: number) => {
   const rows = p.steps.map((v, i) => ({v, t: (i * p.tickMs) / 1000})).filter((r) => r.v !== null) as {v: number; t: number}[];
   const vals = rows.filter((r) => r.t >= start && r.t <= end).map((r) => r.v).sort((a, b) => a - b);
   if (vals.length) return vals[Math.floor(vals.length / 2)];

@@ -18,6 +18,7 @@ Everything for marketing VoiceLab (the app lives in `riqs07/table-topics`): soci
 | Um rain | `UmRain-story`, `UmRain-feed` | 29 s |
 | Conversation as a rally | `Rally-story`, `Rally-feed` | 32 s |
 | They talk back (Maya and Chris react to how you talk) | `TalkBack-story`, `TalkBack-feed` | 66 s |
+| Who is VoiceLab for? (overview) | `Overview-story`, `Overview-feed` | 47 s |
 | Sound check (rising vs falling ending) | `SoundCheck-story`, `SoundCheck-feed` | 20 s |
 | Stress shift (one sentence, five meanings) | `StressShift-story`, `StressShift-feed` | 25 s |
 | Talk share (who did the talking) | `TalkShare-story`, `TalkShare-feed` | 32 s |
@@ -48,6 +49,7 @@ Voices: narrator Caroline, speaker Nate, and the app's own recordings of Maya (B
 | They talk back (5 new lines; Maya's and Chris's are the app's recordings) | about 10 cents |
 | Website Read aloud reader (1 line; word timings by free transcription) | about 3.4 cents |
 | Try it free example readings (JFK and Roosevelt passages in full) | about 21 cents |
+| Who is VoiceLab for? (11 narration lines; moment clips reused) | about 10 cents |
 
 Rendering is free (Remotion is free for individuals and companies of up to 3 people).
 

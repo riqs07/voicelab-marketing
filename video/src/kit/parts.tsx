@@ -28,7 +28,7 @@ export const AudioTrack: React.FC<{tl: Timeline}> = ({tl}) => (
           {/* A fast-forwarded line fades out over its last few frames instead of cutting */}
           <Audio
             src={staticFile(b.audio)}
-            volume={(i) => (b.fastForward ? interpolate(i, [fr(b.fastForward.audioFor) - 6, fr(b.fastForward.audioFor)], [1, 0], clamp) : 1)}
+            volume={(i) => (b.volume ?? 1) * (b.fastForward ? interpolate(i, [fr(b.fastForward.audioFor) - 6, fr(b.fastForward.audioFor)], [1, 0], clamp) : 1)}
           />
         </Sequence>
       ) : null,

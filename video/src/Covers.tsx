@@ -8,6 +8,7 @@ import {DrawnLive} from './templates/DrawnLive';
 import {PausePower} from './templates/PausePower';
 import {Rally} from './templates/Rally';
 import {TalkBack} from './templates/TalkBack';
+import {Overview} from './templates/Overview';
 import {SoundCheck} from './templates/SoundCheck';
 import {StressShift} from './templates/StressShift';
 import {TalkShare} from './templates/TalkShare';
@@ -23,6 +24,7 @@ export const COVERS = [
   {id: 'TalkShare', component: TalkShare, frame: 380, title: 'Good listener, or waiting to talk?'},
   {id: 'PausePower', component: PausePower, frame: 430, title: 'The most confident sound? Silence.'},
   {id: 'TalkBack', component: TalkBack, frame: 1372, title: 'They react to how you talk'},
+  {id: 'Overview', component: Overview, frame: 765, title: 'Who is VoiceLab for?'},
 ] as const;
 
 const SCALE = 0.56;

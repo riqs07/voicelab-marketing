@@ -25,6 +25,8 @@ export type Beat = {
   fastForward?: {audioFor: number; speed: number};
   // Cut off: play only the first `cutAt` seconds, then stop dead (someone interrupts). Use gapAfter: 0 or less.
   cutAt?: number;
+  // Play quieter than the narration (0 to 1), for sample clips under a voiceover
+  volume?: number;
 };
 
 export type TimedBeat = Beat & {start: number; end: number; audio: string | null; full: number};
