@@ -1,13 +1,12 @@
 # VoiceLab marketing
 
-Everything for marketing VoiceLab (the app lives in `riqs07/table-topics`): social videos, the website demo, design mockups, and the finished renders.
+Everything for marketing VoiceLab (the app lives in `riqs07/table-topics`): social videos, the website demo, design mockups, and the finished renders. Instagram posting lives in its own repository, `riqs07/voicelab-content`.
 
 | Folder | What's in it |
 |---|---|
 | `video/` | The Remotion project: 8 reusable video templates plus the website demo. Words, timings and chart data live in `video/src/content/`; voice files in `video/public/audio/`. See `video/README.md`. |
 | `renders/batch-1/` | Finished MP4s, ready to post (9:16 for Reels/TikTok/Shorts, 4:5 for feed, 16:9 for the website), plus Reel covers (`covers/`) and captions (`captions.md`). |
 | `site/` | The website: home, waitlist and a free Rapid Fire, with live versions of the animations. Run `pnpm fresh` (here or in `site`) to pull the latest and start it. See `site/README.md` for how to put it online. |
-| `social/` | The Instagram scheduler, separate from the website. Run `pnpm schedule`, plan a week from `renders/`, and press Send; posts then go out by themselves at their times. See `social/README.md`. |
 | `mockups/` | Design canvases: the website and waitlist, the feedback and chart ideas, and the hero-animation storyboards. |
 | `video/scripts-v1.md` | The approved scripts for the first five videos. |
 

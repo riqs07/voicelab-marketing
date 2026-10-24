@@ -77,13 +77,13 @@ This copies `capture/demo.capture.ts` into the app's browser tests for one run, 
 
 ## Guidelines for new videos
 
-These keep every video ready for the post scheduler (`social/`) with nothing to fix by hand.
+These keep every video ready for the post scheduler (the `voicelab-content` repository) with nothing to fix by hand.
 
 - **Make it 9:16 (1080×1920).** That's the version that goes to Instagram, as a Reel or a Story. It fills the screen with no black bars. Name it `<Name>-story.mp4` in `renders/batch-*/`.
 - **Always render a cover** to go with it: `renders/batch-*/covers/<Name>-cover.png`, also 9:16. The scheduler uses it as the default cover; you can still pick another image or a frame when scheduling.
 - **Keep making the 4:5 version (`<Name>-feed.mp4`) for other platforms** (Facebook or LinkedIn feed, the website). Instagram never gets it: posted as a Reel, a 4:5 video gets black bars top and bottom.
 - **Write the caption in the batch's `captions.md`** under a `## N. Title` heading, with a ``Video: `<Name>-story.mp4` `` line and the caption in a code block. The scheduler fills it in for you.
-- Once a video has posted, the scheduler moves its 9:16 file, 4:5 file and cover together to `renders/posted/`. The caption stays in `captions.md`.
+- **Send it to the scheduler** with one command from `video/`, when `voicelab-content` is cloned next to this repository: `node scripts/to-library.mjs Overview` (Reels, by name), or `node scripts/to-library.mjs --carousel nerves-um`. It copies the 9:16 video, its cover and its caption into `voicelab-content/library/<name>/`; open the scheduler there to schedule it.
 
 ## New posts from a template
 
