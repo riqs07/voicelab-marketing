@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Feedback: did it work</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;600;700&amp;family=Fraunces:opsz,wght@9..144,600&amp;display=swap">
+<style>
+body{margin:0}
+.pb{width:32px;height:32px;border-radius:16px;background:#2E5B3E;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.mid{display:inline-block;width:3px;height:16px;border-radius:2px;background:#C26A2C;vertical-align:-3px;margin:0 3px}
+.ok{display:inline-block;width:3px;height:16px;border-radius:2px;background:#2E5B3E;vertical-align:-3px;margin:0 3px}
+.um{color:#7A3A10;font-style:italic;text-decoration:underline dotted #C26A2C 2px}
+</style>
+</helmet>
+<div style="width: 390px; min-height: 900px; box-sizing: border-box; background: #FBF6EE; color: #1E2620; font-family: 'Atkinson Hyperlegible Next', system-ui, sans-serif; padding: 24px 16px 40px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; justify-content: space-between; align-items: center">
+<span style="font-family: Fraunces, Georgia, serif; font-size: 20px; font-weight: 600">Read aloud</span>
+<span style="font-size: 14px; color: #59645C">Try 2</span>
+</div>
+
+<div style="background: #2E5B3E; color: #FFFFFF; border-radius: 20px; padding: 20px 18px; display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.8">Did the change work?</span>
+<div style="display: flex; align-items: baseline; gap: 12px">
+<span style="font-family: Fraunces, Georgia, serif; font-size: 52px; font-weight: 600; line-height: 1">1 → 0</span>
+</div>
+<span style="font-size: 17px; line-height: 1.4"><b>No stops mid-sentence.</b> You held it to the full stop, then paused for 0.7 s. That’s the change.</span>
+</div>
+
+<div style="background: #FFFFFF; border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 1px 2px rgba(30,38,32,0.06)">
+<b style="font-size: 15px">Before and after, same sentence</b>
+<div style="display: flex; flex-direction: column; gap: 4px">
+<span style="font-size: 12px; font-weight: 700; color: #59645C">BEFORE</span>
+<div style="font-family: Fraunces, Georgia, serif; font-size: 15px; line-height: 1.6">…how the <span class="mid"></span><span class="um">um</span><span class="mid"></span> strong man stumbles.</div>
+<svg width="326" height="14" viewBox="0 0 326 14" aria-hidden="true"><rect x="0" y="3" width="90" height="8" rx="4" fill="#B9C4BB"></rect><rect x="104" y="3" width="30" height="8" rx="4" fill="#B9C4BB"></rect><rect x="150" y="3" width="120" height="8" rx="4" fill="#B9C4BB"></rect></svg>
+</div>
+<div style="display: flex; flex-direction: column; gap: 4px">
+<span style="font-size: 12px; font-weight: 700; color: #2E5B3E">AFTER</span>
+<div style="font-family: Fraunces, Georgia, serif; font-size: 15px; line-height: 1.6">…how the strong man stumbles. <span class="ok" style="width: 22px; height: 7px; vertical-align: 2px"></span></div>
+<svg width="326" height="14" viewBox="0 0 326 14" aria-hidden="true"><rect x="0" y="3" width="262" height="8" rx="4" fill="#2E5B3E"></rect><rect x="292" y="3" width="34" height="8" rx="4" fill="#E6EDE7"></rect></svg>
+</div>
+<span style="font-size: 13px; color: #59645C">Bars are your voice; gaps are pauses. One long run, then the pause at the end.</span>
+<div style="display: flex; gap: 16px; font-size: 13px; color: #2E5B3E; font-weight: 700"><span style="display: flex; align-items: center; gap: 6px"><span class="pb"><svg width="11" height="12" viewBox="0 0 11 12" aria-hidden="true"><path d="M1 1 L10 6 L1 11 Z" fill="#FFFFFF"></path></svg></span> Before</span><span style="display: flex; align-items: center; gap: 6px"><span class="pb"><svg width="11" height="12" viewBox="0 0 11 12" aria-hidden="true"><path d="M1 1 L10 6 L1 11 Z" fill="#FFFFFF"></path></svg></span> After</span></div>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<div style="padding: 13px; border-radius: 999px; background: #2E5B3E; color: #FFFFFF; font-weight: 700; font-size: 16px; text-align: center">Use it on the whole passage</div>
+<div style="padding: 13px; border-radius: 999px; background: #F1F6F2; color: #2E5B3E; font-weight: 700; font-size: 16px; text-align: center">Try the sentence once more</div>
+<span style="font-size: 13px; color: #59645C; text-align: center">Doing it once is a start; three in a row makes it stick.</span>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":900}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

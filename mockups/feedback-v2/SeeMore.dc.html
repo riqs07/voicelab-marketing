@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Feedback: see more</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;600;700&amp;family=Fraunces:opsz,wght@9..144,600&amp;display=swap">
+<style>
+body{margin:0}
+.pb{width:32px;height:32px;border-radius:16px;background:#2E5B3E;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.mid{display:inline-block;width:3px;height:16px;border-radius:2px;background:#C26A2C;vertical-align:-3px;margin:0 3px}
+.ok{display:inline-block;width:3px;height:16px;border-radius:2px;background:#2E5B3E;vertical-align:-3px;margin:0 3px}
+.um{color:#7A3A10;font-style:italic;text-decoration:underline dotted #C26A2C 2px}
+</style>
+</helmet>
+<div style="width: 390px; min-height: 960px; box-sizing: border-box; background: #FBF6EE; color: #1E2620; font-family: 'Atkinson Hyperlegible Next', system-ui, sans-serif; padding: 24px 16px 40px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; justify-content: space-between; align-items: center">
+<span style="font-size: 15px; color: #2E5B3E; font-weight: 700">‹ Back</span>
+<span style="font-size: 14px; color: #59645C">Rapid Fire · 1:02</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 4px">
+<h1 style="margin: 0; font-family: Fraunces, Georgia, serif; font-size: 27px; font-weight: 600">Everything we noticed</h1>
+<p style="margin: 0; font-size: 14px; color: #59645C; line-height: 1.45">Most useful first. Each one says how sure we are; tap ▶ to hear the moment.</p>
+</div>
+
+<div style="background: #FFFFFF; border-radius: 16px; padding: 14px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 1px 2px rgba(30,38,32,0.06); border-left: 5px solid #C26A2C">
+<div style="display: flex; justify-content: space-between; align-items: baseline"><b style="font-size: 15px">Endings went up</b><span style="font-size: 12px; font-weight: 700; color: #2E5B3E">Sure</span></div>
+<span style="font-size: 14px; color: #59645C">3 of 5 statements · your usual is 1 · ▶ 0:21</span>
+<span style="font-size: 12px; color: #B4561A; font-weight: 700">Today’s one change</span>
+</div>
+
+<div style="background: #FFFFFF; border-radius: 16px; padding: 14px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 1px 2px rgba(30,38,32,0.06)">
+<div style="display: flex; justify-content: space-between; align-items: baseline"><b style="font-size: 15px">Hedges</b><span style="font-size: 12px; font-weight: 700; color: #2E5B3E">Sure</span></div>
+<span style="font-size: 14px; line-height: 1.45">“<span style="background: #FCE3CF; border-radius: 4px; padding: 0 3px">I think</span> it was <span style="background: #FCE3CF; border-radius: 4px; padding: 0 3px">kind of</span> the best…” · 4 in 1 minute · your usual is 2 · ▶ 0:34</span>
+</div>
+
+<div style="background: #FFFFFF; border-radius: 16px; padding: 14px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 1px 2px rgba(30,38,32,0.06)">
+<div style="display: flex; justify-content: space-between; align-items: baseline"><b style="font-size: 15px">Pitch variety</b><span style="font-size: 12px; font-weight: 700; color: #6B5410">Fairly sure</span></div>
+<svg width="326" height="30" viewBox="0 0 326 30" aria-hidden="true"><rect x="0" y="12" width="326" height="6" rx="3" fill="#E6EDE7"></rect><rect x="110" y="8" width="110" height="14" rx="7" fill="#B9C4BB" opacity="0.6"></rect><circle cx="196" cy="15" r="7" fill="#2E5B3E"></circle></svg>
+<span style="font-size: 14px; color: #59645C">Within your usual range (shaded). Nothing to change.</span>
+</div>
+
+<div style="background: #FFFFFF; border-radius: 16px; padding: 14px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 1px 2px rgba(30,38,32,0.06); opacity: 0.85">
+<div style="display: flex; justify-content: space-between; align-items: baseline"><b style="font-size: 15px">Volume at the end</b><span style="font-size: 12px; font-weight: 700; color: #59645C">Rough · noisy room</span></div>
+<span style="font-size: 14px; color: #59645C">Maybe faded on the last line. Background noise makes this one unreliable.</span>
+</div>
+
+<div style="background: #F1F6F2; border-radius: 16px; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center">
+<span style="font-size: 14px; color: #2E5B3E; font-weight: 700">Was today’s feedback right?</span>
+<div style="display: flex; gap: 8px"><span style="padding: 7px 12px; border-radius: 999px; background: #FFFFFF; font-size: 14px">👍</span><span style="padding: 7px 12px; border-radius: 999px; background: #FFFFFF; font-size: 14px">👎</span></div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":960}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>
