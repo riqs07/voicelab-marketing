@@ -45,8 +45,9 @@ export const estimate = (b: Beat) => {
 
 export type Timeline = {beats: TimedBeat[]; total: number; frames: number; voiced: boolean};
 
-export const buildTimeline = (video: string, beats: Beat[], voiced = true): Timeline => {
-  let t = LEAD;
+// `lead` is the silence before the first line: 0 for a cold open that speaks on frame 0.
+export const buildTimeline = (video: string, beats: Beat[], voiced = true, lead = LEAD): Timeline => {
+  let t = lead;
   let anyAudio = false;
   const out = beats.map((b) => {
     const file = `audio/${video}/${b.id}.mp3`;
@@ -69,6 +70,19 @@ export const beat = (tl: Timeline, id: string) => {
   const b = tl.beats.find((x) => x.id === id);
   if (!b) throw new Error(`No beat "${id}"`);
   return b;
+};
+
+// When each word of a line is said: by time from transcription when known, otherwise spread by letters across the line.
+export const wordTimes = (b: TimedBeat, times?: number[]) => {
+  const words = b.text.split(/\s+/).filter(Boolean);
+  if (times && times.length === words.length) return words.map((w, i) => ({w, at: b.start + times[i]}));
+  const total = words.reduce((a, w) => a + w.length + 1, 0);
+  let acc = 0;
+  return words.map((w) => {
+    const at = b.start + ((b.end - b.start) * acc) / total;
+    acc += w.length + 1;
+    return {w, at};
+  });
 };
 
 // Where in a line's recording we are at video time t (seconds), allowing for fast-forward.

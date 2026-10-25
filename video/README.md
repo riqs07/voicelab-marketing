@@ -12,6 +12,8 @@ Eight reusable video templates plus a website demo, made with Remotion. Each vid
 | Your voice, drawn live (real pitch draws itself) | `src/content/drawnLive.ts` | 9:16, 4:5 |
 | Um rain (pause words fall into a jar) | `src/content/umRain.ts` | 9:16, 4:5 |
 | Conversation as a rally (Talk share as tennis) | `src/content/rally.ts` | 9:16, 4:5 |
+| You lost them at "so" (a video-call stand-up drains with every filler) | `src/content/standUp.ts` | 9:16, 4:5 |
+| POV: you were asked one question (your answer bubble swallows the chat) | `src/content/oneQuestion.ts` | 9:16, 4:5 |
 
 The web address and voices for every video are in `src/content/brand.ts`.
 
@@ -84,6 +86,18 @@ These keep every video ready for the post scheduler (the `voicelab-content` repo
 - **Keep making the 4:5 version (`<Name>-feed.mp4`) for other platforms** (Facebook or LinkedIn feed, the website). Instagram never gets it: posted as a Reel, a 4:5 video gets black bars top and bottom.
 - **Write the caption in the batch's `captions.md`** under a `## N. Title` heading, with a ``Video: `<Name>-story.mp4` `` line and the caption in a code block. The scheduler fills it in for you.
 - **Send it to the scheduler** with one command from `video/`, when `voicelab-content` is cloned next to this repository: `node scripts/to-library.mjs Overview` (Reels, by name), or `node scripts/to-library.mjs --carousel nerves-um`. It copies the 9:16 video, its cover and its caption into `voicelab-content/library/<name>/`; open the scheduler there to schedule it.
+
+## Hooks: the first 2 seconds
+
+Viewers decide in the first second, and the first frame is also what shows before the video plays. So:
+
+- **Frame 0 is already full.** No fade in, no empty screen. Stand-up and POV start with `buildTimeline(..., 0)` so the first voice plays on frame 0.
+- **The first sound is the problem itself** (a filler, a ramble), not a narrator asking about it.
+- **3 to 6 big words**, readable in under a second, on screen from frame 0.
+- **Open in the middle.** POV shows words already said (`alreadySaid`) so the meter starts at about 75%.
+- **Something changes every half-second** (a counter, a bar, a tile going dark).
+
+Check a hook before voicing it: `./stills.sh StandUp-story 0 9 18 30 45 60` gives the first 2 seconds as frames.
 
 ## New posts from a template
 

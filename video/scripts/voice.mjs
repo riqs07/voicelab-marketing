@@ -25,7 +25,7 @@ const model = env.VOICE_MODEL ?? 'eleven_multilingual_v2';
 const load = (name) => import(pathToFileURL(join(process.cwd(), `src/content/${name}.ts`)).href);
 const brand = await load('brand');
 const videos = [];
-for (const name of ['soundCheck', 'stressShift', 'talkShare', 'pausePower', 'demo']) {
+for (const name of ['soundCheck', 'stressShift', 'talkShare', 'pausePower', 'demo', 'standUp', 'oneQuestion']) {
   const mod = await load(name);
   videos.push(Object.values(mod)[0]);
 }

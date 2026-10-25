@@ -17,6 +17,8 @@ import {PausePower, pausePowerTimeline} from './templates/PausePower';
 import {SoundCheck, soundCheckTimeline} from './templates/SoundCheck';
 import {StressShift, stressShiftTimeline} from './templates/StressShift';
 import {TalkShare, talkShareTimeline} from './templates/TalkShare';
+import {StandUp, standUpTimeline} from './templates/StandUp';
+import {OneQuestion, oneQuestionTimeline} from './templates/OneQuestion';
 
 const SIZES = {
   story: {width: 1080, height: 1920}, // 9:16 TikTok, Reels, Shorts
@@ -64,6 +66,8 @@ export const RemotionRoot: React.FC = () => (
     {Template({id: 'Rally', component: Rally, timeline: rallyTimeline})}
     {Template({id: 'TalkBack', component: TalkBack, timeline: talkBackTimeline})}
     {Template({id: 'Overview', component: Overview, timeline: overviewTimeline})}
+    {Template({id: 'StandUp', component: StandUp, timeline: standUpTimeline})}
+    {Template({id: 'OneQuestion', component: OneQuestion, timeline: oneQuestionTimeline})}
     {Template({id: 'UmRain', component: UmRain, timeline: umRainTimeline})}
     {Template({id: 'Demo', component: Demo, timeline: demoTimeline, sizes: ['wide', 'story']})}
     <Composition id="DemoLoop-wide" component={Demo} durationInFrames={demoLoopFrames()} fps={FPS} {...SIZES.wide} defaultProps={{voiced: false, loop: true}} />
