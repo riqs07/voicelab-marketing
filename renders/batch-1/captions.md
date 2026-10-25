@@ -179,6 +179,25 @@ Join the waitlist: link in bio.
 
 ---
 
+## 10. You lost them at "so" (StandUp)
+Video: `StandUp-story.mp4` · Cover: `covers/StandUp-cover.png`
+
+```
+"So, um, yeah, so basically…"
+
+Nine fillers before the point, and the whole stand-up has checked out. Same update, point first: "The billing bug is fixed." Everyone's back.
+
+Your first ten seconds decide whether people listen. VoiceLab counts your fillers and shows you where the point actually starts.
+
+What's your go-to filler: so, um, like, or basically? 👇
+
+Join the waitlist: link in bio.
+
+#publicspeaking #communicationskills #meetings #leadership #careeradvice
+```
+
+---
+
 ## Notes
 
 - **Numbers are real:** 77%, 12 in 20 seconds and the pause lengths come from the recordings in the videos. If a video is re-recorded, check its caption still matches.

@@ -3,7 +3,7 @@
 set -e
 # Optional: REMOTION_BROWSER=/path/to/chrome to use a browser you already have; otherwise Remotion downloads one.
 mkdir -p out/videos
-for id in DrawnLive-story DrawnLive-feed UmRain-story UmRain-feed Rally-story Rally-feed TalkBack-story TalkBack-feed Overview-story Overview-feed SoundCheck-story SoundCheck-feed StressShift-story StressShift-feed TalkShare-story TalkShare-feed \
+for id in StandUp-story StandUp-feed DrawnLive-story DrawnLive-feed UmRain-story UmRain-feed Rally-story Rally-feed TalkBack-story TalkBack-feed Overview-story Overview-feed SoundCheck-story SoundCheck-feed StressShift-story StressShift-feed TalkShare-story TalkShare-feed \
           PausePower-story PausePower-feed Demo-wide Demo-story DemoLoop-wide; do
   case "$id" in *"$1"*) ;; *) continue ;; esac
   extra=""

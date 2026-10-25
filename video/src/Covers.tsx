@@ -13,6 +13,9 @@ import {SoundCheck} from './templates/SoundCheck';
 import {StressShift} from './templates/StressShift';
 import {TalkShare} from './templates/TalkShare';
 import {UmRain} from './templates/UmRain';
+import {StandUp, standUpTimeline} from './templates/StandUp';
+import {fr} from './kit/theme';
+import {beat} from './kit/timeline';
 
 // Each cover: the video, the frame to freeze (30 per second) and its title. Change titles here.
 export const COVERS = [
@@ -25,6 +28,8 @@ export const COVERS = [
   {id: 'PausePower', component: PausePower, frame: 430, title: 'The most confident sound? Silence.'},
   {id: 'TalkBack', component: TalkBack, frame: 1372, title: 'They react to how you talk'},
   {id: 'Overview', component: Overview, frame: 765, title: 'Who is VoiceLab for?'},
+  // The moment before the narrator: the whole call has checked out (follows the real voice timing)
+  {id: 'StandUp', component: StandUp, frame: fr(beat(standUpTimeline(true), 'n1').start) - 15, title: 'You lost them at “so.”'},
 ] as const;
 
 const SCALE = 0.56;
