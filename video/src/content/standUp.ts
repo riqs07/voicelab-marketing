@@ -20,6 +20,9 @@ export const standUp = {
     {id: 'y2', voice: 'speaker', text: 'The billing bug is fixed. Two customers already wrote in to say thanks.', caption: '', gapAfter: 0.8},
     {id: 'close', voice: 'narrator', text: 'VoiceLab hears your first ten seconds. See how you sound.'},
   ] satisfies Beat[],
+  // When each word of the first take starts, in seconds (ElevenLabs transcription of public/audio/stand-up/y1.mp3).
+  // A new recording needs new times; with the wrong number of words they are ignored and the words are spread evenly.
+  y1Times: [0, 0.662, 2.043, 2.322, 2.473, 3.262, 4.69, 4.969, 5.213, 5.561, 5.875, 6.687, 8.069, 8.22, 8.591, 8.847, 9.485, 11.076, 11.215, 11.389, 11.459, 11.668, 11.935, 12.237],
   // The fillers the first take is counted on (each one drains the room)
   fillers: ['so', 'um', 'yeah', 'basically', 'kind'],
   // The rest of the call, left to right, top to bottom; you are the last tile. `drift` is the filler number at which

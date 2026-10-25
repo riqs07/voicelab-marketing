@@ -95,7 +95,7 @@ export const StandUp: React.FC<{voiced?: boolean}> = ({voiced = true}) => {
   const story = L.format === 'story';
 
   // Fillers said so far in the first take, and when each one landed
-  const words1 = wordTimes(y1);
+  const words1 = wordTimes(y1, [...K.y1Times]);
   const fillerAt = words1.filter((x) => isFiller(x.w)).map((x) => x.at);
   const said = fillerAt.filter((at) => t >= at).length;
   // The second take brings everyone back
