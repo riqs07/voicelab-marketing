@@ -163,20 +163,84 @@ body {
   to { transform: rotate(360deg); }
 }
 
-/* The hero's run (RunHero.tsx): the app's tile loops (t-speed, t-flag, t-patter, t-twinkle), plus a sliding lane line,
-   fluttering headband tails and a slow float. Stilled by "reduce motion" above */
-.run-speed { animation: run-speed 1.6s linear infinite both; }
-@keyframes run-speed { 0% { opacity: 0; transform: translateX(8px); } 30% { opacity: 1; } 100% { opacity: 0; transform: translateX(-10px); } }
-.run-flag { animation: run-flag 1.4s ease-in-out infinite alternate; }
-@keyframes run-flag { from { transform: skewY(-6deg); } to { transform: skewY(5deg); } }
-.run-patter { animation: run-patter 0.5s ease-in-out infinite alternate; }
-@keyframes run-patter { from { transform: none; } to { transform: translateY(-3px); } }
-.run-tails { animation: run-tails 0.5s ease-in-out infinite alternate; }
-@keyframes run-tails { from { transform: rotate(-6deg); } to { transform: rotate(8deg); } }
-.run-twinkle { transform-box: fill-box; transform-origin: center; animation: run-twinkle 4s ease-in-out infinite both; }
-@keyframes run-twinkle { 0%, 100% { transform: scale(0.6); opacity: 0.5; } 50% { transform: scale(1.1); opacity: 1; } }
-.run-lane { animation: run-lane 0.8s linear infinite; }
-@keyframes run-lane { to { stroke-dashoffset: 20; } }
-.run-blink { transform-box: fill-box; transform-origin: center; animation: ch-blink 4.6s infinite; }
+/* The hero picture floats gently (HeroTile.tsx). Stilled by "reduce motion" above */
 .run-float { animation: run-float 5s ease-in-out infinite alternate; }
 @keyframes run-float { from { transform: translateY(0) rotate(0deg); } to { transform: translateY(-8px) rotate(-0.6deg); } }
+
+/* The app's course tiles (src/data/tiles.json, drawn by scripts/render-tiles.mjs from the app's own tile code):
+   the app's theme colours (light) for the classes they use, and the app's tile loops. Scoped to .vl-scene */
+.vl-scene .fill-art-sky { fill: #4a68e0; }
+.vl-scene .fill-art-sun { fill: #f4b73b; }
+.vl-scene .fill-art-bloom { fill: #e86aae; }
+.vl-scene .fill-art-leaf { fill: #7cc46a; }
+.vl-scene .fill-art-plum { fill: #8a63e0; }
+.vl-scene .fill-art-coral { fill: #ec6a55; }
+.vl-scene .fill-art-cream { fill: #fff6e6; }
+.vl-scene .fill-warm { fill: #f4a86e; }
+.vl-scene .fill-warm-shade { fill: #d9844c; }
+.vl-scene .fill-warm-ink { fill: #7a3418; }
+.vl-scene .fill-on-warm { fill: #1e2320; }
+.vl-scene .fill-current { fill: currentColor; }
+.vl-scene .stroke-art-sky { stroke: #4a68e0; }
+.vl-scene .stroke-art-sun { stroke: #f4b73b; }
+.vl-scene .stroke-art-leaf { stroke: #7cc46a; }
+.vl-scene .stroke-art-plum { stroke: #8a63e0; }
+.vl-scene .stroke-art-coral { stroke: #ec6a55; }
+.vl-scene .stroke-art-cream { stroke: #fff6e6; }
+.vl-scene .stroke-on-warm { stroke: #1e2320; }
+.vl-scene .stroke-current { stroke: currentColor; }
+.vl-scene .text-on-warm { color: #1e2320; }
+.vl-scene .opacity-10 { opacity: 0.1; }
+.vl-scene .opacity-15 { opacity: 0.15; }
+.vl-scene .opacity-20 { opacity: 0.2; }
+.vl-scene .opacity-30 { opacity: 0.3; }
+.vl-scene .opacity-40 { opacity: 0.4; }
+.vl-scene .opacity-50 { opacity: 0.5; }
+.vl-scene .opacity-60 { opacity: 0.6; }
+.vl-scene .opacity-70 { opacity: 0.7; }
+.vl-scene .s-blink { transform-box: fill-box; transform-origin: center; }
+@media (prefers-reduced-motion: no-preference) {
+  .vl-scene .s-blink { animation: vl-s-blink 4.6s infinite; }
+  .vl-scene .t-float { animation: vl-t-float 3.6s ease-in-out infinite; }
+  .vl-scene .t-breathe { animation: vl-t-breathe 4s ease-in-out infinite; }
+  .vl-scene .t-pulse { animation: vl-t-pulse 4s ease-in-out infinite; }
+  .vl-scene .t-air { animation: vl-t-air 4s ease-out infinite both; }
+  .vl-scene .t-wobble { animation: vl-t-wobble 2.4s ease-in-out infinite alternate; }
+  .vl-scene .t-wave { animation: vl-t-wave 1.8s ease-in-out infinite alternate; }
+  .vl-scene .t-glide { animation: vl-t-glide 4s ease-in-out infinite alternate; }
+  .vl-scene .t-twinkle { transform-box: fill-box; transform-origin: center; animation: vl-t-twinkle 4s ease-in-out infinite both; }
+  .vl-scene .t-sway { animation: vl-t-sway 3s ease-in-out infinite alternate; }
+  .vl-scene .t-nod { animation: vl-t-nod 2.8s ease-in-out infinite both; }
+  .vl-scene .t-hop { animation: vl-t-hop 2.4s ease-in-out infinite both; }
+  .vl-scene .t-slide { animation: vl-t-slide 3s ease-in-out infinite alternate; }
+  .vl-scene .t-ring { animation: vl-t-ring 3s ease-out infinite both; }
+  .vl-scene .t-pop { animation: vl-t-pop 3s ease-in-out infinite both; }
+}
+@keyframes vl-s-blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(0.1); } }
+@keyframes vl-t-float { 0%, 100% { transform: none; } 50% { transform: translateY(-3px); } }
+@keyframes vl-t-breathe { 0%, 100% { transform: none; } 45%, 55% { transform: scale(1.05); } }
+@keyframes vl-t-pulse { 0%, 100% { transform: none; opacity: 0.85; } 50% { transform: scale(1.08); opacity: 1; } }
+@keyframes vl-t-air { 0% { opacity: 0; transform: none; } 30% { opacity: 0.9; } 100% { opacity: 0; transform: translate(8px, -8px); } }
+@keyframes vl-t-wobble { from { transform: rotate(-3deg); } to { transform: rotate(3deg); } }
+@keyframes vl-t-wave { from { transform: rotate(-10deg); } to { transform: rotate(10deg); } }
+@keyframes vl-t-glide { from { transform: translate(-3px, -4px) rotate(-4deg); } to { transform: translate(3px, 4px) rotate(4deg); } }
+@keyframes vl-t-twinkle { 0%, 100% { transform: scale(0.6); opacity: 0.5; } 50% { transform: scale(1.1); opacity: 1; } }
+@keyframes vl-t-sway { from { transform: rotate(-6deg); } to { transform: rotate(6deg); } }
+@keyframes vl-t-nod { 0%, 60%, 100% { transform: none; } 30% { transform: rotate(6deg); } }
+@keyframes vl-t-hop { 0%, 50%, 100% { transform: none; } 25% { transform: translateY(-5px); } }
+@keyframes vl-t-slide { from { transform: translateX(-4px); } to { transform: translateX(4px); } }
+@keyframes vl-t-ring { 0% { opacity: 0; transform: scale(0.9); } 30% { opacity: 0.9; } 100% { opacity: 0; transform: scale(1.08); } }
+@keyframes vl-t-pop { 0%, 30%, 100% { transform: none; } 12% { transform: scale(1.08); } }
+
+/* The hero's tile in VoiceLab's own colours, so it sits with the page: the brand green ground, a sand lectern,
+   a white page with green lines, cream sound rings and sparkle */
+.hero-brand .vl-scene .fill-art-sun { fill: #2e5b3e; }
+.hero-brand .vl-scene .fill-art-plum { fill: #efe8dc; }
+.hero-brand .vl-scene .stroke-art-plum { stroke: #2e5b3e; }
+.hero-brand .vl-scene .fill-art-cream { fill: #fbf6ee; }
+.hero-brand .vl-scene path.fill-art-cream[d^="M78 104"] { fill: #ffffff; }
+.hero-brand .vl-scene .t-twinkle.fill-art-cream { fill: #f4a86e; }
+
+/* The closing card's mascots react at once when clicked (ClosingChat.tsx) */
+.react-now .ch-wave { animation-delay: 0s; }
+.react-now .ch-hop { animation-delay: 0s; }

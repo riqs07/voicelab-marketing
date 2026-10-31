@@ -49,6 +49,12 @@ node scripts/sync-core.mjs /path/to/Table-Topics
 pnpm check && pnpm build
 ```
 
+The pictures of the app's course tiles (the hero and the lessons band) are drawn from the app's own tile code into `src/data/tiles.json`. After the app's tiles change, or to add a lesson to the band (the `TILES` list in the script):
+
+```sh
+node scripts/render-tiles.mjs /path/to/Table-Topics
+```
+
 ## Where things come from
 
 - Pitch line: `src/data/gorilla.json`, the real pitch of the two "drawn live" recordings, measured with the app's tracker.

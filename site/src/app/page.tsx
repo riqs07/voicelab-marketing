@@ -1,16 +1,18 @@
 import { BounceWords, BouncyLink, Reveal } from "@/components/Bouncy";
 import { GuidedStory } from "@/components/GuidedStory";
 import { PeoplePicker } from "@/components/PeoplePicker";
-import { RunHero } from "@/components/RunHero";
+import { HeroTile } from "@/components/HeroTile";
 import { PracticeMenu } from "@/components/PracticeMenu";
 import { ReadAlongDemo } from "@/components/ReadAlongDemo";
 import { Reels } from "@/components/Reels";
 import { StressShift } from "@/components/StressShift";
 import { TalkLanes } from "@/components/TalkLanes";
 import { UmJar } from "@/components/UmJar";
-import { Blob, Sage, type BlobFace } from "@/components/Characters";
+import { Blob, type BlobFace } from "@/components/Characters";
 import { SagePerch } from "@/components/SagePerch";
 import { BlobPeek } from "@/components/BlobPeek";
+import { LessonBanner } from "@/components/LessonBanner";
+import { ClosingChat } from "@/components/ClosingChat";
 
 // Each step has the blob in the face that fits it, eyes open: talking, surprised by what it sees, beaming at the second try; they blink at different times
 const STEPS: { n: string; face: BlobFace; title: string; line: string }[] = [
@@ -54,8 +56,16 @@ export default function Home() {
           </div>
           <p className="m-0 text-sm text-muted">No account needed. The free Rapid Fire runs in your browser.</p>
         </div>
-        {/* The run: the app's course tile, large, as the hero picture */}
-        <RunHero />
+        {/* "The run" from Voice: lean in, the app's course tile, large, as the hero picture */}
+        <HeroTile />
+      </section>
+
+      {/* Lessons from the courses, gliding past */}
+      <section className="pb-16" aria-labelledby="lessons-band">
+        <p id="lessons-band" className="mx-auto mb-4 max-w-6xl px-4 text-sm font-bold uppercase tracking-wider text-accent sm:px-8">
+          Short lessons inside, out loud
+        </p>
+        <LessonBanner />
       </section>
 
       {/* How it works */}
@@ -166,12 +176,8 @@ export default function Home() {
       <section className="mx-auto max-w-6xl px-4 sm:px-8">
         <Reveal>
           <div className="relative flex flex-col items-start gap-6 overflow-hidden rounded-[2.25rem] bg-ink px-8 py-14 text-paper sm:px-14 lg:pr-[24rem]">
-            {/* The blob and Sage, side by side on a ground line, as on the videos' end card */}
-            <div className="pointer-events-none absolute bottom-10 right-10 hidden items-end gap-2 lg:flex" aria-hidden="true">
-              <div className="absolute -bottom-1 left-0 right-0 h-1.5 rounded-full bg-[#2f3a32]" />
-              <Blob size={150} face="ready" />
-              <Sage size={170} face="calm" />
-            </div>
+            {/* The blob and Sage, side by side on a ground line, now and then trading a few lines */}
+            <ClosingChat />
             <h2 className="m-0 font-serif text-4xl font-semibold sm:text-6xl">See how you sound.</h2>
             <p className="m-0 max-w-xl text-lg text-[#D7DED9]">Join the waitlist and we’ll tell you the day VoiceLab opens. Or try one free Rapid Fire right now.</p>
             <div className="flex flex-wrap gap-3">
