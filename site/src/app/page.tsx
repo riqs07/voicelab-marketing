@@ -56,7 +56,7 @@ export default function Home() {
           </div>
           <p className="m-0 text-sm text-muted">No account needed. The free Rapid Fire runs in your browser.</p>
         </div>
-        {/* "The run" from Voice: lean in, the app's course tile, large, as the hero picture */}
+        {/* One of a few of the app's course tiles, picked on each visit, large, as the hero picture */}
         <HeroTile />
       </section>
 

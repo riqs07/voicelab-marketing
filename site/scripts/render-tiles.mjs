@@ -18,9 +18,12 @@ if (!app) {
 }
 const site = join(dirname(fileURLToPath(import.meta.url)), "..");
 
-// The tiles the site uses: the hero's, then the lessons in the banner (tile name and lesson name)
+// The tiles the site uses: the hero's (one is picked on each visit), then the lessons in the band (tile name and name)
 const TILES = [
   ["speech-run", "The run"],
+  ["beyond-good-you", "Beyond “good, you?”"],
+  ["stories-that-land", "Stories that land"],
+  ["the-run", "The run"],
   ["buy-a-beat", "Buy a beat"],
   ["answer-with-a-hook", "Answer with a hook"],
   ["open-strong", "Open strong"],

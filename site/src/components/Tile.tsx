@@ -10,3 +10,6 @@ export function Tile({ name, className = "" }: { name: TileName; className?: str
   // The markup is our own, generated at build time from the app's drawings, not user content
   return <span aria-hidden="true" className={`block [&>svg]:block [&>svg]:h-full [&>svg]:w-full ${className}`} dangerouslySetInnerHTML={{ __html: TILES[name].svg }} />;
 }
+
+// The hero's tiles: one is picked on each visit (HeroTile.tsx); the lessons band leaves them out
+export const HERO_TILES = ["speech-run", "beyond-good-you", "stories-that-land", "the-run"] as const satisfies readonly TileName[];

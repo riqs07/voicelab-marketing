@@ -190,9 +190,12 @@ body {
 .vl-scene .stroke-on-warm { stroke: #1e2320; }
 .vl-scene .stroke-current { stroke: currentColor; }
 .vl-scene .text-on-warm { color: #1e2320; }
+.vl-scene .fill-accent { fill: #2e5b3e; }
+.vl-scene .text-accent-ink { color: #fcfcfb; }
 .vl-scene .opacity-10 { opacity: 0.1; }
 .vl-scene .opacity-15 { opacity: 0.15; }
 .vl-scene .opacity-20 { opacity: 0.2; }
+.vl-scene .opacity-25 { opacity: 0.25; }
 .vl-scene .opacity-30 { opacity: 0.3; }
 .vl-scene .opacity-40 { opacity: 0.4; }
 .vl-scene .opacity-50 { opacity: 0.5; }
@@ -232,14 +235,25 @@ body {
 @keyframes vl-t-ring { 0% { opacity: 0; transform: scale(0.9); } 30% { opacity: 0.9; } 100% { opacity: 0; transform: scale(1.08); } }
 @keyframes vl-t-pop { 0%, 30%, 100% { transform: none; } 12% { transform: scale(1.08); } }
 
-/* The hero's tile in VoiceLab's own colours, so it sits with the page: the brand green ground, a sand lectern,
-   a white page with green lines, cream sound rings and sparkle */
-.hero-brand .vl-scene .fill-art-sun { fill: #2e5b3e; }
+/* The hero's tiles in VoiceLab's own colours, so they sit with the page (HeroTile.tsx): the ground is always the
+   brand green; on it, the props become sand, peach, apricot and cream, with green details on light parts */
+.hero-brand .vl-scene .fill-art-cream { fill: #fbf6ee; }
 .hero-brand .vl-scene .fill-art-plum { fill: #efe8dc; }
 .hero-brand .vl-scene .stroke-art-plum { stroke: #2e5b3e; }
-.hero-brand .vl-scene .fill-art-cream { fill: #fbf6ee; }
+.hero-brand .vl-scene .fill-art-coral { fill: #c26a2c; }
+.hero-brand .vl-scene .fill-art-bloom { fill: #fce3cf; }
+.hero-brand .vl-scene .fill-art-sun { fill: #f4c08f; }
+.hero-brand .vl-scene .stroke-art-sky { stroke: #fce3cf; }
+.hero-brand .vl-scene .t-twinkle.fill-art-cream, .hero-brand .vl-scene .t-twinkle.fill-art-sun { fill: #f4a86e; }
+/* A second person (the friend) in sand with a dark face, so it shows on the green */
+.hero-brand .vl-scene .fill-accent { fill: #efe8dc; }
+.hero-brand .vl-scene .text-accent-ink { color: #1e2320; }
+/* The ground: the tile's first shape, whatever colour it was */
+.hero-brand .vl-scene > g > rect:first-child { fill: #2e5b3e; }
+/* The lectern's page stays white */
 .hero-brand .vl-scene path.fill-art-cream[d^="M78 104"] { fill: #ffffff; }
-.hero-brand .vl-scene .t-twinkle.fill-art-cream { fill: #f4a86e; }
+/* The finish flag's checks, green on its cream cloth */
+.hero-brand .vl-scene[data-course-tile="the-run"] .fill-art-plum { fill: #2e5b3e; }
 
 /* The closing card's mascots react at once when clicked (ClosingChat.tsx) */
 .react-now .ch-wave { animation-delay: 0s; }
