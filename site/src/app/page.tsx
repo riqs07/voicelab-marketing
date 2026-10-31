@@ -60,14 +60,6 @@ export default function Home() {
         <HeroTile />
       </section>
 
-      {/* Lessons from the courses, gliding past */}
-      <section className="pb-16" aria-labelledby="lessons-band">
-        <p id="lessons-band" className="mx-auto mb-4 max-w-6xl px-4 text-sm font-bold uppercase tracking-wider text-accent sm:px-8">
-          Short lessons inside, out loud
-        </p>
-        <LessonBanner />
-      </section>
-
       {/* How it works */}
       <section id="how" className="scroll-mt-8 bg-sand py-20">
         <div className="mx-auto max-w-6xl px-4 sm:px-8">
@@ -115,13 +107,18 @@ export default function Home() {
       <section className="overflow-x-clip bg-tint py-20">
         <div className="mx-auto max-w-6xl px-4 sm:px-8">
           <Reveal>
-            <h2 className="m-0 font-serif text-4xl font-semibold leading-tight sm:text-5xl">Little lessons, 30 seconds each.</h2>
-            <p className="mt-4 max-w-2xl text-lg text-muted">Follow along on Instagram while you wait.</p>
+            <h2 className="m-0 font-serif text-4xl font-semibold leading-tight sm:text-5xl">Little lessons, under a minute each.</h2>
+            <p className="mt-4 max-w-2xl text-lg text-muted">Three from the app’s courses. Each one teaches one idea, then you say it out loud.</p>
           </Reveal>
           <div className="mt-12">
             <Reels />
           </div>
         </div>
+        {/* More lessons from the courses, gliding past */}
+        <p id="lessons-band" className="mx-auto mb-4 mt-16 max-w-6xl px-4 text-sm font-bold uppercase tracking-wider text-accent sm:px-8">
+          And many more, across twelve courses
+        </p>
+        <LessonBanner />
       </section>
 
       {/* Inside the app */}
