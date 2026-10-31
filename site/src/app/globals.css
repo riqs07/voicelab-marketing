@@ -162,14 +162,3 @@ body {
 @keyframes vs-spin {
   to { transform: rotate(360deg); }
 }
-
-/* Sage's explaining arm opens a little further, three times, then rests */
-.ch-explain {
-  transform-box: fill-box;
-  transform-origin: 100% 0%;
-  animation: ch-explain 1.6s ease-in-out 1s 6 alternate;
-}
-@keyframes ch-explain {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(-12deg); }
-}
