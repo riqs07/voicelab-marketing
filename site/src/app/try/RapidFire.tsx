@@ -6,6 +6,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useEffect, useState } from "react";
 import { BouncyLink, SPRING } from "@/components/Bouncy";
 import { TopicDraw } from "@/components/TopicDraw";
+import { Sage } from "@/components/Characters";
 import { LiveShape, StartShape, StatusShape } from "@/components/VoiceShape";
 import { analyseTake, type FreeTake } from "@/lib/freeTake";
 import { QUESTIONS, THINK_SECONDS, WINDOW, clock } from "@/lib/rapidFire";
@@ -111,9 +112,15 @@ export function RapidFire() {
       <AnimatePresence mode="wait">
         {view === "intro" ? (
           <motion.div key="intro" {...pop} className="flex flex-col items-center gap-6 text-center">
-            <p className="m-0 text-lg text-muted">Your question is hidden until you start. You get {THINK_SECONDS} seconds to think, then talk for one to two minutes.</p>
-            {/* The voice shape is the start button, as in the app */}
-            <StartShape label="Show my question" detail={`then ${THINK_SECONDS} s to think`} onStart={() => think(true)} />
+            <div className="flex flex-wrap items-end justify-center gap-6">
+              {/* The voice shape is the start button, as in the app */}
+              <StartShape label="Show my question" detail={`then ${THINK_SECONDS} s to think`} onStart={() => think(true)} />
+              {/* Sage, the coach, with its line before a timed task */}
+              <div className="flex flex-col items-center" aria-hidden="true">
+                <p className="m-0 mb-1 max-w-[11rem] rounded-2xl rounded-bl-md bg-tint px-4 py-2 text-left font-semibold leading-snug">Take a breath. Then start with your point.</p>
+                <Sage size={110} face="calm" />
+              </div>
+            </div>
             <p className="m-0 max-w-md text-sm text-muted">
               Your browser will ask to use the microphone. Your voice is measured right here in the page; the recording stays on your device for you to play back and is never uploaded. Your browser’s speech recognition (Apple or Google) turns your words into text.
             </p>

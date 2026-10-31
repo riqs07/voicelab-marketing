@@ -4,7 +4,8 @@
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { BouncyLink, SPRING } from "@/components/Bouncy";
-import { Meter, Ring } from "@/components/TakeParts";
+import { Blob } from "@/components/Characters";
+import { LiveShape, StartShape, StatusShape } from "@/components/VoiceShape";
 import { followReading, readingTokens, scriptWords } from "@/core/liveReading";
 import { clock } from "@/lib/rapidFire";
 import { FINISH_SECONDS, PASSAGES, READ_LIMIT, analyseReading, type ReadTake } from "@/lib/readAloud";
@@ -43,6 +44,8 @@ export function ReadAloud() {
   const expected = useMemo(() => scriptWords(tokens), [tokens]);
   const follow = followReading(expected, `${recorder.finalText} ${recorder.interim}`);
   const listening = view === "ready" && exampleAt !== null;
+  // The blob's mouth is open while the example is saying a word, shut between words, so it looks like it's reading
+  const mouthOpen = listening && !still && (READINGS[passage.id] ?? []).some((w) => exampleAt !== null && exampleAt >= w.start && exampleAt <= w.end);
   const exampleFollow = listening ? followReading(expected, heardBy(READINGS[passage.id] ?? [], exampleAt)) : null;
   const shown = view === "read" ? follow : exampleFollow;
   const finished = stage === "read" && follow.next >= expected.length;
@@ -164,24 +167,15 @@ export function ReadAloud() {
             {view === "ready" ? (
               <div className="flex flex-col items-start gap-3">
                 <audio key={passage.id} ref={example} src={`/audio/read-along/${passage.id}.mp3`} preload="none" onEnded={() => setExampleAt(null)} />
-                <div className="flex flex-wrap items-center gap-3">
-                  <motion.button
-                    type="button"
-                    onClick={() => void startReading(false)}
-                    whileHover={still ? undefined : { scale: 1.05, rotate: -1 }}
-                    whileTap={still ? undefined : { scale: 0.92 }}
-                    transition={SPRING}
-                    className="min-h-14 rounded-full bg-warm px-8 font-serif text-2xl font-semibold text-ink shadow-[0_6px_0_#c26a2c]"
-                  >
-                    Start reading
-                  </motion.button>
-                  <button
-                    type="button"
-                    onClick={hearExample}
-                    aria-pressed={listening}
-                    className="flex min-h-12 items-center gap-2 rounded-full border-2 border-line px-5 font-bold hover:border-accent"
-                  >
-                    <span aria-hidden="true">{listening ? "■" : "▶"}</span> {listening ? "Stop the example" : "Hear it read first"}
+                <div className="flex w-full flex-wrap items-center justify-center gap-8 sm:justify-start">
+                  {/* The voice shape starts the reading, as in the app */}
+                  <StartShape label="Start reading" detail="stops at the last word" onStart={() => void startReading(false)} />
+                  {/* The blob reads it to you first: its mouth opens on each word of the example */}
+                  <button type="button" onClick={hearExample} aria-pressed={listening} className="group flex flex-col items-center gap-1 rounded-3xl p-2 transition-transform hover:-translate-y-1">
+                    <Blob size={120} face={mouthOpen ? "talk" : "ready"} />
+                    <span className="flex items-center gap-2 font-bold text-accent">
+                      <span aria-hidden="true">{listening ? "■" : "▶"}</span> {listening ? "Stop the example" : "Hear it read first"}
+                    </span>
                   </button>
                 </div>
                 {listening ? <p className="m-0 text-sm text-muted">Read by an AI voice. The words light up the same way yours will.</p> : null}
@@ -190,21 +184,16 @@ export function ReadAloud() {
                 </p>
               </div>
             ) : (
-              <div className="flex flex-wrap items-center gap-5">
-                <Ring fraction={expected.length ? follow.next / expected.length : 0} colour="#2E5B3E" size={80}>
-                  {clock(recorder.seconds)}
-                </Ring>
-                <div className="flex flex-col">
+              <div className="flex flex-col items-center gap-4 sm:flex-row sm:gap-8">
+                {/* The live voice shape: grows with your voice and is the stop button */}
+                <LiveShape level={recorder.level} colour="#F4A86E" clock={clock(recorder.seconds)} onStop={() => void stopReading()} />
+                <div className="flex flex-col items-center sm:items-start">
                   <span className="flex items-center gap-2 font-semibold">
                     <motion.span className="inline-block h-3 w-3 rounded-full bg-[#C2412C]" animate={still ? undefined : { opacity: [1, 0.3, 1] }} transition={{ duration: 1.2, repeat: Infinity }} />
                     Listening
                   </span>
                   <span className="text-muted">{finished ? "That’s the end. Nicely done." : `${follow.next} of ${expected.length} words`}</span>
                 </div>
-                <Meter level={recorder.level} />
-                <motion.button type="button" onClick={() => void stopReading()} whileTap={still ? undefined : { scale: 0.92 }} transition={SPRING} className="ml-auto min-h-13 rounded-full bg-ink px-8 text-lg font-bold text-paper">
-                  Stop
-                </motion.button>
               </div>
             )}
           </motion.div>
@@ -212,8 +201,7 @@ export function ReadAloud() {
 
         {view === "working" ? (
           <motion.div key="working" {...pop} className="flex flex-col items-center gap-4 py-10 text-center">
-            <motion.span className="h-4 w-4 rounded-full bg-accent" animate={still ? undefined : { y: [0, -16, 0] }} transition={{ duration: 0.6, repeat: Infinity }} />
-            <span className="text-lg text-muted">Checking your reading…</span>
+            <StatusShape label="Checking…" detail="your reading" />
           </motion.div>
         ) : null}
 
