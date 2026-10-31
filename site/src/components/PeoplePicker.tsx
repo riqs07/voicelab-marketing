@@ -1,8 +1,8 @@
 "use client";
 // "Talk with someone": the app's four people, each with the same personality in every situation. Tap a face to
-// hear their real recorded opening line; the situation and how hard they make it can be shuffled.
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { useEffect, useState } from "react";
+// hear their real recorded opening line. The situation changes by itself every few seconds; how hard they make it can be picked.
+import { AnimatePresence, motion, useInView, useReducedMotion } from "motion/react";
+import { useEffect, useRef, useState } from "react";
 import { Blob, type BlobColours, type BlobFace } from "./Characters";
 import { playClip } from "@/lib/play";
 
@@ -32,6 +32,14 @@ export function PeoplePicker() {
   const still = useReducedMotion();
   const [who, setWho] = useState(0);
   const [where, setWhere] = useState(1);
+  // The situation changes by itself every few seconds while the card is on screen (never with reduced motion)
+  const card = useRef<HTMLDivElement>(null);
+  const onScreen = useInView(card);
+  useEffect(() => {
+    if (!onScreen || still) return;
+    const id = window.setInterval(() => setWhere((w) => (w + 1) % SITUATIONS.length), 4000);
+    return () => window.clearInterval(id);
+  }, [onScreen, still]);
   const [level, setLevel] = useState(1);
   const person = PEOPLE[who] ?? PEOPLE[0]!;
   // Who is saying their line right now (their mouth moves for about as long as the recording)
@@ -44,7 +52,7 @@ export function PeoplePicker() {
   const hop = still ? { duration: 0 } : { type: "spring" as const, stiffness: 420, damping: 16 };
 
   return (
-    <div className="flex h-full flex-col gap-5 rounded-[2rem] bg-card p-6 shadow-[0_8px_0_#efe8dc]">
+    <div ref={card} className="flex h-full flex-col gap-5 rounded-[2rem] bg-card p-6 shadow-[0_8px_0_#efe8dc]">
       <div>
         <h3 className="m-0 font-serif text-2xl font-semibold">Four people. Out loud. Three minutes.</h3>
         <p className="m-0 mt-1 text-muted">They answer in their own voices and remember who they are. Tap a face to hear them.</p>
@@ -89,21 +97,19 @@ export function PeoplePicker() {
       <div className="mt-auto flex flex-col gap-3">
         <div className="flex flex-wrap items-center gap-2">
           <span className="text-sm font-bold uppercase tracking-wider text-muted">Situation</span>
-          <AnimatePresence mode="popLayout" initial={false}>
+          {/* A gentle fade and slide as it changes, so it doesn't jump */}
+          <AnimatePresence mode="wait" initial={false}>
             <motion.span
               key={where}
               className="rounded-full bg-tint px-3 py-1 font-semibold text-accent"
-              initial={still ? false : { opacity: 0, y: 14, rotate: -4 }}
-              animate={{ opacity: 1, y: 0, rotate: 0 }}
-              exit={still ? undefined : { opacity: 0, y: -14 }}
-              transition={hop}
+              initial={still ? false : { opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={still ? undefined : { opacity: 0, y: -6 }}
+              transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
             >
               {SITUATIONS[where]}
             </motion.span>
           </AnimatePresence>
-          <button type="button" onClick={() => setWhere((w) => (w + 1) % SITUATIONS.length)} className="min-h-11 rounded-full px-3 font-bold text-accent hover:underline">
-            Shuffle
-          </button>
         </div>
         <div role="group" aria-label="How hard" className="flex w-fit gap-1 rounded-full bg-sand p-1">
           {LEVELS.map((l, i) => (

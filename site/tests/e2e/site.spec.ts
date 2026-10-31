@@ -86,8 +86,8 @@ test("home page: the Practice menu and the mode showcases", async ({ page }) => 
   // Each person plays their own opening line
   await page.getByRole("button", { name: "Theo: play their opening line" }).click();
   await expect(page.getByText("“Oh, hi. Are you here for the ten o’clock too?”")).toBeVisible();
-  await page.getByRole("button", { name: "Shuffle" }).click();
-  await expect(page.getByText("Early for a meeting")).toBeVisible();
+  // The situation changes by itself after a few seconds
+  await expect(page.getByText("Early for a meeting")).toBeVisible({ timeout: 6_000 });
   const played = await page.evaluate(() => (window as unknown as { played: string[] }).played);
   // Videos on the page may also call play(); only the sound clips matter here
   expect(played.map((src) => new URL(src, "http://localhost").pathname).filter((path) => path.startsWith("/audio/"))).toEqual(["/audio/read-along/moon.mp3", "/audio/stress-shift/s4.mp3", "/audio/people/theo-01.mp3"]);
