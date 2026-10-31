@@ -2,8 +2,8 @@
 // The hero card: the real pitch of two recordings ("Then the gorilla just stared at me"), measured with the
 // app's tracker, drawing itself on a loop. The first try rises at the end, the second falls. "Hear it"
 // plays the actual recordings in time with the line.
-import { useAnimationFrame, useReducedMotion } from "motion/react";
-import { useRef, useState } from "react";
+import { AnimatePresence, motion, useAnimationFrame, useReducedMotion } from "motion/react";
+import { useRef, useState, type ReactNode } from "react";
 import gorilla from "@/data/gorilla.json";
 
 type Take = { label: string; steps: (number | null)[]; words: { text: string; start: number; end: number }[]; badge: string };
@@ -34,29 +34,93 @@ const backOut = (p: number) => {
   return 1 + (c + 1) * q * q * q + c * q * q;
 };
 
-// The voiced stretches up to `upTo` seconds, plus thin dashed bridges over short creaky gaps
-function lines(take: Take, upTo: number) {
-  let d = "";
-  let bridges = "";
-  let open = false;
-  let head: { x: number; y: number } | null = null;
-  let lastT = -1;
+// Smooth in and out (for fades and the grey-over)
+const ease = (p: number) => {
+  const q = clamp01(p);
+  return q * q * (3 - 2 * q);
+};
+
+type Pt = { x: number; y: number; t: number };
+// One cubic piece of a curve: from a, with controls c1 and c2, to b
+type Piece = { a: Pt; c1: Pt; c2: Pt; b: Pt };
+
+// The voiced stretches, each softened (a light 1-4-6-4-1 blur, twice, so the tracker's small wobbles don't show) and drawn as a
+// smooth curve through its readings (Catmull-Rom as cubic pieces), worked out once per take
+function runsOf(take: Take): Piece[][] {
+  const runs: Pt[][] = [];
+  let run: Pt[] = [];
   take.steps.forEach((v, i) => {
-    const t = i * TICK;
-    if (t > upTo) return;
     if (v === null) {
-      open = false;
+      if (run.length) runs.push(run);
+      run = [];
       return;
     }
-    const px = x(t);
-    const py = y(v);
-    if (!open && head && t - lastT < 0.7) bridges += `M${head.x.toFixed(1)} ${head.y.toFixed(1)} L${px.toFixed(1)} ${py.toFixed(1)} `;
-    d += `${open ? "L" : "M"}${px.toFixed(1)} ${py.toFixed(1)} `;
-    open = true;
-    head = { x: px, y: py };
-    lastT = t;
+    run.push({ x: 0, y: v, t: i * TICK });
   });
-  return { d, bridges, head: head as { x: number; y: number } | null };
+  if (run.length) runs.push(run);
+  const weights = [1, 4, 6, 4, 1];
+  return runs.map((r) => {
+    // Two passes of the blur, then into drawing units
+    const blur = (pts: Pt[]) =>
+      pts.map((p, i) => {
+        let sum = 0;
+        let total = 0;
+        weights.forEach((w, k) => {
+          const near = pts[i + k - 2];
+          if (near) {
+            sum += near.y * w;
+            total += w;
+          }
+        });
+        return { ...p, y: sum / total };
+      });
+    const soft = blur(blur(r)).map((p) => ({ x: x(p.t), y: y(p.y), t: p.t }));
+    if (soft.length === 1) return [{ a: soft[0]!, c1: soft[0]!, c2: soft[0]!, b: soft[0]! }];
+    return soft.slice(0, -1).map((p1, i) => {
+      const p0 = soft[i - 1] ?? p1;
+      const p2 = soft[i + 1]!;
+      const p3 = soft[i + 2] ?? p2;
+      return { a: p1, c1: { x: p1.x + (p2.x - p0.x) / 6, y: p1.y + (p2.y - p0.y) / 6, t: p1.t }, c2: { x: p2.x - (p3.x - p1.x) / 6, y: p2.y - (p3.y - p1.y) / 6, t: p2.t }, b: p2 };
+    });
+  });
+}
+
+// The first part of a cubic piece, up to fraction f (de Casteljau), so a curve can grow smoothly between readings
+function split(c: Piece, f: number): Piece {
+  const mix = (p: Pt, q: Pt) => ({ x: p.x + (q.x - p.x) * f, y: p.y + (q.y - p.y) * f, t: p.t + (q.t - p.t) * f });
+  const ab = mix(c.a, c.c1);
+  const bc = mix(c.c1, c.c2);
+  const cd = mix(c.c2, c.b);
+  const abc = mix(ab, bc);
+  const bcd = mix(bc, cd);
+  return { a: c.a, c1: ab, c2: abc, b: mix(abc, bcd) };
+}
+
+const n = (v: number) => v.toFixed(1);
+
+// The curves up to `upTo` seconds, growing continuously, plus soft dashed bridges over short creaky gaps
+function lines(runs: Piece[][], upTo: number) {
+  let d = "";
+  let bridges = "";
+  let head: Pt | null = null;
+  for (const run of runs) {
+    const start = run[0]!.a;
+    if (start.t > upTo) break;
+    // A bridge from the last stretch, once this one has begun: a gentle S-curve, level at both ends
+    if (head && start.t - head.t < 0.7) {
+      const mid = (start.x - head.x) / 2;
+      bridges += `M${n(head.x)} ${n(head.y)} C${n(head.x + mid)} ${n(head.y)} ${n(start.x - mid)} ${n(start.y)} ${n(start.x)} ${n(start.y)} `;
+    }
+    d += `M${n(start.x)} ${n(start.y)} `;
+    head = start;
+    for (const piece of run) {
+      if (piece.a.t >= upTo) break;
+      const part = piece.b.t <= upTo ? piece : split(piece, (upTo - piece.a.t) / (piece.b.t - piece.a.t));
+      d += `C${n(part.c1.x)} ${n(part.c1.y)} ${n(part.c2.x)} ${n(part.c2.y)} ${n(part.b.x)} ${n(part.b.y)} `;
+      head = part.b;
+    }
+  }
+  return { d, bridges, head };
 }
 
 // Where a word sits: the middle of its pitch readings, or between its neighbours when it has none
@@ -71,8 +135,17 @@ function heightOf(take: Take, start: number, end: number): number {
 }
 
 const [FIRST, SECOND] = TAKES as [Take, Take];
-const END1 = lines(FIRST, 99).head ?? { x: RIGHT, y: MID };
-const END2 = lines(SECOND, 99).head ?? { x: RIGHT, y: MID };
+const RUNS1 = runsOf(FIRST);
+const RUNS2 = runsOf(SECOND);
+const END1 = lines(RUNS1, 99).head ?? { x: RIGHT, y: MID };
+const END2 = lines(RUNS2, 99).head ?? { x: RIGHT, y: MID };
+
+// The first try's colour, from the accent green to grey as it greys out
+function mixColour(p: number) {
+  const from = [0x2e, 0x5b, 0x3e];
+  const to = [0x8c, 0x97, 0x8f];
+  return `rgb(${from.map((f, i) => Math.round(f + ((to[i] ?? f) - f) * p)).join(" ")})`;
+}
 
 export function PitchHero() {
   const still = useReducedMotion();
@@ -105,12 +178,15 @@ export function PitchHero() {
 
   const since1 = t - T1;
   const since2 = t - T2;
-  const line1 = lines(FIRST, since1);
-  const line2 = since2 > 0 ? lines(SECOND, since2) : { d: "", bridges: "", head: null };
-  const grey = clamp01((t - (T2 - 0.6)) / 0.4);
+  const line1 = lines(RUNS1, since1);
+  const line2 = since2 > 0 ? lines(RUNS2, since2) : { d: "", bridges: "", head: null };
+  // The first try greys out smoothly as the second begins
+  const grey = ease((t - (T2 - 0.9)) / 0.8);
   const pop1 = backOut((t - (T1 + SPAN - 0.25)) / 0.45);
   const pop2 = backOut((t - (T2 + SPAN - 0.25)) / 0.45);
-  const fadeOut = 1 - clamp01((t - (CYCLE - 0.6)) / 0.5);
+  const fadeOut = 1 - ease((t - (CYCLE - 0.8)) / 0.7);
+  // The playhead dot grows in as a line starts and shrinks away as it finishes
+  const dot = (since: number) => 8 * ease(since / 0.2) * (1 - ease((since - SPAN + 0.15) / 0.3));
   const second2 = t >= T2 - 0.4;
 
   const words = (take: Take, startAt: number, opacity: number, boldLast: boolean) =>
@@ -137,7 +213,9 @@ export function PitchHero() {
   return (
     <figure className="relative m-0 rounded-[2rem] bg-card p-5 shadow-[0_10px_0_#e4ede6,0_20px_40px_rgba(30,38,32,0.08)] sm:p-7">
       <div className="flex items-center justify-between gap-3">
-        <span className="text-sm font-semibold text-muted">{second2 ? "Same phrase · second try" : "One phrase · first try"}</span>
+        <span className="text-sm font-semibold text-muted">
+          <Swap id={second2 ? "two" : "one"}>{second2 ? "Same phrase · second try" : "One phrase · first try"}</Swap>
+        </span>
         <button
           type="button"
           onClick={hearIt}
@@ -152,13 +230,13 @@ export function PitchHero() {
       <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label="The pitch of “Then the gorilla just stared at me”, said twice: the first time it rises at the end, the second time it falls." className="mt-2 block w-full" style={{ opacity: still ? 1 : fadeOut }}>
         <line x1={LEFT} y1={MID} x2={RIGHT} y2={MID} stroke="#B9C4BB" strokeWidth="2" strokeDasharray="9 7" />
         {grey < 1 ? <path d={line1.d} stroke="#2E5B3E" strokeWidth="20" opacity={0.12 * (1 - grey)} fill="none" strokeLinecap="round" strokeLinejoin="round" /> : null}
-        <path d={line1.bridges} stroke={grey > 0 ? "#8C978F" : "#2E5B3E"} strokeWidth="3" fill="none" strokeDasharray="5 8" strokeLinecap="round" opacity="0.6" />
-        <path d={line1.d} stroke={grey > 0 ? "#8C978F" : "#2E5B3E"} strokeWidth={grey > 0 ? 4 : 7} strokeDasharray={grey > 0 ? "12 9" : undefined} fill="none" strokeLinecap="round" strokeLinejoin="round" opacity={1 - 0.3 * grey} />
+        <path d={line1.bridges} stroke={mixColour(grey)} strokeWidth="3" fill="none" strokeDasharray="5 8" strokeLinecap="round" opacity="0.6" />
+        <path d={line1.d} stroke={mixColour(grey)} strokeWidth={7 - 3 * grey} strokeDasharray={grey > 0.5 ? "12 9" : undefined} fill="none" strokeLinecap="round" strokeLinejoin="round" opacity={1 - 0.3 * grey} />
         <path d={line2.d} stroke="#2E5B3E" strokeWidth="20" opacity="0.12" fill="none" strokeLinecap="round" strokeLinejoin="round" />
         <path d={line2.bridges} stroke="#2E5B3E" strokeWidth="3" fill="none" strokeDasharray="5 8" strokeLinecap="round" opacity="0.7" />
         <path d={line2.d} stroke="#2E5B3E" strokeWidth="7" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-        {line1.head && since1 > 0 && since1 < SPAN ? <circle cx={line1.head.x} cy={line1.head.y} r="8" fill="#1E2620" /> : null}
-        {line2.head && since2 > 0 && since2 < SPAN ? <circle cx={line2.head.x} cy={line2.head.y} r="8" fill="#1E2620" /> : null}
+        {line1.head && since1 > 0 && since1 < SPAN + 0.2 ? <circle cx={line1.head.x} cy={line1.head.y} r={dot(since1)} fill="#1E2620" /> : null}
+        {line2.head && since2 > 0 && since2 < SPAN + 0.2 ? <circle cx={line2.head.x} cy={line2.head.y} r={dot(since2)} fill="#1E2620" /> : null}
         <circle cx={END1.x} cy={END1.y} r={16 * Math.max(0, pop1)} fill="none" stroke="#C26A2C" strokeWidth="4" opacity={1 - grey} />
         {words(FIRST, T1, 1 - grey, false)}
         {words(SECOND, T2, 1, pop2 > 0.5)}
@@ -172,10 +250,21 @@ export function PitchHero() {
         </g>
       </svg>
       <figcaption className="mt-1 min-h-7 text-base text-muted">
-        {second2 ? "Second try: the ending falls, and the story lands." : "First try: the voice goes up at the end, so it sounds like a question."}
+        <Swap id={second2 ? "two" : "one"}>{second2 ? "Second try: the ending falls, and the story lands." : "First try: the voice goes up at the end, so it sounds like a question."}</Swap>
       </figcaption>
       <audio ref={first} src="/audio/gorilla-1.mp3" preload="none" />
       <audio ref={second} src="/audio/gorilla-2.mp3" preload="none" />
     </figure>
+  );
+}
+
+// Words that ease out and the new ones ease in when the try changes
+function Swap({ id, children }: { id: string; children: ReactNode }) {
+  return (
+    <AnimatePresence mode="wait" initial={false}>
+      <motion.span key={id} className="inline-block" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}>
+        {children}
+      </motion.span>
+    </AnimatePresence>
   );
 }
