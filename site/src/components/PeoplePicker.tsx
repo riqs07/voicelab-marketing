@@ -2,7 +2,8 @@
 // "Talk with someone": the app's four people, each with the same personality in every situation. Tap a face to
 // hear their real recorded opening line; the situation and how hard they make it can be shuffled.
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Blob, type BlobColours, type BlobFace } from "./Characters";
 import { playClip } from "@/lib/play";
 
 // From the app's conversation content
@@ -12,6 +13,14 @@ const PEOPLE = [
   { id: "chris", name: "Chris", tagline: "Down-to-earth and dry. Easy-going, tired lately", line: "Hey. Sorry I’m late. It’s been… a week.", colour: "bg-grey" },
   { id: "priya", name: "Priya", tagline: "Bright and expressive. Wears her feelings openly", line: "Oh my gosh, hi! You won’t believe this. I got into the design programme in Copenhagen!", colour: "bg-orange" },
 ];
+// Each person as a blob in their colour, with a face that fits them: Maya beaming, Theo shy, Chris tired and dry, Priya bursting
+const LOOKS: Record<string, { face: BlobFace; colours: BlobColours }> = {
+  maya: { face: "happy", colours: { body: "#F4A86E", shade: "#D9844C", ink: "#1E2320" } },
+  theo: { face: "shy", colours: { body: "#2E5B3E", shade: "#20432C", ink: "#FCFCFB" } },
+  chris: { face: "tired", colours: { body: "#8C978F", shade: "#6F7A72", ink: "#1E2320" } },
+  priya: { face: "sing", colours: { body: "#C26A2C", shade: "#9E531F", ink: "#FFF6E6" } },
+};
+
 const SITUATIONS = ["At the office party", "Monday at the coffee machine", "Early for a meeting", "Before an evening class", "Coffee with a friend", "Walking out of work", "Bumping into each other", "Lunch with a friend"];
 const LEVELS = [
   { name: "Easy", blurb: "Warm and chatty, with details to pick up." },
@@ -25,6 +34,13 @@ export function PeoplePicker() {
   const [where, setWhere] = useState(1);
   const [level, setLevel] = useState(1);
   const person = PEOPLE[who] ?? PEOPLE[0]!;
+  // Who is saying their line right now (their mouth moves for about as long as the recording)
+  const [speaking, setSpeaking] = useState<string | null>(null);
+  useEffect(() => {
+    if (!speaking) return;
+    const id = window.setTimeout(() => setSpeaking(null), 3600);
+    return () => window.clearTimeout(id);
+  }, [speaking]);
   const hop = still ? { duration: 0 } : { type: "spring" as const, stiffness: 420, damping: 16 };
 
   return (
@@ -42,14 +58,16 @@ export function PeoplePicker() {
             aria-label={`${p.name}: play their opening line`}
             onClick={() => {
               setWho(i);
+              setSpeaking(p.id);
               playClip(`/audio/people/${p.id}-01.mp3`);
             }}
             whileHover={still ? undefined : { y: -4, rotate: -3 }}
             whileTap={still ? undefined : { scale: 0.9 }}
             transition={hop}
-            className={`grid h-16 w-16 place-items-center rounded-full font-serif text-2xl font-semibold text-white ${p.colour} ${who === i ? "ring-4 ring-ink ring-offset-2" : "opacity-70"}`}
+            className={`flex flex-col items-center rounded-2xl px-1 pb-1 transition-opacity ${who === i ? "bg-sand" : "opacity-60 hover:opacity-100"}`}
           >
-            {p.name[0]}
+            <Blob size={76} face={LOOKS[p.id]?.face} colours={LOOKS[p.id]?.colours} talking={speaking === p.id && !still} className="-my-1" />
+            <span className={`text-sm font-bold ${who === i ? "text-ink" : "text-muted"}`}>{p.name}</span>
           </motion.button>
         ))}
       </div>

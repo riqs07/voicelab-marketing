@@ -10,6 +10,7 @@ import { TalkLanes } from "@/components/TalkLanes";
 import { UmJar } from "@/components/UmJar";
 import { Blob, Sage, type BlobFace } from "@/components/Characters";
 import { SagePerch } from "@/components/SagePerch";
+import { BlobPeek } from "@/components/BlobPeek";
 
 // Each step has the blob in the face that fits it: talking, surprised by what it sees, pleased with the second try
 const STEPS: { n: string; face: BlobFace; title: string; line: string }[] = [
@@ -22,7 +23,7 @@ const STEPS: { n: string; face: BlobFace; title: string; line: string }[] = [
 const SHOWCASES = [
   { id: "mode-read", group: "Speak on the spot", Graphic: ReadAlongDemo },
   { id: "mode-voice", group: "Your voice", Graphic: StressShift },
-  { id: "mode-stories", group: "Tell stories", Graphic: GuidedStory },
+  { id: "mode-stories", group: "Tell stories", Graphic: GuidedStory, peek: true },
   { id: "mode-people", group: "Everyday conversation", Graphic: PeoplePicker },
 ];
 
@@ -62,7 +63,7 @@ export default function Home() {
             {STEPS.map((step, i) => (
               <Reveal key={step.n} delay={i * 0.1}>
                 <div className="h-full rounded-[1.75rem] bg-card p-6 transition-transform duration-300 hover:-translate-y-1.5 hover:rotate-[-0.5deg]">
-                  <Blob size={112} face={step.face} arms={step.face === "happy"} className="-mb-2 -ml-3 -mt-2" />
+                  <Blob size={112} face={step.face} arms={step.face === "happy"} talking={step.face === "sing"} className="-mb-2 -ml-3 -mt-2" />
                   <h3 className="mb-2 mt-4 font-serif text-2xl font-semibold">{step.title}</h3>
                   <p className="m-0 leading-relaxed text-muted">{step.line}</p>
                 </div>
@@ -122,11 +123,17 @@ export default function Home() {
             </SagePerch>
           </Reveal>
           <div className="flex min-w-0 flex-col gap-8">
-            {SHOWCASES.map(({ id, group, Graphic }) => (
+            {SHOWCASES.map(({ id, group, Graphic, peek }) => (
               <Reveal key={id} className="min-w-0">
                 <div id={id} className="scroll-mt-8">
                   <p className="m-0 mb-3 text-sm font-bold uppercase tracking-wider text-accent">{group}</p>
-                  <Graphic />
+                  {peek ? (
+                    <BlobPeek>
+                      <Graphic />
+                    </BlobPeek>
+                  ) : (
+                    <Graphic />
+                  )}
                 </div>
               </Reveal>
             ))}

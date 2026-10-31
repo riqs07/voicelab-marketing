@@ -24,7 +24,10 @@ const C = {
 } as const;
 
 // The blob's faces used on the site: ready (the usual), happy (celebrating) and puzzled ("hmm", never ashamed)
-export type BlobFace = "ready" | "happy" | "puzzled" | "sing" | "wow";
+export type BlobFace = "ready" | "happy" | "puzzled" | "sing" | "wow" | "shy" | "tired";
+
+// A blob's colours: its body, shaded side and face. The warm blob's by default; the conversation people have their own
+export type BlobColours = { body: string; shade: string; ink: string };
 
 // The warm blob at a size, with a face, and optionally hopping or with arms up
 export function Blob({
@@ -32,14 +35,22 @@ export function Blob({
   face = "ready",
   hop = false,
   arms = false,
+  talking = false,
+  colours,
   className = "",
 }: {
   size?: number;
   face?: BlobFace;
   hop?: boolean;
   arms?: boolean;
+  // The mouth opens and closes a little, as if speaking
+  talking?: boolean;
+  colours?: BlobColours;
   className?: string;
 }) {
+  const body = colours?.body ?? C.warm;
+  const shade = colours?.shade ?? C.warmShade;
+  const ink = colours?.ink ?? C.onWarm;
   return (
     <svg
       width={size}
@@ -53,7 +64,7 @@ export function Blob({
         {arms && (
           <>
             <ellipse
-              fill={C.warmShade}
+              fill={shade}
               cx="114"
               cy="-34"
               rx="16"
@@ -61,7 +72,7 @@ export function Blob({
               transform="rotate(58 114 -34)"
             />
             <ellipse
-              fill={C.warm}
+              fill={body}
               cx="-114"
               cy="-34"
               rx="16"
@@ -71,8 +82,8 @@ export function Blob({
           </>
         )}
         {/* The shaded body, then the lit body nudged up and left so the shade is a crescent at the lower right */}
-        <path fill={C.warmShade} d={BLOB} />
-        <path fill={C.warm} transform="translate(-9 -8) scale(0.93)" d={BLOB} />
+        <path fill={shade} d={BLOB} />
+        <path fill={body} transform="translate(-9 -8) scale(0.93)" d={BLOB} />
         {/* The highlight, lit from the upper left */}
         <ellipse
           fill={C.cream}
@@ -85,8 +96,8 @@ export function Blob({
         />
         {/* The face */}
         <g
-          fill={C.onWarm}
-          stroke={C.onWarm}
+          fill={ink}
+          stroke={ink}
           strokeWidth="7.9"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -119,6 +130,7 @@ export function Blob({
                 d="M-37.6 -29.9l13.9 -13.9 13.9 13.9M9.9 -29.9l13.9 -13.9 13.9 13.9"
               />
               <path
+                className={talking ? "ch-talk" : undefined}
                 stroke="none"
                 d="M-23.8 -12h47.5q0 23.7-23.7 23.7t-23.8-23.7z"
               />
@@ -128,7 +140,7 @@ export function Blob({
           {face === "sing" && (
             <g transform="translate(-47.5 -55.6) scale(1.979)" strokeWidth="4">
               <path fill="none" d="M5 13l7-7 7 7M29 13l7-7 7 7" />
-              <ellipse className="ch-talk" stroke="none" cx="24" cy="27" rx="7" ry="7" />
+              <ellipse className={talking ? "ch-talk" : undefined} stroke="none" cx="24" cy="27" rx="7" ry="7" />
             </g>
           )}
           {/* Surprised: round eyes and a round mouth, as the app's "wow" face */}
@@ -138,6 +150,22 @@ export function Blob({
               <circle className="ch-blink" cx="36" cy="9" r="6" />
               <ellipse cx="24" cy="28" rx="4.5" ry="5.5" />
             </g>
+          )}
+          {/* Shy: small eyes glancing down and aside, a small smile */}
+          {face === "shy" && (
+            <>
+              <ellipse className="ch-blink" stroke="none" cx="-30" cy="-28" rx="8" ry="10" />
+              <ellipse className="ch-blink" stroke="none" cx="16" cy="-28" rx="8" ry="10" />
+              <path className={talking ? "ch-talk" : undefined} fill="none" d="M-17 0q9 7 18 0" />
+            </>
+          )}
+          {/* Tired, dry: heavy lids (flat-topped eyes) and a straight mouth, a little to one side; never cross */}
+          {face === "tired" && (
+            <>
+              <path className="ch-blink" stroke="none" d="M-35 -36h22a11 13 0 0 1-22 0z" />
+              <path className="ch-blink" stroke="none" d="M13 -36h22a11 13 0 0 1-22 0z" />
+              <path className={talking ? "ch-talk" : undefined} fill="none" d="M-8 -2h22" />
+            </>
           )}
           {face === "puzzled" && (
             <>
