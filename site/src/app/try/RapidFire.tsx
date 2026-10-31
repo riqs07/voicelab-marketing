@@ -5,7 +5,8 @@
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useEffect, useState } from "react";
 import { BouncyLink, SPRING } from "@/components/Bouncy";
-import { Meter, Ring } from "@/components/TakeParts";
+import { TopicDraw } from "@/components/TopicDraw";
+import { LiveShape, StartShape, StatusShape } from "@/components/VoiceShape";
 import { analyseTake, type FreeTake } from "@/lib/freeTake";
 import { QUESTIONS, THINK_SECONDS, WINDOW, clock } from "@/lib/rapidFire";
 import { canListen, useTake } from "@/lib/useTake";
@@ -20,7 +21,8 @@ function light(seconds: number) {
   if (seconds >= WINDOW.long) return { colour: "#C2412C", text: "Time to land it" };
   if (seconds >= 90) return { colour: "#E0A526", text: "Start wrapping up" };
   if (seconds >= WINDOW.short) return { colour: "#2E5B3E", text: "You're in the window" };
-  return { colour: "#B9C4BB", text: "Keep going: aim for a minute" };
+  // Before the window the voice shape stays warm, as in the app
+  return { colour: "#F4A86E", text: "Keep going: aim for a minute" };
 }
 
 export function RapidFire() {
@@ -28,6 +30,8 @@ export function RapidFire() {
   const [stage, setStage] = useState<Stage>("intro");
   const [question, setQuestion] = useState<string>(QUESTIONS[0]);
   const [left, setLeft] = useState(THINK_SECONDS);
+  // Whether the topic draw has landed on the question (thinking time starts then)
+  const [drawn, setDrawn] = useState(false);
   const [take, setTake] = useState<FreeTake | null>(null);
   const [lastTake, setLastTake] = useState<FreeTake | null>(null);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
@@ -38,7 +42,7 @@ export function RapidFire() {
 
   // Thinking countdown, then talk
   useEffect(() => {
-    if (stage !== "think") return;
+    if (stage !== "think" || !drawn) return;
     if (left <= 0) {
       void startTalking();
       return;
@@ -46,7 +50,7 @@ export function RapidFire() {
     const id = window.setTimeout(() => setLeft((s) => s - 1), 1000);
     return () => window.clearTimeout(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps -- runs on each tick of the countdown only
-  }, [stage, left]);
+  }, [stage, left, drawn]);
 
   // Stop at the limit
   useEffect(() => {
@@ -69,7 +73,12 @@ export function RapidFire() {
       const others = QUESTIONS.filter((q) => q !== question);
       setQuestion(others[Math.floor(Math.random() * others.length)] ?? QUESTIONS[0]);
       setLastTake(null);
-    } else if (take) setLastTake(take);
+      setDrawn(false);
+    } else {
+      if (take) setLastTake(take);
+      // Trying the same question again: no draw
+      setDrawn(true);
+    }
     setLeft(THINK_SECONDS);
     setStage("think");
   }
@@ -103,21 +112,8 @@ export function RapidFire() {
         {view === "intro" ? (
           <motion.div key="intro" {...pop} className="flex flex-col items-center gap-6 text-center">
             <p className="m-0 text-lg text-muted">Your question is hidden until you start. You get {THINK_SECONDS} seconds to think, then talk for one to two minutes.</p>
-            <motion.button
-              type="button"
-              onClick={() => think(true)}
-              whileHover={still ? undefined : { scale: 1.06 }}
-              whileTap={still ? undefined : { scale: 0.92 }}
-              animate={still ? undefined : { boxShadow: ["0 0 0 0 rgba(244,168,110,0.5)", "0 0 0 22px rgba(244,168,110,0)"] }}
-              transition={{ boxShadow: { duration: 1.6, repeat: Infinity }, default: SPRING }}
-              className="flex h-48 w-48 flex-col items-center justify-center gap-1 rounded-full bg-warm font-serif text-2xl font-semibold text-ink"
-            >
-              <svg width="30" height="30" viewBox="0 0 24 24" aria-hidden="true">
-                <rect x="9" y="3" width="6" height="12" rx="3" fill="#1E2620" />
-                <path d="M5 11 C 5 16, 19 16, 19 11 M12 16 L12 21" stroke="#1E2620" strokeWidth="2" fill="none" strokeLinecap="round" />
-              </svg>
-              Show my question
-            </motion.button>
+            {/* The voice shape is the start button, as in the app */}
+            <StartShape label="Show my question" detail={`then ${THINK_SECONDS} s to think`} onStart={() => think(true)} />
             <p className="m-0 max-w-md text-sm text-muted">
               Your browser will ask to use the microphone. Your voice is measured right here in the page; the recording stays on your device for you to play back and is never uploaded. Your browser’s speech recognition (Apple or Google) turns your words into text.
             </p>
@@ -128,35 +124,30 @@ export function RapidFire() {
           <motion.div key="live" {...pop} className="flex flex-col gap-6">
             <div>
               <span className="text-sm font-semibold text-muted">Your question</span>
-              <h2 className="m-0 mt-1 font-serif text-3xl font-semibold leading-tight sm:text-4xl">{question}</h2>
+              <h2 className="m-0 mt-1 font-serif text-3xl font-semibold leading-tight sm:text-4xl" aria-live="polite">
+                {stage === "think" && !drawn ? <TopicDraw key={question} question={question} pool={QUESTIONS} onDone={() => setDrawn(true)} /> : question}
+              </h2>
             </div>
             {stage === "think" ? (
-              <div className="flex flex-wrap items-center gap-5">
-                <Ring fraction={left / THINK_SECONDS} colour="#2E5B3E">
-                  {left}
-                </Ring>
-                <span className="text-lg text-muted">seconds to think</span>
-                <button type="button" onClick={() => void startTalking()} className="min-h-11 rounded-full border-2 border-line px-5 font-bold hover:border-accent">
+              <div className="flex flex-col items-center gap-4 sm:flex-row sm:gap-8">
+                {/* The faded shape, thinking: picking a question, then counting down */}
+                {drawn ? <StatusShape label={left} detail="seconds to think" /> : <StatusShape label="Get ready" detail="picking a question" />}
+                <button type="button" onClick={() => void startTalking()} disabled={!drawn} className="min-h-11 rounded-full border-2 border-line px-5 font-bold hover:border-accent disabled:opacity-40">
                   Start now
                 </button>
               </div>
             ) : (
               <>
-                <div className="flex flex-wrap items-center gap-5">
-                  <Ring fraction={seconds / WINDOW.long} colour={now.colour} size={88}>
-                    {clock(seconds)}
-                  </Ring>
-                  <div className="flex flex-col">
+                <div className="flex flex-col items-center gap-4 sm:flex-row sm:gap-8">
+                  {/* The live voice shape: grows with your voice, takes the timing light's colour, and is the stop button */}
+                  <LiveShape level={level} colour={now.colour} clock={clock(seconds)} onStop={() => void stopTalking()} />
+                  <div className="flex flex-col items-center sm:items-start">
                     <span className="flex items-center gap-2 font-semibold">
                       <motion.span className="inline-block h-3 w-3 rounded-full bg-[#C2412C]" animate={still ? undefined : { opacity: [1, 0.3, 1] }} transition={{ duration: 1.2, repeat: Infinity }} />
-                      Listening
+                      Listening…
                     </span>
                     <span className="text-muted">{now.text}</span>
                   </div>
-                  <Meter level={level} />
-                  <motion.button type="button" onClick={() => void stopTalking()} whileTap={still ? undefined : { scale: 0.92 }} transition={SPRING} className="ml-auto min-h-13 rounded-full bg-ink px-8 text-lg font-bold text-paper">
-                    Stop
-                  </motion.button>
                 </div>
                 <p className="m-0 min-h-24 rounded-2xl bg-paper p-4 text-lg leading-relaxed" aria-live="polite">
                   {finalText}
@@ -170,8 +161,7 @@ export function RapidFire() {
 
         {view === "working" ? (
           <motion.div key="working" {...pop} className="flex flex-col items-center gap-4 py-10 text-center">
-            <motion.span className="h-4 w-4 rounded-full bg-accent" animate={still ? undefined : { y: [0, -16, 0] }} transition={{ duration: 0.6, repeat: Infinity }} />
-            <span className="text-lg text-muted">Measuring your voice…</span>
+            <StatusShape label="Measuring…" detail="your voice" />
           </motion.div>
         ) : null}
 

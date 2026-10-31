@@ -91,19 +91,7 @@ export function Results({
       </motion.div>
 
       {changes.length > 0 ? (
-        <div className="rounded-2xl border-2 border-line p-4">
-          <span className="font-semibold">Last try → this try</span>
-          <ul className="m-0 mt-2 flex list-none flex-col gap-1 p-0">
-            {changes.map((c) => (
-              <li key={c.label} className="flex justify-between gap-3">
-                <span>{c.label}</span>
-                <span className={`font-bold tabular-nums ${c.better ? "text-accent" : "text-muted"}`}>
-                  {c.before} → {c.now}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
+        <Improved changes={changes} />
       ) : null}
 
       {take.pitch ? (
@@ -176,5 +164,60 @@ export function Results({
       </div>
       <p className="m-0 text-sm text-muted">Nothing was uploaded or saved. Your recording stays in this page and is gone when you leave.</p>
     </div>
+  );
+}
+
+type Change = { label: string; before: number; now: number; better: boolean };
+
+// Last try against this try. When something got better, a small celebration, as on the app's Today tick-off: the box
+// warms, the better numbers hop, and a few small squares flash round them. Nothing happens when nothing improved.
+function Improved({ changes }: { changes: Change[] }) {
+  const still = useReducedMotion();
+  const better = changes.some((c) => c.better);
+  return (
+    <div className={`relative rounded-2xl border-2 p-4 ${better ? "border-warm bg-peach/50" : "border-line"}`}>
+      <span className="font-semibold">{better ? "Better than your last try" : "Last try → this try"}</span>
+      <ul className="m-0 mt-2 flex list-none flex-col gap-1 p-0">
+        {changes.map((c, i) => (
+          <li key={c.label} className="flex justify-between gap-3">
+            <span>{c.label}</span>
+            <span className="relative">
+              <motion.span
+                className={`inline-block font-bold tabular-nums ${c.better ? "text-accent" : "text-muted"}`}
+                initial={false}
+                animate={c.better && !still ? { y: [0, -7, 0, -4, 0], scale: [1, 1.15, 1, 1.08, 1] } : undefined}
+                transition={{ duration: 0.9, delay: 0.7 + i * 0.15 }}
+              >
+                {c.before} → {c.now}
+              </motion.span>
+              {c.better && !still ? <Confetti delay={0.7 + i * 0.15} /> : null}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+// Three small rotated squares in the accent and warm colours that flash out round a number once
+function Confetti({ delay }: { delay: number }) {
+  const bits = [
+    { x: -34, y: -22, r: 20, c: "bg-accent" },
+    { x: 4, y: -30, r: -15, c: "bg-warm" },
+    { x: 34, y: -14, r: 35, c: "bg-accent" },
+  ];
+  return (
+    <>
+      {bits.map((b, i) => (
+        <motion.span
+          key={i}
+          aria-hidden="true"
+          className={`pointer-events-none absolute left-1/2 top-1/2 h-2.5 w-2.5 rounded-[2px] ${b.c}`}
+          initial={{ opacity: 0, x: 0, y: 0, rotate: 0, scale: 0.4 }}
+          animate={{ opacity: [0, 1, 0], x: b.x, y: b.y, rotate: b.r + 90, scale: 1 }}
+          transition={{ duration: 0.8, delay: delay + i * 0.05, ease: "easeOut" }}
+        />
+      ))}
+    </>
   );
 }

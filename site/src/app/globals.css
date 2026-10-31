@@ -145,3 +145,20 @@ body {
   from { transform: scale(1, 1); }
   to { transform: scale(0.9, 0.7); }
 }
+
+/* The voice shape (VoiceShape.tsx), as in the app: an outline that slowly changes, and a halo that turns */
+.vs-morph {
+  border-radius: 46% 54% 58% 42% / 48% 42% 58% 52%;
+  animation: vs-morph 6s ease-in-out infinite;
+}
+@keyframes vs-morph {
+  0%, 100% { border-radius: 46% 54% 58% 42% / 48% 42% 58% 52%; }
+  33% { border-radius: 58% 42% 44% 56% / 56% 52% 48% 44%; }
+  66% { border-radius: 42% 58% 52% 48% / 42% 58% 42% 58%; }
+}
+.vs-spin {
+  animation: vs-spin 24s linear infinite;
+}
+@keyframes vs-spin {
+  to { transform: rotate(360deg); }
+}
