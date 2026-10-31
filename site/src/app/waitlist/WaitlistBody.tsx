@@ -16,7 +16,6 @@ export function WaitlistBody() {
         <h1 className="m-0 font-serif text-5xl font-semibold leading-[1.05] sm:text-6xl">
           <BounceWords text="Join the waitlist." />
         </h1>
-        <p className="m-0 max-w-md text-lg leading-relaxed text-muted">VoiceLab is being tested now. Leave your email and we’ll tell you the day it opens.</p>
       </div>
       {/* On a computer the form sits on the right across both rows; on a phone it comes straight after the heading */}
       <div className="lg:col-start-2 lg:row-span-2 lg:row-start-1">
