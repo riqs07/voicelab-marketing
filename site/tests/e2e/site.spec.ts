@@ -48,10 +48,8 @@ test("home page: hero, animations, videos and calls to action", async ({ page })
   await expect(page.getByRole("img", { name: /^The blob (at a lectern|and a friend chatting|telling a story|running toward a finish flag)/ })).toBeVisible();
   await expect(page.getByRole("link", { name: "Try a free Rapid Fire" }).first()).toHaveAttribute("href", "/try");
   await expect(page.getByRole("link", { name: "Join the waitlist" }).first()).toHaveAttribute("href", "/waitlist");
-  // The jar fills when scrolled into view
-  await page.getByRole("heading", { name: "Um rain" }).scrollIntoViewIfNeeded();
-  await expect(page.getByText("12 pause words in 20 seconds.")).toBeVisible({ timeout: 10_000 });
-  // The talk lanes switch tries
+  // The talk lanes, in Inside the app, switch tries
+  await page.getByRole("heading", { name: "Who did the talking?" }).scrollIntoViewIfNeeded();
   await page.getByRole("button", { name: "Second try" }).click();
   await expect(page.getByText("About even, and you asked back.")).toBeVisible();
   await expect(page.getByText("59%")).toBeVisible({ timeout: 5_000 });
@@ -149,7 +147,7 @@ test("free Rapid Fire: question, talk, stop, results measured in the browser", a
   await expect(page.getByText(/words at \d+ a minute/)).toBeVisible();
   // Try again keeps the question and compares with the last try
   await page.getByRole("button", { name: "Try it again" }).click();
-  await expect(page.getByText("seconds to think")).toBeVisible();
+  await expect(page.getByText("seconds to think", { exact: true })).toBeVisible();
   expect(problems).toEqual([]);
 });
 

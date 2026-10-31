@@ -7,7 +7,6 @@ import { ReadAlongDemo } from "@/components/ReadAlongDemo";
 import { Reels } from "@/components/Reels";
 import { StressShift } from "@/components/StressShift";
 import { TalkLanes } from "@/components/TalkLanes";
-import { UmJar } from "@/components/UmJar";
 import { Blob, type BlobFace } from "@/components/Characters";
 import { SagePerch } from "@/components/SagePerch";
 import { BlobPeek } from "@/components/BlobPeek";
@@ -34,6 +33,7 @@ const SHOWCASES = [
   { id: "mode-voice", group: "Your voice", Graphic: StressShift },
   { id: "mode-stories", group: "Tell stories", Graphic: GuidedStory, peek: true },
   { id: "mode-people", group: "Everyday conversation", Graphic: PeoplePicker },
+  { id: "mode-back-and-forth", group: "Back and forth", Graphic: TalkLanes },
 ];
 
 export default function Home() {
@@ -87,22 +87,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* What it sees: interactive cards */}
-      <section className="mx-auto max-w-6xl px-4 py-20 sm:px-8">
-        <Reveal>
-          <h2 className="m-0 max-w-2xl font-serif text-4xl font-semibold leading-tight sm:text-5xl">See what your voice is doing.</h2>
-          <p className="mt-4 max-w-2xl text-lg text-muted">Two of the things VoiceLab notices, from real recordings. Scroll, watch, press the buttons.</p>
-        </Reveal>
-        <div className="mt-10 grid gap-6 lg:grid-cols-2">
-          <Reveal className="min-w-0">
-            <UmJar />
-          </Reveal>
-          <Reveal delay={0.1} className="min-w-0">
-            <TalkLanes />
-          </Reveal>
-        </div>
-      </section>
-
       {/* Reels */}
       <section className="overflow-x-clip bg-tint py-20">
         <div className="mx-auto max-w-6xl px-4 sm:px-8">
@@ -127,7 +111,7 @@ export default function Home() {
           <h2 className="m-0 font-serif text-4xl font-semibold leading-tight sm:text-5xl">Inside the app</h2>
         </Reveal>
         <Reveal>
-          <p className="mt-4 max-w-2xl text-lg text-muted">Twenty-odd ways to practise, in four groups. Pick anything, in any order, or let Today choose. Here are four up close.</p>
+          <p className="mt-4 max-w-2xl text-lg text-muted">Twenty-odd ways to practise, in four groups. Pick anything, in any order, or let Today choose. Here are five up close.</p>
         </Reveal>
         <div className="mt-12 grid gap-10 lg:grid-cols-[22rem_1fr] lg:items-start">
           <Reveal className="lg:sticky lg:top-8">

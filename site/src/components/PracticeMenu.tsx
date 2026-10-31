@@ -32,7 +32,7 @@ export const MENU: { title: string; rows: Row[] }[] = [
     title: "Everyday conversation",
     rows: [
       { name: "Talk with someone", detail: "Four people, 3 minutes, out loud", icon: "people", see: "#mode-people" },
-      { name: "Small talk", detail: "Share, ask back, follow up, end well", icon: "chat" },
+      { name: "Small talk", detail: "Share, ask back, follow up, end well", icon: "chat", see: "#mode-back-and-forth" },
       { name: "One moment a day", detail: "A private note of something worth telling", icon: "sun" },
     ],
   },
