@@ -1,6 +1,6 @@
 "use client";
-// Phone-shaped players for three of the app's own lesson clips (copied from the app's public/lessons): they play
-// silently while on screen and pause when they leave. "Sound on" unmutes one at a time.
+// Phone-shaped players for three of the app's own lesson clips (copied from the app's public/lessons). Nothing plays by
+// itself: tap a phone to play that lesson with sound; starting one pauses the others, so only one ever plays.
 import { motion, useReducedMotion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 
@@ -13,26 +13,30 @@ const REELS = [
 // A slight, alternating tilt for each phone as it rises into place
 const TILT = [-4, 0, 4];
 
-function Phone({ id, title, course, loud, onSound, index }: { id: string; title: string; course: string; loud: boolean; onSound: () => void; index: number }) {
+function Phone({ id, title, course, playing, onToggle, onEnded, index }: { id: string; title: string; course: string; playing: boolean; onToggle: () => void; onEnded: () => void; index: number }) {
   const video = useRef<HTMLVideoElement>(null);
   const still = useReducedMotion();
 
-  // Play only while on screen (and never by itself for people who asked for less motion)
+  // Only the one you chose plays, with its voice; the others pause where they are
   useEffect(() => {
     const el = video.current;
-    if (!el || still) return;
+    if (!el) return;
+    if (playing) void el.play().catch(() => onEnded());
+    else el.pause();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- follows the chosen clip only
+  }, [playing]);
+
+  // Stop playing when it scrolls well out of view
+  useEffect(() => {
+    const el = video.current;
+    if (!el || !playing) return;
     const watch = new IntersectionObserver(([entry]) => {
-      if (entry?.isIntersecting) void el.play().catch(() => undefined);
-      else el.pause();
-    }, { threshold: 0.4 });
+      if (entry && !entry.isIntersecting) onEnded();
+    }, { threshold: 0 });
     watch.observe(el);
     return () => watch.disconnect();
-  }, [still]);
-
-  useEffect(() => {
-    if (video.current) video.current.muted = !loud;
-    if (loud) void video.current?.play().catch(() => undefined);
-  }, [loud]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- one watcher while playing
+  }, [playing]);
 
   return (
     <motion.figure
@@ -43,37 +47,55 @@ function Phone({ id, title, course, loud, onSound, index }: { id: string; title:
       viewport={{ once: true, margin: "-60px" }}
       transition={{ type: "spring", stiffness: 200, damping: 13, delay: index * 0.12 }}
     >
-      <div className="w-full max-w-[18rem] rounded-[2.4rem] bg-ink p-2.5 shadow-[0_24px_50px_rgba(30,38,32,0.18)]">
+      {/* The phone is the play button: tap to play this lesson with sound, tap again to pause */}
+      <button
+        type="button"
+        onClick={onToggle}
+        aria-pressed={playing}
+        aria-label={`${playing ? "Pause" : "Play"} the lesson clip: ${title}`}
+        className="group relative block w-full max-w-[18rem] cursor-pointer rounded-[2.4rem] bg-ink p-2.5 shadow-[0_24px_50px_rgba(30,38,32,0.18)]"
+      >
         <video
           ref={video}
           className="block aspect-[4/5] w-full rounded-[1.9rem] bg-paper"
           src={`/lessons/${id}.mp4`}
           poster={`/lessons/${id}-poster.jpg`}
-          muted
-          loop
           playsInline
           preload="none"
-          aria-label={`Lesson clip: ${title}`}
-          controls={still ?? false}
+          onEnded={onEnded}
+          aria-hidden="true"
         />
-      </div>
+        {/* The play button over the paused clip */}
+        <span className={`pointer-events-none absolute inset-0 flex items-center justify-center transition-opacity duration-300 ${playing ? "opacity-0" : "opacity-100"}`} aria-hidden="true">
+          <span className="flex h-20 w-20 items-center justify-center rounded-full bg-paper/95 shadow-[0_8px_24px_rgba(30,38,32,0.25)] transition-transform duration-300 group-hover:scale-110">
+            <svg width="28" height="32" viewBox="0 0 14 16" className="ml-1">
+              <path d="M1 1 L13 8 L1 15 Z" fill="#2E5B3E" />
+            </svg>
+          </span>
+        </span>
+      </button>
       <figcaption className="flex flex-col items-center gap-1 text-center">
         <span className="font-serif text-xl font-semibold">{title}</span>
         <span className="text-sm text-muted">{course}</span>
-        <button type="button" onClick={onSound} aria-pressed={loud} className="min-h-11 rounded-full px-3 text-sm font-bold text-accent hover:underline">
-          {loud ? "Sound off" : "Sound on"}
-        </button>
+        <span className="text-sm font-bold text-accent">{playing ? "Playing · tap to pause" : "Tap to play, sound on"}</span>
       </figcaption>
     </motion.figure>
   );
 }
 
 export function Reels() {
-  const [loud, setLoud] = useState<string | null>(null);
+  const [playing, setPlaying] = useState<string | null>(null);
   return (
     <div className="grid grid-cols-1 gap-10 sm:grid-cols-3 sm:gap-6">
       {REELS.map((reel, i) => (
-        <Phone key={reel.id} {...reel} index={i} loud={loud === reel.id} onSound={() => setLoud(loud === reel.id ? null : reel.id)} />
+        <Phone
+          key={reel.id}
+          {...reel}
+          index={i}
+          playing={playing === reel.id}
+          onToggle={() => setPlaying(playing === reel.id ? null : reel.id)}
+          onEnded={() => setPlaying((p) => (p === reel.id ? null : p))}
+        />
       ))}
     </div>
   );
