@@ -149,27 +149,51 @@ export function Blob({
             </g>
           )}
           {/* Surprised: round eyes and a round mouth, as the app's "wow" face */}
-          {/* Talking: open eyes that blink, and an open mouth that moves */}
+          {/* Talking: steady open eyes that blink, and an open mouth that moves */}
           {face === "talk" && (
             <>
-              <ellipse className="ch-blink" stroke="none" cx="-23.8" cy="-35.8" rx="9.9" ry="14.8" />
-              <ellipse className="ch-blink" stroke="none" cx="23.7" cy="-35.8" rx="9.9" ry="14.8" />
-              <path className={talking ? "ch-talk" : undefined} stroke="none" d="M-17 -10h34q0 24-17 24t-17-24z" />
+              {/* Steady, slightly narrower eyes, looking ahead at whoever is listening */}
+              <ellipse className="ch-blink" stroke="none" cx="-22" cy="-38" rx="8.5" ry="12.5" />
+              <ellipse className="ch-blink" stroke="none" cx="22" cy="-38" rx="8.5" ry="12.5" />
+              {/* A mouth mid-word: wider than tall, opening and closing */}
+              <ellipse className={talking ? "ch-talk" : undefined} stroke="none" cx="0" cy="0" rx="15" ry="10" />
             </>
           )}
-          {/* Beaming: open eyes that blink, and a wide open smile */}
+          {/* Beaming: smiling eyes that blink, rosy cheeks and a big grin */}
           {face === "beam" && (
             <>
-              <ellipse className="ch-blink" stroke="none" cx="-23.8" cy="-37" rx="9.9" ry="14.8" />
-              <ellipse className="ch-blink" stroke="none" cx="23.7" cy="-37" rx="9.9" ry="14.8" />
-              <path stroke="none" d="M-22 -10h44q0 22-22 22t-22-22z" />
+              {/* Rosy cheeks */}
+              <ellipse fill={C.cheek} stroke="none" opacity="0.55" cx="-50" cy="-12" rx="14" ry="8.5" />
+              <ellipse fill={C.cheek} stroke="none" opacity="0.55" cx="50" cy="-12" rx="14" ry="8.5" />
+              {/* Smiling eyes: still open, rounded on top and lifted from below by the smile */}
+              <g className="ch-blink">
+                <ellipse stroke="none" cx="-23.8" cy="-38" rx="10.5" ry="14.5" />
+                {/* The smile lifts the lower lid: a curve of the body colour across the bottom of the eye */}
+                <ellipse fill={body} stroke="none" cx="-23.8" cy="-21" rx="14" ry="9" />
+              </g>
+              <g className="ch-blink">
+                <ellipse stroke="none" cx="23.7" cy="-38" rx="10.5" ry="14.5" />
+                <ellipse fill={body} stroke="none" cx="23.7" cy="-21" rx="14" ry="9" />
+              </g>
+              {/* A big grin, with the tongue showing */}
+              <path stroke="none" d="M-25 -12h50q0 28-25 28t-25-28z" />
+              <ellipse fill={C.tongue} stroke="none" cx="0" cy="8" rx="11" ry="6" />
             </>
           )}
+          {/* Surprised, taking it in: wide shining eyes looking up at something, a small "oh" */}
           {face === "wow" && (
-            <g transform="translate(-47.5 -55.6) scale(1.979)" stroke="none">
-              <circle className="ch-blink" cx="12" cy="9" r="6" />
-              <circle className="ch-blink" cx="36" cy="9" r="6" />
-              <ellipse cx="24" cy="28" rx="4.5" ry="5.5" />
+            <g stroke="none">
+              {/* Wide eyes, bigger than usual, looking up and to the right at what it sees, each with a shine */}
+              <g className="ch-blink">
+                <circle cx="-22" cy="-40" r="14" />
+                <circle fill={C.cream} cx="-17" cy="-46" r="4.5" />
+              </g>
+              <g className="ch-blink">
+                <circle cx="26" cy="-40" r="14" />
+                <circle fill={C.cream} cx="31" cy="-46" r="4.5" />
+              </g>
+              {/* A small round "oh" */}
+              <ellipse cx="3" cy="2" rx="7" ry="9" />
             </g>
           )}
           {/* Shy: small eyes glancing down and aside, a small smile */}

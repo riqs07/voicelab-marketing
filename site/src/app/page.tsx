@@ -70,7 +70,7 @@ export default function Home() {
             {STEPS.map((step, i) => (
               <Reveal key={step.n} delay={i * 0.1}>
                 <div className="h-full rounded-[1.75rem] bg-card p-6 transition-transform duration-300 hover:-translate-y-1.5 hover:rotate-[-0.5deg]">
-                  <Blob size={112} face={step.face} arms={step.face === "beam"} talking={step.face === "talk"} blink={BLINKS[i] ?? BLINKS[0]} className="-mb-2 -ml-3 -mt-2" />
+                  <Blob size={112} face={step.face} arms={step.face === "beam"} talking={step.face === "talk"} blink={BLINKS[i] ?? BLINKS[0]} className={`-mb-2 -ml-3 -mt-2 ${step.face === "talk" ? "-rotate-6" : step.face === "wow" ? "rotate-3" : ""}`} />
                   <h3 className="mb-2 mt-4 font-serif text-2xl font-semibold">{step.title}</h3>
                   <p className="m-0 leading-relaxed text-muted">{step.line}</p>
                 </div>
