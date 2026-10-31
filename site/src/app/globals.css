@@ -162,3 +162,21 @@ body {
 @keyframes vs-spin {
   to { transform: rotate(360deg); }
 }
+
+/* The hero's run (RunHero.tsx): the app's tile loops (t-speed, t-flag, t-patter, t-twinkle), plus a sliding lane line,
+   fluttering headband tails and a slow float. Stilled by "reduce motion" above */
+.run-speed { animation: run-speed 1.6s linear infinite both; }
+@keyframes run-speed { 0% { opacity: 0; transform: translateX(8px); } 30% { opacity: 1; } 100% { opacity: 0; transform: translateX(-10px); } }
+.run-flag { animation: run-flag 1.4s ease-in-out infinite alternate; }
+@keyframes run-flag { from { transform: skewY(-6deg); } to { transform: skewY(5deg); } }
+.run-patter { animation: run-patter 0.5s ease-in-out infinite alternate; }
+@keyframes run-patter { from { transform: none; } to { transform: translateY(-3px); } }
+.run-tails { animation: run-tails 0.5s ease-in-out infinite alternate; }
+@keyframes run-tails { from { transform: rotate(-6deg); } to { transform: rotate(8deg); } }
+.run-twinkle { transform-box: fill-box; transform-origin: center; animation: run-twinkle 4s ease-in-out infinite both; }
+@keyframes run-twinkle { 0%, 100% { transform: scale(0.6); opacity: 0.5; } 50% { transform: scale(1.1); opacity: 1; } }
+.run-lane { animation: run-lane 0.8s linear infinite; }
+@keyframes run-lane { to { stroke-dashoffset: 20; } }
+.run-blink { transform-box: fill-box; transform-origin: center; animation: ch-blink 4.6s infinite; }
+.run-float { animation: run-float 5s ease-in-out infinite alternate; }
+@keyframes run-float { from { transform: translateY(0) rotate(0deg); } to { transform: translateY(-8px) rotate(-0.6deg); } }

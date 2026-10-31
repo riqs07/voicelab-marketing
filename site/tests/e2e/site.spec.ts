@@ -45,7 +45,7 @@ test("home page: hero, animations, videos and calls to action", async ({ page })
   const problems = watchConsole(page);
   await page.goto("/");
   await expect(page.getByRole("heading", { level: 1, name: "Hear how you really sound." })).toBeVisible();
-  await expect(page.getByRole("img", { name: /The pitch of “Then the gorilla just stared at me”/ })).toBeVisible();
+  await expect(page.getByRole("img", { name: /The blob running toward a finish flag/ })).toBeVisible();
   await expect(page.getByRole("link", { name: "Try a free Rapid Fire" }).first()).toHaveAttribute("href", "/try");
   await expect(page.getByRole("link", { name: "Join the waitlist" }).first()).toHaveAttribute("href", "/waitlist");
   // The jar fills when scrolled into view

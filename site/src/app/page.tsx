@@ -1,7 +1,7 @@
 import { BounceWords, BouncyLink, Reveal } from "@/components/Bouncy";
 import { GuidedStory } from "@/components/GuidedStory";
 import { PeoplePicker } from "@/components/PeoplePicker";
-import { PitchHero } from "@/components/PitchHero";
+import { RunHero } from "@/components/RunHero";
 import { PracticeMenu } from "@/components/PracticeMenu";
 import { ReadAlongDemo } from "@/components/ReadAlongDemo";
 import { Reels } from "@/components/Reels";
@@ -54,9 +54,8 @@ export default function Home() {
           </div>
           <p className="m-0 text-sm text-muted">No account needed. The free Rapid Fire runs in your browser.</p>
         </div>
-        <Reveal>
-          <PitchHero />
-        </Reveal>
+        {/* The run: the app's course tile, large, as the hero picture */}
+        <RunHero />
       </section>
 
       {/* How it works */}
