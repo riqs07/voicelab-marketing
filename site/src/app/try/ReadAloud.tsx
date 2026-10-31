@@ -4,7 +4,6 @@
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { BouncyLink, SPRING } from "@/components/Bouncy";
-import { Blob } from "@/components/Characters";
 import { LiveShape, StartShape, StatusShape } from "@/components/VoiceShape";
 import { followReading, readingTokens, scriptWords } from "@/core/liveReading";
 import { clock } from "@/lib/rapidFire";
@@ -44,8 +43,6 @@ export function ReadAloud() {
   const expected = useMemo(() => scriptWords(tokens), [tokens]);
   const follow = followReading(expected, `${recorder.finalText} ${recorder.interim}`);
   const listening = view === "ready" && exampleAt !== null;
-  // The blob's mouth is open while the example is saying a word, shut between words, so it looks like it's reading
-  const mouthOpen = listening && !still && (READINGS[passage.id] ?? []).some((w) => exampleAt !== null && exampleAt >= w.start && exampleAt <= w.end);
   const exampleFollow = listening ? followReading(expected, heardBy(READINGS[passage.id] ?? [], exampleAt)) : null;
   const shown = view === "read" ? follow : exampleFollow;
   const finished = stage === "read" && follow.next >= expected.length;
@@ -170,12 +167,13 @@ export function ReadAloud() {
                 <div className="flex w-full flex-wrap items-center justify-center gap-8 sm:justify-start">
                   {/* The voice shape starts the reading, as in the app */}
                   <StartShape label="Start reading" detail="stops at the last word" onStart={() => void startReading(false)} />
-                  {/* The blob reads it to you first: its mouth opens on each word of the example */}
-                  <button type="button" onClick={hearExample} aria-pressed={listening} className="group flex flex-col items-center gap-1 rounded-3xl p-2 transition-transform hover:-translate-y-1">
-                    <Blob size={120} face={mouthOpen ? "talk" : "ready"} />
-                    <span className="flex items-center gap-2 font-bold text-accent">
-                      <span aria-hidden="true">{listening ? "■" : "▶"}</span> {listening ? "Stop the example" : "Hear it read first"}
-                    </span>
+                  <button
+                    type="button"
+                    onClick={hearExample}
+                    aria-pressed={listening}
+                    className="flex min-h-12 items-center gap-2 rounded-full border-2 border-line px-5 font-bold hover:border-accent"
+                  >
+                    <span aria-hidden="true">{listening ? "■" : "▶"}</span> {listening ? "Stop the example" : "Hear it read first"}
                   </button>
                 </div>
                 {listening ? <p className="m-0 text-sm text-muted">Read by an AI voice. The words light up the same way yours will.</p> : null}
