@@ -97,9 +97,15 @@ export default function Home() {
       {/* Reels */}
       <section className="overflow-x-clip bg-tint py-20">
         <div className="mx-auto max-w-6xl px-4 sm:px-8">
-          <Reveal>
+          <Reveal className="relative">
             <h2 className="m-0 font-serif text-4xl font-semibold leading-tight sm:text-5xl">Little lessons, 30 seconds each.</h2>
             <p className="mt-4 max-w-2xl text-lg text-muted">Follow along on Instagram while you wait.</p>
+            {/* Sage, who teaches the lessons, introducing them with one arm opened toward the videos */}
+            <div className="absolute -bottom-6 right-4 hidden md:block" aria-hidden="true">
+              <Sage size={140} face="calm" explain className="relative z-10" />
+              {/* A soft shadow to stand on */}
+              <div className="absolute bottom-[14px] left-1/2 h-3 w-24 -translate-x-[40%] rounded-[50%] bg-[#1e2620]/10" />
+            </div>
           </Reveal>
           <div className="mt-12">
             <Reels />

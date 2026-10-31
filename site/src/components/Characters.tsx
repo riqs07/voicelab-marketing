@@ -176,11 +176,14 @@ export function Sage({
   size = 130,
   face = "calm",
   wave = false,
+  explain = false,
   className = "",
 }: {
   size?: number;
   face?: SageFace;
   wave?: boolean;
+  // One arm opened out and down, toward whatever Sage is introducing (the character sheet's "explains with one arm")
+  explain?: boolean;
   className?: string;
 }) {
   // Each brow's lift and tilt, by face
@@ -202,7 +205,7 @@ export function Sage({
     <svg
       width={size}
       height={size}
-      viewBox="-130 -170 260 290"
+      viewBox={explain ? "-160 -170 290 290" : "-130 -170 260 290"}
       aria-hidden="true"
       className={className}
     >
@@ -217,6 +220,10 @@ export function Sage({
             {/* Raised beside the head to wave, or resting at its side */}
             {wave ? (
               <ellipse fill={C.sage} cx="-114" cy="-62" rx="17" ry="28" transform="rotate(-38 -114 -62)" />
+            ) : explain ? (
+              <g className="ch-explain">
+                <ellipse fill={C.sage} cx="-126" cy="14" rx="17" ry="28" transform="rotate(62 -126 14)" />
+              </g>
             ) : (
               <ellipse fill={C.sage} cx="-104" cy="26" rx="17" ry="28" transform="rotate(6 -82 -6)" />
             )}
