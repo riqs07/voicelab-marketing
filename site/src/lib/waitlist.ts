@@ -3,12 +3,10 @@
 
 // What people can pick on the form (same as the mockup)
 export const GOALS = ["Telling stories", "Small talk", "Thinking on my feet", "How I sound", "Speaking at work", "A talk coming up"] as const;
-export const PHONES = ["iPhone", "Android"] as const;
 
 export type Goal = (typeof GOALS)[number];
-export type Phone = (typeof PHONES)[number];
 
-export type Signup = { email: string; goals: Goal[]; phone: Phone | null };
+export type Signup = { email: string; goals: Goal[] };
 
 export type Parsed =
   // A real sign-up
@@ -30,8 +28,7 @@ export function parseSignup(body: unknown): Parsed {
   const email = typeof record.email === "string" ? record.email.trim().toLowerCase() : "";
   if (email.length > 254 || !EMAIL.test(email)) return { kind: "invalid", message: "That email doesn't look right." };
   const goals = Array.isArray(record.goals) ? GOALS.filter((goal) => (record.goals as unknown[]).includes(goal)) : [];
-  const phone = PHONES.find((name) => name === record.phone) ?? null;
-  return { kind: "signup", signup: { email, goals, phone } };
+  return { kind: "signup", signup: { email, goals } };
 }
 
 // The Buttondown request that adds a subscriber (https://docs.buttondown.com, "Create a subscriber").
@@ -45,7 +42,7 @@ export function buttondownRequest(signup: Signup, apiKey: string): { url: string
       body: JSON.stringify({
         email_address: signup.email,
         // Notes kept with the subscriber, to see what people want before launch
-        metadata: { source: "website", goals: signup.goals.join(", "), phone: signup.phone ?? "" },
+        metadata: { source: "website", goals: signup.goals.join(", ") },
       }),
     },
   };

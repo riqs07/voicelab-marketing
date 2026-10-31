@@ -1,10 +1,10 @@
 "use client";
-// The waitlist form: email, optional goals and phone, then a bouncy "You're on the list".
+// The waitlist form: email and optional goals, then a bouncy "You're on the list".
 import Link from "next/link";
 import { motion, useReducedMotion } from "motion/react";
 import { useState } from "react";
 import { BouncyLink, SPRING } from "@/components/Bouncy";
-import { GOALS, PHONES, type Goal, type Phone } from "@/lib/waitlist";
+import { GOALS, type Goal } from "@/lib/waitlist";
 import { Blob } from "@/components/Characters";
 
 const CHIP = "min-h-11 rounded-full border-2 px-4 font-semibold transition-colors";
@@ -38,7 +38,6 @@ export function WaitlistForm() {
   const still = useReducedMotion();
   const [email, setEmail] = useState("");
   const [goals, setGoals] = useState<Goal[]>([]);
-  const [phone, setPhone] = useState<Phone | null>(null);
   const [state, setState] = useState<"idle" | "sending" | "joined">("idle");
   const [error, setError] = useState<string | null>(null);
 
@@ -51,7 +50,7 @@ export function WaitlistForm() {
       const answer = await fetch("/api/waitlist", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, goals, phone, website }),
+        body: JSON.stringify({ email, goals, website }),
       });
       const result = (await answer.json()) as { ok: boolean; message?: string };
       if (result.ok) {
@@ -147,27 +146,6 @@ export function WaitlistForm() {
               </motion.button>
             );
           })}
-        </div>
-      </fieldset>
-
-      <fieldset className="m-0 flex flex-col gap-3 border-0 p-0">
-        <legend className="mb-3 font-semibold">
-          Your phone <span className="font-normal text-muted">Optional</span>
-        </legend>
-        <div className="flex flex-wrap gap-2">
-          {PHONES.map((name) => (
-            <motion.button
-              key={name}
-              type="button"
-              aria-pressed={phone === name}
-              onClick={() => setPhone(phone === name ? null : name)}
-              whileTap={still ? undefined : { scale: 0.9 }}
-              transition={SPRING}
-              className={`${CHIP} ${phone === name ? ON : OFF}`}
-            >
-              {name}
-            </motion.button>
-          ))}
         </div>
       </fieldset>
 

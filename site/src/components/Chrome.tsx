@@ -42,6 +42,29 @@ export function Footer() {
         <Blob size={64} className="ch-peek block" />
       </div>
       <span>© {new Date().getFullYear()} VoiceLab</span>
+      {/* Where it's made: a heart for "love", and an oak for the City of Oaks */}
+      <span className="flex items-center gap-1.5">
+        Made with
+        <svg width="16" height="15" viewBox="0 0 24 22" role="img" aria-label="love" className="shrink-0">
+          <path d="M12 21C5 15.6 1 12 1 7.2 1 3.8 3.6 1.2 6.8 1.2c2.1 0 3.9 1.1 5.2 2.9 1.3-1.8 3.1-2.9 5.2-2.9 3.2 0 5.8 2.6 5.8 6 0 4.8-4 8.4-11 13.8z" fill="#E8935C" />
+        </svg>
+        in the City of Oaks
+        <svg width="18" height="20" viewBox="0 0 36 40" aria-hidden="true" className="shrink-0">
+          {/* The trunk, branching into the crown */}
+          <path d="M16 39V27l-5-5M20 39V27l5-4" stroke="#7A5232" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+          {/* The crown: overlapping rounds, like an oak's lobed outline */}
+          <g fill="#2E5B3E">
+            <circle cx="18" cy="12" r="9" />
+            <circle cx="9" cy="16" r="7" />
+            <circle cx="27" cy="16" r="7" />
+            <circle cx="12" cy="8" r="6" />
+            <circle cx="24" cy="8" r="6" />
+            <circle cx="18" cy="21" r="6" />
+          </g>
+          {/* A highlight on the crown, lit from the upper left like the drawings */}
+          <circle cx="11" cy="8" r="2.5" fill="#FBF6EE" opacity="0.35" />
+        </svg>
+      </span>
       <nav aria-label="Footer" className="flex gap-6">
         <Link href="/privacy" className="text-muted underline-offset-4 hover:underline">
           Privacy

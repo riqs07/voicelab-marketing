@@ -104,10 +104,9 @@ test("waitlist: join with goals and see the success state", async ({ page }) => 
   await page.goto("/waitlist");
   await page.getByLabel("Email").fill("me@example.com");
   await page.getByRole("button", { name: "Small talk" }).click();
-  await page.getByRole("button", { name: "iPhone" }).click();
   await page.getByRole("button", { name: "Join the waitlist" }).click();
   await expect(page.getByRole("status")).toHaveText("You’re on the list.");
-  expect(sent).toEqual({ email: "me@example.com", goals: ["Small talk"], phone: "iPhone", website: "" });
+  expect(sent).toEqual({ email: "me@example.com", goals: ["Small talk"], website: "" });
   expect(problems).toEqual([]);
 });
 

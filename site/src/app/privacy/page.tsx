@@ -9,7 +9,7 @@ export default function PrivacyPage() {
       <p className="m-0">This page covers the VoiceLab website. We keep it short because we collect very little.</p>
       <h2 className="mb-0 mt-4 font-serif text-2xl font-semibold">The waitlist</h2>
       <p className="m-0">
-        When you join, we keep your email and anything you picked (what you want to get better at, your phone). It’s stored with our email provider, Buttondown, and used only to tell you about VoiceLab. Every email has an unsubscribe link, and you can ask us to delete your details at any time.
+        When you join, we keep your email and anything you picked (what you want to get better at). It’s stored with our email provider, Buttondown, and used only to tell you about VoiceLab. Every email has an unsubscribe link, and you can ask us to delete your details at any time.
       </p>
       <h2 className="mb-0 mt-4 font-serif text-2xl font-semibold">The free Rapid Fire</h2>
       <p className="m-0">

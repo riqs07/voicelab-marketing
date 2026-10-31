@@ -3,9 +3,9 @@ import { clock, takeStats, tipFor, tokenize } from "./rapidFire";
 import { alreadySubscribed, buttondownRequest, parseSignup } from "./waitlist";
 
 describe("parseSignup", () => {
-  it("accepts an email and keeps only known goals and phones", () => {
-    const parsed = parseSignup({ email: "  Me@Example.com ", goals: ["Small talk", "Hacking"], phone: "iPhone" });
-    expect(parsed).toEqual({ kind: "signup", signup: { email: "me@example.com", goals: ["Small talk"], phone: "iPhone" } });
+  it("accepts an email and keeps only known goals", () => {
+    const parsed = parseSignup({ email: "  Me@Example.com ", goals: ["Small talk", "Hacking"] });
+    expect(parsed).toEqual({ kind: "signup", signup: { email: "me@example.com", goals: ["Small talk"] } });
   });
 
   it("rejects a bad email", () => {
@@ -18,19 +18,19 @@ describe("parseSignup", () => {
     expect(parseSignup({ email: "me@example.com", website: "spam.biz" })).toEqual({ kind: "bot" });
   });
 
-  it("ignores an unknown phone", () => {
-    const parsed = parseSignup({ email: "me@example.com", phone: "Nokia" });
-    expect(parsed.kind === "signup" && parsed.signup.phone).toBe(null);
+  it("drops anything it doesn't ask for, such as a phone", () => {
+    const parsed = parseSignup({ email: "me@example.com", phone: "iPhone" });
+    expect(parsed).toEqual({ kind: "signup", signup: { email: "me@example.com", goals: [] } });
   });
 });
 
 describe("buttondownRequest", () => {
   it("sends the key only in the header and the choices as metadata", () => {
-    const { url, init } = buttondownRequest({ email: "me@example.com", goals: ["Small talk", "How I sound"], phone: null }, "secret");
+    const { url, init } = buttondownRequest({ email: "me@example.com", goals: ["Small talk", "How I sound"] }, "secret");
     expect(url).toBe("https://api.buttondown.com/v1/subscribers");
     expect((init.headers as Record<string, string>).Authorization).toBe("Token secret");
     const body = JSON.parse(String(init.body));
-    expect(body).toEqual({ email_address: "me@example.com", metadata: { source: "website", goals: "Small talk, How I sound", phone: "" } });
+    expect(body).toEqual({ email_address: "me@example.com", metadata: { source: "website", goals: "Small talk, How I sound" } });
     expect(String(init.body)).not.toContain("secret");
   });
 
