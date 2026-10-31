@@ -9,6 +9,7 @@ import { StressShift } from "@/components/StressShift";
 import { TalkLanes } from "@/components/TalkLanes";
 import { UmJar } from "@/components/UmJar";
 import { Blob, Sage, type BlobFace } from "@/components/Characters";
+import { SagePerch } from "@/components/SagePerch";
 
 // Each step has the blob in the face that fits it: talking, surprised by what it sees, pleased with the second try
 const STEPS: { n: string; face: BlobFace; title: string; line: string }[] = [
@@ -116,7 +117,9 @@ export default function Home() {
         </Reveal>
         <div className="mt-12 grid gap-10 lg:grid-cols-[22rem_1fr] lg:items-start">
           <Reveal className="lg:sticky lg:top-8">
-            <PracticeMenu />
+            <SagePerch>
+              <PracticeMenu />
+            </SagePerch>
           </Reveal>
           <div className="flex min-w-0 flex-col gap-8">
             {SHOWCASES.map(({ id, group, Graphic }) => (

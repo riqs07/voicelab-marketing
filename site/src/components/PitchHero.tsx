@@ -44,45 +44,58 @@ type Pt = { x: number; y: number; t: number };
 // One cubic piece of a curve: from a, with controls c1 and c2, to b
 type Piece = { a: Pt; c1: Pt; c2: Pt; b: Pt };
 
-// The voiced stretches, each softened (a light 1-4-6-4-1 blur, twice, so the tracker's small wobbles don't show) and drawn as a
-// smooth curve through its readings (Catmull-Rom as cubic pieces), worked out once per take
+// The whole take as one smooth curve: the gaps where the tracker lost the voice are filled with an eased blend between
+// the readings either side, the series is softened (a 1-4-6-4-1 blur, three times, so the tracker's wobbles don't
+// show), and it is drawn through every reading as cubic pieces (Catmull-Rom). Worked out once per take.
 function runsOf(take: Take): Piece[][] {
-  const runs: Pt[][] = [];
-  let run: Pt[] = [];
-  take.steps.forEach((v, i) => {
-    if (v === null) {
-      if (run.length) runs.push(run);
-      run = [];
-      return;
+  const steps = take.steps;
+  const firstVoiced = steps.findIndex((v) => v !== null);
+  let lastVoiced = steps.length - 1;
+  while (lastVoiced > 0 && steps[lastVoiced] === null) lastVoiced--;
+  if (firstVoiced < 0) return [];
+  // Fill each gap with an eased blend from the reading before it to the one after it
+  const values: number[] = [];
+  for (let i = firstVoiced; i <= lastVoiced; i++) {
+    const v = steps[i];
+    if (v !== null && v !== undefined) {
+      values.push(v);
+      continue;
     }
-    run.push({ x: 0, y: v, t: i * TICK });
-  });
-  if (run.length) runs.push(run);
+    let a = i - 1;
+    while (steps[a] === null) a--;
+    let b = i + 1;
+    while (steps[b] === null) b++;
+    const from = steps[a] ?? 0;
+    const to = steps[b] ?? from;
+    values.push(from + (to - from) * ease((i - a) / (b - a)));
+  }
   const weights = [1, 4, 6, 4, 1];
-  return runs.map((r) => {
-    // Two passes of the blur, then into drawing units
-    const blur = (pts: Pt[]) =>
-      pts.map((p, i) => {
-        let sum = 0;
-        let total = 0;
-        weights.forEach((w, k) => {
-          const near = pts[i + k - 2];
-          if (near) {
-            sum += near.y * w;
-            total += w;
-          }
-        });
-        return { ...p, y: sum / total };
+  const blur = (vs: number[]) =>
+    vs.map((_, i) => {
+      let sum = 0;
+      let total = 0;
+      weights.forEach((w, k) => {
+        const near = vs[i + k - 2];
+        if (near !== undefined) {
+          sum += near * w;
+          total += w;
+        }
       });
-    const soft = blur(blur(r)).map((p) => ({ x: x(p.t), y: y(p.y), t: p.t }));
-    if (soft.length === 1) return [{ a: soft[0]!, c1: soft[0]!, c2: soft[0]!, b: soft[0]! }];
-    return soft.slice(0, -1).map((p1, i) => {
+      return sum / total;
+    });
+  const soft: Pt[] = blur(blur(blur(values))).map((v, i) => {
+    const t = (firstVoiced + i) * TICK;
+    return { x: x(t), y: y(v), t };
+  });
+  if (soft.length === 1) return [[{ a: soft[0]!, c1: soft[0]!, c2: soft[0]!, b: soft[0]! }]];
+  return [
+    soft.slice(0, -1).map((p1, i) => {
       const p0 = soft[i - 1] ?? p1;
       const p2 = soft[i + 1]!;
       const p3 = soft[i + 2] ?? p2;
       return { a: p1, c1: { x: p1.x + (p2.x - p0.x) / 6, y: p1.y + (p2.y - p0.y) / 6, t: p1.t }, c2: { x: p2.x - (p3.x - p1.x) / 6, y: p2.y - (p3.y - p1.y) / 6, t: p2.t }, b: p2 };
-    });
-  });
+    }),
+  ];
 }
 
 // The first part of a cubic piece, up to fraction f (de Casteljau), so a curve can grow smoothly between readings
@@ -98,19 +111,13 @@ function split(c: Piece, f: number): Piece {
 
 const n = (v: number) => v.toFixed(1);
 
-// The curves up to `upTo` seconds, growing continuously, plus soft dashed bridges over short creaky gaps
+// The curve up to `upTo` seconds, growing continuously (the piece at the playhead is split there)
 function lines(runs: Piece[][], upTo: number) {
   let d = "";
-  let bridges = "";
   let head: Pt | null = null;
   for (const run of runs) {
     const start = run[0]!.a;
     if (start.t > upTo) break;
-    // A bridge from the last stretch, once this one has begun: a gentle S-curve, level at both ends
-    if (head && start.t - head.t < 0.7) {
-      const mid = (start.x - head.x) / 2;
-      bridges += `M${n(head.x)} ${n(head.y)} C${n(head.x + mid)} ${n(head.y)} ${n(start.x - mid)} ${n(start.y)} ${n(start.x)} ${n(start.y)} `;
-    }
     d += `M${n(start.x)} ${n(start.y)} `;
     head = start;
     for (const piece of run) {
@@ -120,7 +127,7 @@ function lines(runs: Piece[][], upTo: number) {
       head = part.b;
     }
   }
-  return { d, bridges, head };
+  return { d, head };
 }
 
 // Where a word sits: the middle of its pitch readings, or between its neighbours when it has none
@@ -179,7 +186,7 @@ export function PitchHero() {
   const since1 = t - T1;
   const since2 = t - T2;
   const line1 = lines(RUNS1, since1);
-  const line2 = since2 > 0 ? lines(RUNS2, since2) : { d: "", bridges: "", head: null };
+  const line2 = since2 > 0 ? lines(RUNS2, since2) : { d: "", head: null };
   // The first try greys out smoothly as the second begins
   const grey = ease((t - (T2 - 0.9)) / 0.8);
   const pop1 = backOut((t - (T1 + SPAN - 0.25)) / 0.45);
@@ -228,12 +235,10 @@ export function PitchHero() {
         </button>
       </div>
       <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label="The pitch of “Then the gorilla just stared at me”, said twice: the first time it rises at the end, the second time it falls." className="mt-2 block w-full" style={{ opacity: still ? 1 : fadeOut }}>
-        <line x1={LEFT} y1={MID} x2={RIGHT} y2={MID} stroke="#B9C4BB" strokeWidth="2" strokeDasharray="9 7" />
+        <line x1={LEFT} y1={MID} x2={RIGHT} y2={MID} stroke="#E4EDE6" strokeWidth="2.5" strokeLinecap="round" />
         {grey < 1 ? <path d={line1.d} stroke="#2E5B3E" strokeWidth="20" opacity={0.12 * (1 - grey)} fill="none" strokeLinecap="round" strokeLinejoin="round" /> : null}
-        <path d={line1.bridges} stroke={mixColour(grey)} strokeWidth="3" fill="none" strokeDasharray="5 8" strokeLinecap="round" opacity="0.6" />
-        <path d={line1.d} stroke={mixColour(grey)} strokeWidth={7 - 3 * grey} strokeDasharray={grey > 0.5 ? "12 9" : undefined} fill="none" strokeLinecap="round" strokeLinejoin="round" opacity={1 - 0.3 * grey} />
+        <path d={line1.d} stroke={mixColour(grey)} strokeWidth={7 - 2.5 * grey} fill="none" strokeLinecap="round" strokeLinejoin="round" opacity={1 - 0.45 * grey} />
         <path d={line2.d} stroke="#2E5B3E" strokeWidth="20" opacity="0.12" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-        <path d={line2.bridges} stroke="#2E5B3E" strokeWidth="3" fill="none" strokeDasharray="5 8" strokeLinecap="round" opacity="0.7" />
         <path d={line2.d} stroke="#2E5B3E" strokeWidth="7" fill="none" strokeLinecap="round" strokeLinejoin="round" />
         {line1.head && since1 > 0 && since1 < SPAN + 0.2 ? <circle cx={line1.head.x} cy={line1.head.y} r={dot(since1)} fill="#1E2620" /> : null}
         {line2.head && since2 > 0 && since2 < SPAN + 0.2 ? <circle cx={line2.head.x} cy={line2.head.y} r={dot(since2)} fill="#1E2620" /> : null}

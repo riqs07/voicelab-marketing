@@ -212,16 +212,14 @@ export function Sage({
           {/* The arms, tucked behind; one lifts in a small wave */}
           <g
             className={wave ? "ch-wave" : undefined}
-            style={{ transformOrigin: "-82px -6px" }}
+            style={{ transformOrigin: "-92px -34px" }}
           >
-            <ellipse
-              fill={C.sage}
-              cx="-104"
-              cy="26"
-              rx="17"
-              ry="28"
-              transform={wave ? "rotate(120 -82 -6)" : "rotate(6 -82 -6)"}
-            />
+            {/* Raised beside the head to wave, or resting at its side */}
+            {wave ? (
+              <ellipse fill={C.sage} cx="-114" cy="-62" rx="17" ry="28" transform="rotate(-38 -114 -62)" />
+            ) : (
+              <ellipse fill={C.sage} cx="-104" cy="26" rx="17" ry="28" transform="rotate(6 -82 -6)" />
+            )}
           </g>
           <ellipse
             fill={C.sageShade}

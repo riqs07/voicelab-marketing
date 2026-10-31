@@ -97,7 +97,7 @@ body {
   }
 }
 .ch-wave {
-  animation: ch-wave 1.4s ease-in-out 3 alternate;
+  animation: ch-wave 0.45s ease-in-out 0.9s 6 alternate;
 }
 @keyframes ch-wave {
   from {
