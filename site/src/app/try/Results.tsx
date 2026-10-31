@@ -7,6 +7,7 @@ import { BouncyLink, SPRING } from "@/components/Bouncy";
 import { Ring, TakeLine, WordsView } from "@/components/TakeParts";
 import type { FreeTake } from "@/lib/freeTake";
 import { WINDOW, clock } from "@/lib/rapidFire";
+import { Sage } from "@/components/Characters";
 
 export function Results({
   question,
@@ -76,14 +77,18 @@ export function Results({
         ))}
       </div>
 
-      <motion.p
-        className="m-0 rounded-2xl bg-peach px-5 py-4 text-lg leading-snug text-peach-ink"
+      {/* Sage, the coach, gives the one tip: proud when this try beat the last, curious otherwise */}
+      <motion.div
+        className="flex items-end gap-2"
         initial={still ? false : { opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ ...SPRING, delay: 0.35 }}
       >
-        <b>One thing to try:</b> {take.tip}
-      </motion.p>
+        <Sage size={84} face={changes.some((c) => c.better) ? "proud" : "curious"} className="-mb-1 shrink-0" />
+        <p className="m-0 flex-1 rounded-2xl rounded-bl-md bg-peach px-5 py-4 text-lg leading-snug text-peach-ink">
+          <b>One thing to try:</b> {take.tip}
+        </p>
+      </motion.div>
 
       {changes.length > 0 ? (
         <div className="rounded-2xl border-2 border-line p-4">

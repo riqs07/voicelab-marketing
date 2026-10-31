@@ -1,6 +1,7 @@
 // The header and footer on every page
 import Link from "next/link";
 import { BouncyLink } from "./Bouncy";
+import { Blob } from "./Characters";
 
 export function LogoMark({ size = 34 }: { size?: number }) {
   return (
@@ -35,7 +36,11 @@ export function Header() {
 
 export function Footer() {
   return (
-    <footer className="mx-auto mt-24 flex max-w-6xl flex-wrap items-center justify-between gap-4 border-t border-line px-4 py-8 text-sm text-muted sm:px-8">
+    <footer className="relative mx-auto mt-24 flex max-w-6xl flex-wrap items-center justify-between gap-4 border-t border-line px-4 py-8 text-sm text-muted sm:px-8">
+      {/* An Easter egg: the blob's eyes peek over the footer line */}
+      <div className="absolute -top-[46px] right-[28%] h-[46px] overflow-hidden" aria-hidden="true">
+        <Blob size={64} className="ch-peek block" />
+      </div>
       <span>© {new Date().getFullYear()} VoiceLab</span>
       <nav aria-label="Footer" className="flex gap-6">
         <Link href="/privacy" className="text-muted underline-offset-4 hover:underline">

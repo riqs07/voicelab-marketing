@@ -8,6 +8,7 @@ import { Reels } from "@/components/Reels";
 import { StressShift } from "@/components/StressShift";
 import { TalkLanes } from "@/components/TalkLanes";
 import { UmJar } from "@/components/UmJar";
+import { Blob, Sage } from "@/components/Characters";
 
 const STEPS = [
   { n: "1", title: "Speak", line: "A surprise question, a story, or your own talk. Timing lights keep you inside the window." },
@@ -147,7 +148,13 @@ export default function Home() {
       {/* Closing call */}
       <section className="mx-auto max-w-6xl px-4 sm:px-8">
         <Reveal>
-          <div className="flex flex-col items-start gap-6 rounded-[2.25rem] bg-ink px-8 py-14 text-paper sm:px-14">
+          <div className="relative flex flex-col items-start gap-6 overflow-hidden rounded-[2.25rem] bg-ink px-8 py-14 text-paper sm:px-14 lg:pr-[24rem]">
+            {/* The blob and Sage, side by side on a ground line, as on the videos' end card */}
+            <div className="pointer-events-none absolute bottom-10 right-10 hidden items-end gap-2 lg:flex" aria-hidden="true">
+              <div className="absolute -bottom-1 left-0 right-0 h-1.5 rounded-full bg-[#2f3a32]" />
+              <Blob size={150} face="ready" />
+              <Sage size={170} face="calm" />
+            </div>
             <h2 className="m-0 font-serif text-4xl font-semibold sm:text-6xl">See how you sound.</h2>
             <p className="m-0 max-w-xl text-lg text-[#D7DED9]">Join the waitlist and we’ll tell you the day VoiceLab opens. Or try one free Rapid Fire right now.</p>
             <div className="flex flex-wrap gap-3">

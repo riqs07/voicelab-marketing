@@ -5,6 +5,7 @@ import { motion, useReducedMotion } from "motion/react";
 import { useState } from "react";
 import { BouncyLink, SPRING } from "@/components/Bouncy";
 import { GOALS, PHONES, type Goal, type Phone } from "@/lib/waitlist";
+import { Blob } from "@/components/Characters";
 
 const CHIP = "min-h-11 rounded-full border-2 px-4 font-semibold transition-colors";
 const ON = "border-accent bg-accent text-white";
@@ -73,16 +74,14 @@ export function WaitlistForm() {
         transition={{ ...SPRING, stiffness: 260, damping: 12 }}
       >
         {still ? null : <Burst />}
+        {/* The blob celebrates: its one hop, arms up */}
         <motion.span
-          className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-accent text-white"
-          initial={still ? false : { scale: 0, rotate: -90 }}
-          animate={{ scale: 1, rotate: 0 }}
+          className="-mb-2 inline-flex"
+          initial={still ? false : { scale: 0, y: 20 }}
+          animate={{ scale: 1, y: 0 }}
           transition={{ type: "spring", stiffness: 400, damping: 10, delay: 0.15 }}
-          aria-hidden="true"
         >
-          <svg width="30" height="30" viewBox="0 0 24 24">
-            <path d="M5 12.5 L10 17 L19 7" stroke="currentColor" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
+          <Blob size={96} face="happy" arms hop />
         </motion.span>
         <h2 className="m-0 font-serif text-4xl font-semibold" role="status">
           You’re on the list.
