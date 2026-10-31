@@ -34,7 +34,7 @@ function Burst() {
   );
 }
 
-export function WaitlistForm() {
+export function WaitlistForm({ onGoals, onJoined }: { onGoals?: (goals: Goal[]) => void; onJoined?: () => void } = {}) {
   const still = useReducedMotion();
   const [email, setEmail] = useState("");
   const [goals, setGoals] = useState<Goal[]>([]);
@@ -55,6 +55,7 @@ export function WaitlistForm() {
       const result = (await answer.json()) as { ok: boolean; message?: string };
       if (result.ok) {
         setState("joined");
+        onJoined?.();
         return;
       }
       setError(result.message ?? "Something went wrong. Please try again.");
@@ -136,10 +137,15 @@ export function WaitlistForm() {
                 key={goal}
                 type="button"
                 aria-pressed={on}
-                onClick={() => setGoals(on ? goals.filter((g) => g !== goal) : [...goals, goal])}
+                onClick={() => {
+                  const next = on ? goals.filter((g) => g !== goal) : [...goals, goal];
+                  setGoals(next);
+                  onGoals?.(next);
+                }}
                 whileTap={still ? undefined : { scale: 0.9 }}
                 animate={still ? undefined : { scale: on ? [1, 1.12, 1] : 1 }}
-                transition={SPRING}
+                // The pop has three steps, so it's timed (a spring can only go between two)
+                transition={{ scale: { duration: 0.35, ease: "easeOut" }, default: SPRING }}
                 className={`${CHIP} ${on ? ON : OFF}`}
               >
                 {goal}

@@ -24,6 +24,11 @@ const TILES = [
   ["beyond-good-you", "Beyond “good, you?”"],
   ["stories-that-land", "Stories that land"],
   ["the-run", "The run"],
+  // The courses the waitlist's goals point to (with the two above)
+  ["stop-freezing", "Stop freezing"],
+  ["voice-lean-in", "A voice they lean in for"],
+  ["explain-it-simply", "Explain it simply"],
+  ["ready-by-the-day", "Ready by the day"],
   ["buy-a-beat", "Buy a beat"],
   ["answer-with-a-hook", "Answer with a hook"],
   ["open-strong", "Open strong"],

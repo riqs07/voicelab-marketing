@@ -13,3 +13,6 @@ export function Tile({ name, className = "" }: { name: TileName; className?: str
 
 // The hero's tiles: one is picked on each visit (HeroTile.tsx); the lessons band leaves them out
 export const HERO_TILES = ["speech-run", "beyond-good-you", "stories-that-land", "the-run"] as const satisfies readonly TileName[];
+
+// The course tiles the waitlist shows for each goal; the lessons band leaves them out too
+export const COURSE_TILES = ["stories-that-land", "beyond-good-you", "stop-freezing", "voice-lean-in", "explain-it-simply", "ready-by-the-day"] as const satisfies readonly TileName[];

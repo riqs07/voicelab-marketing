@@ -4,10 +4,10 @@
 // With reduced motion it's a still row you can swipe through.
 import { motion, useAnimationFrame, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform, useVelocity } from "motion/react";
 import { useRef } from "react";
-import { HERO_TILES, TILES, Tile, type TileName } from "./Tile";
+import { COURSE_TILES, HERO_TILES, TILES, Tile, type TileName } from "./Tile";
 
-// Every tile in tiles.json except the hero's
-const LESSONS = (Object.keys(TILES) as TileName[]).filter((name) => !(HERO_TILES as readonly string[]).includes(name));
+// Every lesson tile in tiles.json: not the hero's, and not the course tiles
+const LESSONS = (Object.keys(TILES) as TileName[]).filter((name) => ![...HERO_TILES, ...COURSE_TILES].includes(name as never));
 
 // Keep a value inside a range, wrapping round (for the endless band)
 const wrap = (min: number, max: number, v: number) => {
