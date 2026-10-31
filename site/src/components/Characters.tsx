@@ -24,7 +24,7 @@ const C = {
 } as const;
 
 // The blob's faces used on the site: ready (the usual), happy (celebrating) and puzzled ("hmm", never ashamed)
-export type BlobFace = "ready" | "happy" | "puzzled";
+export type BlobFace = "ready" | "happy" | "puzzled" | "sing" | "wow";
 
 // The warm blob at a size, with a face, and optionally hopping or with arms up
 export function Blob({
@@ -123,6 +123,21 @@ export function Blob({
                 d="M-23.8 -12h47.5q0 23.7-23.7 23.7t-23.8-23.7z"
               />
             </>
+          )}
+          {/* Singing (talking): arched eyes and an open round mouth, as the app's "sing" face */}
+          {face === "sing" && (
+            <g transform="translate(-47.5 -55.6) scale(1.979)" strokeWidth="4">
+              <path fill="none" d="M5 13l7-7 7 7M29 13l7-7 7 7" />
+              <ellipse className="ch-talk" stroke="none" cx="24" cy="27" rx="7" ry="7" />
+            </g>
+          )}
+          {/* Surprised: round eyes and a round mouth, as the app's "wow" face */}
+          {face === "wow" && (
+            <g transform="translate(-47.5 -55.6) scale(1.979)" stroke="none">
+              <circle className="ch-blink" cx="12" cy="9" r="6" />
+              <circle className="ch-blink" cx="36" cy="9" r="6" />
+              <ellipse cx="24" cy="28" rx="4.5" ry="5.5" />
+            </g>
           )}
           {face === "puzzled" && (
             <>

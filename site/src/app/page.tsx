@@ -8,12 +8,13 @@ import { Reels } from "@/components/Reels";
 import { StressShift } from "@/components/StressShift";
 import { TalkLanes } from "@/components/TalkLanes";
 import { UmJar } from "@/components/UmJar";
-import { Blob, Sage } from "@/components/Characters";
+import { Blob, Sage, type BlobFace } from "@/components/Characters";
 
-const STEPS = [
-  { n: "1", title: "Speak", line: "A surprise question, a story, or your own talk. Timing lights keep you inside the window." },
-  { n: "2", title: "See it", line: "Your pitch, pauses and words in one view. Tap any word to hear it back." },
-  { n: "3", title: "Say it again", line: "One thing to change, then the same words again, with the change drawn over the first try." },
+// Each step has the blob in the face that fits it: talking, surprised by what it sees, pleased with the second try
+const STEPS: { n: string; face: BlobFace; title: string; line: string }[] = [
+  { n: "1", face: "sing", title: "Speak", line: "A surprise question, a story, or your own talk. Timing lights keep you inside the window." },
+  { n: "2", face: "wow", title: "See it", line: "Your pitch, pauses and words in one view. Tap any word to hear it back." },
+  { n: "3", face: "happy", title: "Say it again", line: "One thing to change, then the same words again, with the change drawn over the first try." },
 ];
 
 // The showcases beside the Practice menu; each id is linked from its row in the menu
@@ -60,7 +61,7 @@ export default function Home() {
             {STEPS.map((step, i) => (
               <Reveal key={step.n} delay={i * 0.1}>
                 <div className="h-full rounded-[1.75rem] bg-card p-6 transition-transform duration-300 hover:-translate-y-1.5 hover:rotate-[-0.5deg]">
-                  <span className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-accent font-serif text-xl font-semibold text-white">{step.n}</span>
+                  <Blob size={112} face={step.face} arms={step.face === "happy"} className="-mb-2 -ml-3 -mt-2" />
                   <h3 className="mb-2 mt-4 font-serif text-2xl font-semibold">{step.title}</h3>
                   <p className="m-0 leading-relaxed text-muted">{step.line}</p>
                 </div>
