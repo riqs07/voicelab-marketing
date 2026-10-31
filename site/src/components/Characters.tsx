@@ -1,6 +1,7 @@
 // The app's two characters, for a few small moments on the site: the warm blob (the learner, stands in for you) and Sage (the calm coach)
 // Drawn from the app's own outline and shading (Table-Topics: src/components/scenes/Scene.tsx and video/src/characters/Sage.tsx), so they are the same characters
 // Sage is still a draft in the app; its colours here are the character sheet's
+import type { CSSProperties } from "react";
 
 // The blob's one outline, never redrawn: a slightly uneven round, 100 units across its radius
 const BLOB =
@@ -24,7 +25,7 @@ const C = {
 } as const;
 
 // The blob's faces used on the site: ready (the usual), happy (celebrating) and puzzled ("hmm", never ashamed)
-export type BlobFace = "ready" | "happy" | "puzzled" | "sing" | "wow" | "shy" | "tired";
+export type BlobFace = "ready" | "happy" | "puzzled" | "sing" | "wow" | "shy" | "tired" | "talk" | "beam";
 
 // A blob's colours: its body, shaded side and face. The warm blob's by default; the conversation people have their own
 export type BlobColours = { body: string; shade: string; ink: string };
@@ -38,6 +39,7 @@ export function Blob({
   talking = false,
   colours,
   className = "",
+  blink,
 }: {
   size?: number;
   face?: BlobFace;
@@ -46,6 +48,8 @@ export function Blob({
   // The mouth opens and closes a little, as if speaking
   talking?: boolean;
   colours?: BlobColours;
+  // When the eyes blink: how often and how far into the cycle, so blobs side by side blink at different times
+  blink?: { every: number; delay: number };
   className?: string;
 }) {
   const body = colours?.body ?? C.warm;
@@ -58,6 +62,7 @@ export function Blob({
       viewBox="-150 -130 300 240"
       aria-hidden="true"
       className={className}
+      style={blink ? ({ "--blink-every": `${blink.every}s`, "--blink-delay": `${blink.delay}s` } as CSSProperties) : undefined}
     >
       <g className={hop ? "ch-hop" : undefined}>
         {/* Arms up, tucked behind the body, the far one in the shade */}
@@ -144,6 +149,22 @@ export function Blob({
             </g>
           )}
           {/* Surprised: round eyes and a round mouth, as the app's "wow" face */}
+          {/* Talking: open eyes that blink, and an open mouth that moves */}
+          {face === "talk" && (
+            <>
+              <ellipse className="ch-blink" stroke="none" cx="-23.8" cy="-35.8" rx="9.9" ry="14.8" />
+              <ellipse className="ch-blink" stroke="none" cx="23.7" cy="-35.8" rx="9.9" ry="14.8" />
+              <path className={talking ? "ch-talk" : undefined} stroke="none" d="M-17 -10h34q0 24-17 24t-17-24z" />
+            </>
+          )}
+          {/* Beaming: open eyes that blink, and a wide open smile */}
+          {face === "beam" && (
+            <>
+              <ellipse className="ch-blink" stroke="none" cx="-23.8" cy="-37" rx="9.9" ry="14.8" />
+              <ellipse className="ch-blink" stroke="none" cx="23.7" cy="-37" rx="9.9" ry="14.8" />
+              <path stroke="none" d="M-22 -10h44q0 22-22 22t-22-22z" />
+            </>
+          )}
           {face === "wow" && (
             <g transform="translate(-47.5 -55.6) scale(1.979)" stroke="none">
               <circle className="ch-blink" cx="12" cy="9" r="6" />

@@ -56,7 +56,7 @@ body {
 .ch-blink {
   transform-box: fill-box;
   transform-origin: center;
-  animation: ch-blink 4.6s infinite;
+  animation: ch-blink var(--blink-every, 4.6s) var(--blink-delay, 0s) infinite;
 }
 @keyframes ch-blink {
   0%,

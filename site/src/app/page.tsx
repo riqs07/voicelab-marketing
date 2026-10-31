@@ -12,11 +12,18 @@ import { Blob, Sage, type BlobFace } from "@/components/Characters";
 import { SagePerch } from "@/components/SagePerch";
 import { BlobPeek } from "@/components/BlobPeek";
 
-// Each step has the blob in the face that fits it: talking, surprised by what it sees, pleased with the second try
+// Each step has the blob in the face that fits it, eyes open: talking, surprised by what it sees, beaming at the second try; they blink at different times
 const STEPS: { n: string; face: BlobFace; title: string; line: string }[] = [
-  { n: "1", face: "sing", title: "Speak", line: "A surprise question, a story, or your own talk. Timing lights keep you inside the window." },
+  { n: "1", face: "talk", title: "Speak", line: "A surprise question, a story, or your own talk. Timing lights keep you inside the window." },
   { n: "2", face: "wow", title: "See it", line: "Your pitch, pauses and words in one view. Tap any word to hear it back." },
-  { n: "3", face: "happy", title: "Say it again", line: "One thing to change, then the same words again, with the change drawn over the first try." },
+  { n: "3", face: "beam", title: "Say it again", line: "One thing to change, then the same words again, with the change drawn over the first try." },
+];
+
+// When each step's blob blinks: different rhythms, offset, so they never blink together
+const BLINKS = [
+  { every: 4.6, delay: 0.4 },
+  { every: 5.8, delay: 2.1 },
+  { every: 3.9, delay: 1.3 },
 ];
 
 // The showcases beside the Practice menu; each id is linked from its row in the menu
@@ -63,7 +70,7 @@ export default function Home() {
             {STEPS.map((step, i) => (
               <Reveal key={step.n} delay={i * 0.1}>
                 <div className="h-full rounded-[1.75rem] bg-card p-6 transition-transform duration-300 hover:-translate-y-1.5 hover:rotate-[-0.5deg]">
-                  <Blob size={112} face={step.face} arms={step.face === "happy"} talking={step.face === "sing"} className="-mb-2 -ml-3 -mt-2" />
+                  <Blob size={112} face={step.face} arms={step.face === "beam"} talking={step.face === "talk"} blink={BLINKS[i] ?? BLINKS[0]} className="-mb-2 -ml-3 -mt-2" />
                   <h3 className="mb-2 mt-4 font-serif text-2xl font-semibold">{step.title}</h3>
                   <p className="m-0 leading-relaxed text-muted">{step.line}</p>
                 </div>
