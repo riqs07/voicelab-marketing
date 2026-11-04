@@ -12,6 +12,8 @@ import { SagePerch } from "@/components/SagePerch";
 import { BlobPeek } from "@/components/BlobPeek";
 import { LessonBanner } from "@/components/LessonBanner";
 import { ClosingChat } from "@/components/ClosingChat";
+import { StoryboardStills } from "@/components/StoryboardStills";
+import { CastCarousel } from "@/components/CastCarousel";
 
 // Each step has the blob in the face that fits it, eyes open: talking, surprised by what it sees, beaming at the second try; they blink at different times
 const STEPS: { n: string; face: BlobFace; title: string; line: string }[] = [
@@ -78,12 +80,17 @@ export default function Home() {
               </Reveal>
             ))}
           </div>
-          <Reveal className="mt-12">
-            <figure className="m-0 overflow-hidden rounded-[2rem] bg-ink p-2 shadow-[0_20px_50px_rgba(30,38,32,0.18)]">
-              <video className="block w-full rounded-[1.6rem]" src="/videos/demo.mp4" poster="/videos/demo-poster.jpg" controls preload="none" playsInline aria-label="A 30-second walkthrough of VoiceLab" />
-            </figure>
-            <p className="mt-3 text-center text-sm text-muted">The real app, in 30 seconds (sound on).</p>
-          </Reveal>
+          {/* Five screens from the redesign, in place of the old demo video */}
+          <div className="mt-16">
+            <Reveal>
+              <p className="m-0 text-sm font-bold uppercase tracking-wider text-accent">A first look</p>
+              <h3 className="m-0 mt-2 font-serif text-3xl font-semibold leading-tight sm:text-4xl">The new VoiceLab, screen by screen.</h3>
+              <p className="mt-3 max-w-2xl text-muted">Screens from the redesign we’re building now, with the real words and numbers.</p>
+            </Reveal>
+            <div className="mt-8">
+              <StoryboardStills />
+            </div>
+          </div>
         </div>
       </section>
 
@@ -103,6 +110,19 @@ export default function Home() {
           And many more, across twelve courses
         </p>
         <LessonBanner />
+      </section>
+
+      {/* The cast */}
+      <section id="cast" className="scroll-mt-8 bg-sand py-20">
+        <div className="mx-auto max-w-6xl px-4 sm:px-8">
+          <Reveal>
+            <h2 className="m-0 font-serif text-4xl font-semibold leading-tight sm:text-5xl">Meet the cast.</h2>
+            <p className="mt-4 max-w-2xl text-lg text-muted">You’re the orange one. Sage coaches you, a friend chats with you, and every course ends with a boss to win over. Tap one to say hi.</p>
+          </Reveal>
+          <div className="mt-10">
+            <CastCarousel />
+          </div>
+        </div>
       </section>
 
       {/* Inside the app */}

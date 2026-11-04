@@ -53,8 +53,29 @@ test("home page: hero, animations, videos and calls to action", async ({ page })
   await page.getByRole("button", { name: "Second try" }).click();
   await expect(page.getByText("About even, and you asked back.")).toBeVisible();
   await expect(page.getByText("59%")).toBeVisible({ timeout: 5_000 });
-  // Three reels and the demo
-  await expect(page.locator("video")).toHaveCount(4);
+  // Three reels; the old demo video is gone, replaced by five storyboard stills that load
+  await expect(page.locator("video")).toHaveCount(3);
+  const stills = page.getByRole("img", { name: /^The VoiceLab app:/ });
+  await expect(stills).toHaveCount(5);
+  await stills.last().scrollIntoViewIfNeeded();
+  for (const still of await stills.all()) {
+    await expect.poll(() => still.evaluate((img: HTMLImageElement) => img.complete && img.naturalWidth > 0)).toBe(true);
+  }
+  expect(problems).toEqual([]);
+});
+
+test("home page: the cast says hi", async ({ page }) => {
+  const problems = watchConsole(page);
+  await page.goto("/");
+  await page.getByRole("heading", { name: "Meet the cast." }).scrollIntoViewIfNeeded();
+  const row = page.getByRole("list", { name: "The VoiceLab cast" });
+  await expect(row.getByRole("button", { name: /^Say hi to / })).toHaveCount(6);
+  await expect(page.getByText("Good. You?")).toBeVisible();
+  // The arrows step through the row
+  const before = await row.evaluate((el) => el.scrollLeft);
+  await page.getByRole("button", { name: "Next character" }).click();
+  await expect.poll(() => row.evaluate((el) => el.scrollLeft)).toBeGreaterThan(before);
+  await page.getByRole("button", { name: "Say hi to Bun" }).click();
   expect(problems).toEqual([]);
 });
 
