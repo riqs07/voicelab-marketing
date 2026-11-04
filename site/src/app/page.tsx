@@ -28,7 +28,7 @@ const BLINKS = [
   { every: 3.9, delay: 1.3 },
 ];
 
-// The showcases beside the Practice menu; each id is linked from its row in the menu
+// The showcases beside the Practice phone; four are linked from its job tiles
 const SHOWCASES = [
   { id: "mode-read", group: "Speak on the spot", Graphic: ReadAlongDemo },
   { id: "mode-voice", group: "Your voice", Graphic: StressShift },

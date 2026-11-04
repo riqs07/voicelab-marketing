@@ -78,8 +78,10 @@ test("home page: the Practice menu and the mode showcases", async ({ page }) => 
   await page.getByRole("heading", { name: "Inside the app" }).scrollIntoViewIfNeeded();
   // The menu shows the app's groups, and its rows link to their showcase
   await expect(page.getByText("Everyday conversation", { exact: true }).first()).toBeVisible();
-  await expect(page.getByRole("link", { name: /Talk with someone/ })).toHaveAttribute("href", "#mode-people");
-  await expect(page.getByRole("link", { name: /Read aloud/ }).first()).toHaveAttribute("href", "#mode-read");
+  // The new Practice screen: Rapid Fire opens the free one, and each job links to its showcase
+  await expect(page.getByRole("link", { name: /Quick start.*Rapid Fire/ })).toHaveAttribute("href", "/try");
+  await expect(page.getByRole("link", { name: /Conversations/ })).toHaveAttribute("href", "#mode-people");
+  await expect(page.getByRole("link", { name: /Speak on the spot/ })).toHaveAttribute("href", "#mode-read");
   await expect(page.getByRole("link", { name: "Try Read aloud free" })).toHaveAttribute("href", "/try?mode=read");
   // The read-along tile plays its reader
   await page.getByRole("button", { name: /Hear it read/ }).click();

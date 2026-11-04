@@ -7,6 +7,9 @@ import "./globals.css";
 // The two fonts from the app and the videos, served from this site
 const fraunces = localFont({ src: "./fonts/Fraunces-latin.woff2", variable: "--font-fraunces", weight: "100 900", display: "swap" });
 const atkinson = localFont({ src: "./fonts/AtkinsonHyperlegibleNext-latin.woff2", variable: "--font-atkinson", weight: "200 800", display: "swap" });
+// The redesign's rounded faces, used only inside the Practice phone on the home page (so not preloaded)
+const fredoka = localFont({ src: "./fonts/Fredoka-latin.woff2", variable: "--font-fredoka", weight: "500 700", display: "swap", preload: false });
+const nunito = localFont({ src: "./fonts/Nunito-latin.woff2", variable: "--font-nunito", weight: "600 900", display: "swap", preload: false });
 
 // The site's own address, for social preview images: SITE_URL if set, else the Vercel production address
 const siteUrl = process.env.SITE_URL ?? (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : "http://localhost:3000");
@@ -24,7 +27,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${fraunces.variable} ${atkinson.variable}`}>
+    <html lang="en" className={`${fraunces.variable} ${atkinson.variable} ${fredoka.variable} ${nunito.variable}`}>
       <body className="min-h-dvh antialiased">
         <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-ink focus:px-4 focus:py-2 focus:text-paper">
           Skip to content
