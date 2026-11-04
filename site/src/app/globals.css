@@ -20,6 +20,7 @@
   --color-grey: #8c978f;
   --font-sans: var(--font-atkinson), system-ui, sans-serif;
   --font-serif: var(--font-fraunces), Georgia, serif;
+  --font-round: var(--font-fredoka), ui-rounded, system-ui, sans-serif;
 }
 
 html {
@@ -258,3 +259,23 @@ body {
 /* The closing card's mascots react at once when clicked (ClosingChat.tsx) */
 .react-now .ch-wave { animation-delay: 0s; }
 .react-now .ch-hop { animation-delay: 0s; }
+
+/* The header logo's blob hops once when the logo is hovered or focused (Chrome.tsx) */
+.logo-blob {
+  transform-origin: 50% 100%;
+}
+.logo:hover .logo-blob,
+.logo:focus-visible .logo-blob {
+  animation: logo-hop 0.6s cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+@keyframes logo-hop {
+  0% {
+    transform: translateY(0) scale(1.06, 0.92);
+  }
+  45% {
+    transform: translateY(-5px) scale(0.96, 1.05);
+  }
+  100% {
+    transform: none;
+  }
+}

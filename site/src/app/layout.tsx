@@ -7,8 +7,9 @@ import "./globals.css";
 // The two fonts from the app and the videos, served from this site
 const fraunces = localFont({ src: "./fonts/Fraunces-latin.woff2", variable: "--font-fraunces", weight: "100 900", display: "swap" });
 const atkinson = localFont({ src: "./fonts/AtkinsonHyperlegibleNext-latin.woff2", variable: "--font-atkinson", weight: "200 800", display: "swap" });
-// The redesign's rounded faces, used only inside the Practice phone on the home page (so not preloaded)
-const fredoka = localFont({ src: "./fonts/Fredoka-latin.woff2", variable: "--font-fredoka", weight: "500 700", display: "swap", preload: false });
+// The redesign's rounded faces: Fredoka for the logo's name on every page (so preloaded), Nunito only inside the
+// Practice phone on the home page (so not)
+const fredoka = localFont({ src: "./fonts/Fredoka-latin.woff2", variable: "--font-fredoka", weight: "500 700", display: "swap" });
 const nunito = localFont({ src: "./fonts/Nunito-latin.woff2", variable: "--font-nunito", weight: "600 900", display: "swap", preload: false });
 
 // The site's own address, for social preview images: SITE_URL if set, else the Vercel production address
