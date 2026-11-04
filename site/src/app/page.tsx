@@ -79,13 +79,19 @@ export default function Home() {
               </Reveal>
             ))}
           </div>
-          {/* Five screens from the app's storyboard, in place of the old demo video */}
+          {/* The 48-second commercial (the real app), then five screens from the app's storyboard */}
           <div className="mt-16">
             <Reveal>
               <h3 className="m-0 font-serif text-3xl font-semibold leading-tight sm:text-4xl">Take a look.</h3>
               <p className="mt-3 max-w-2xl text-muted">What practising with VoiceLab looks like, from picking a mode to hearing how far you’ve come.</p>
             </Reveal>
-            <div className="mt-8">
+            <Reveal className="mt-8">
+              <figure className="m-0 overflow-hidden rounded-[2rem] bg-ink p-2 shadow-[0_20px_50px_rgba(30,38,32,0.18)]">
+                <video className="block aspect-video w-full rounded-[1.6rem]" src="/videos/demo.mp4" poster="/videos/demo-poster.jpg" controls preload="none" playsInline aria-label="A 48-second look at VoiceLab" />
+              </figure>
+              <p className="mt-3 text-center text-sm text-muted">The real app, in under a minute (sound on).</p>
+            </Reveal>
+            <div className="mt-10">
               <StoryboardStills />
             </div>
           </div>

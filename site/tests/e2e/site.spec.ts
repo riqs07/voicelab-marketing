@@ -53,8 +53,9 @@ test("home page: hero, animations, videos and calls to action", async ({ page })
   await page.getByRole("button", { name: "Second try" }).click();
   await expect(page.getByText("About even, and you asked back.")).toBeVisible();
   await expect(page.getByText("59%")).toBeVisible({ timeout: 5_000 });
-  // Three reels; the old demo video is gone, replaced by five storyboard stills that load
-  await expect(page.locator("video")).toHaveCount(3);
+  // Three reels and the commercial, then five storyboard stills that load
+  await expect(page.getByLabel("A 48-second look at VoiceLab")).toHaveAttribute("src", "/videos/demo.mp4");
+  await expect(page.locator("video")).toHaveCount(4);
   const stills = page.getByRole("img", { name: /^The VoiceLab app:/ });
   await expect(stills).toHaveCount(5);
   await stills.last().scrollIntoViewIfNeeded();
