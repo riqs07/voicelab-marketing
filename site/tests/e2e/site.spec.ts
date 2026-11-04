@@ -64,6 +64,21 @@ test("home page: hero, animations, videos and calls to action", async ({ page })
   expect(problems).toEqual([]);
 });
 
+test("home page: the logo's blob reacts to clicks, a little more each time", async ({ page }) => {
+  const problems = watchConsole(page);
+  await page.goto("/");
+  const logo = page.getByRole("banner").getByRole("link", { name: "VoiceLab" });
+  await logo.click();
+  await expect(page.getByRole("status").filter({ hasText: "Hi!" })).toBeVisible();
+  await logo.click();
+  await logo.click();
+  await expect(page.getByRole("status").filter({ hasText: "Are you practising on me?" })).toBeVisible();
+  // It stays on the home page, and settles after a few quiet seconds
+  await expect(page).toHaveURL(/\/$/);
+  await expect(page.getByText("Are you practising on me?")).toBeHidden({ timeout: 6_000 });
+  expect(problems).toEqual([]);
+});
+
 test("home page: the Practice menu and the mode showcases", async ({ page }) => {
   const problems = watchConsole(page);
   // Count clips started instead of playing sound

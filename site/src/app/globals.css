@@ -260,7 +260,7 @@ body {
 .react-now .ch-wave { animation-delay: 0s; }
 .react-now .ch-hop { animation-delay: 0s; }
 
-/* The header logo's blob hops once when the logo is hovered or focused (Chrome.tsx) */
+/* The header logo's blob hops once when the logo is hovered or focused (Logo.tsx) */
 .logo-blob {
   transform-origin: 50% 100%;
 }

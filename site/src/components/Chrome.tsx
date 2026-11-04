@@ -2,33 +2,13 @@
 import Link from "next/link";
 import { BouncyLink } from "./Bouncy";
 import { Blob } from "./Characters";
-
-// The logo: the orange blob, the learner from the app, looking out and blinking now and then; it hops when the logo is
-// hovered or focused. Drawn from the same outline and colours as Characters.tsx's Blob, framed tightly for the header
-const LOGO_BLOB = "M0 -100C58.8 -100 106 -53.2 106 0C106 50.4 61.6 94 0 94C-58.8 94 -103 53.2 -103 0C-103 -56 -56 -100 0 -100Z";
-export function LogoMark({ size = 38 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="-112 -108 220 210" aria-hidden="true" className="logo-blob block shrink-0 overflow-visible">
-      {/* The shaded body, the lit body nudged up and left, and the highlight from the upper left */}
-      <path fill="#D9844C" d={LOGO_BLOB} />
-      <path fill="#F4A86E" transform="translate(-9 -8) scale(0.93)" d={LOGO_BLOB} />
-      <ellipse fill="#FFF6E6" opacity="0.5" cx="-50" cy="-54" rx="20" ry="12" transform="rotate(-35 -50 -54)" />
-      {/* The usual face: two eyes that blink, and a small smile */}
-      <ellipse className="ch-blink" fill="#1E2320" cx="-23.8" cy="-35.8" rx="9.9" ry="14.8" />
-      <ellipse className="ch-blink" fill="#1E2320" cx="23.7" cy="-35.8" rx="9.9" ry="14.8" />
-      <path fill="none" stroke="#1E2320" strokeWidth="7.9" strokeLinecap="round" d="M-15.8 -4.1q15.8 13.9 31.7 0" />
-    </svg>
-  );
-}
+import { Logo } from "./Logo";
 
 export function Header() {
   return (
     <header className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-5 sm:px-8">
-      <Link href="/" className="logo flex items-center gap-2.5 text-ink no-underline">
-        <LogoMark />
-        {/* The name in the app's rounded face, as in the redesign */}
-        <span className="font-round text-[25px] font-semibold leading-none">VoiceLab</span>
-      </Link>
+      {/* The orange blob and the name; click it on the home page for a reaction */}
+      <Logo />
       <nav aria-label="Main" className="flex flex-wrap items-center gap-x-6 gap-y-2">
         <Link href="/#how" className="hidden font-semibold text-ink underline-offset-4 hover:underline sm:inline">
           How it works
