@@ -64,21 +64,6 @@ test("home page: hero, animations, videos and calls to action", async ({ page })
   expect(problems).toEqual([]);
 });
 
-test("home page: the cast says hi", async ({ page }) => {
-  const problems = watchConsole(page);
-  await page.goto("/");
-  await page.getByRole("heading", { name: "Meet the cast." }).scrollIntoViewIfNeeded();
-  const row = page.getByRole("list", { name: "The VoiceLab cast" });
-  await expect(row.getByRole("button", { name: /^Say hi to / })).toHaveCount(6);
-  await expect(page.getByText("Good. You?")).toBeVisible();
-  // The arrows step through the row
-  const before = await row.evaluate((el) => el.scrollLeft);
-  await page.getByRole("button", { name: "Next character" }).click();
-  await expect.poll(() => row.evaluate((el) => el.scrollLeft)).toBeGreaterThan(before);
-  await page.getByRole("button", { name: "Say hi to Bun" }).click();
-  expect(problems).toEqual([]);
-});
-
 test("home page: the Practice menu and the mode showcases", async ({ page }) => {
   const problems = watchConsole(page);
   // Count clips started instead of playing sound
